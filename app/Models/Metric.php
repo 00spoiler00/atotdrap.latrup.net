@@ -8,4 +8,11 @@ class Metric extends BaseModel
 {
     use HasFactory;
     public $timestamps = false;
+
+    // region Relationships
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
+    }
 }

@@ -14,11 +14,11 @@ return new class() extends Migration {
         Schema::create('races', function (Blueprint $table) {
             $table->id();
             $table->string('event_id')->unique();
-            $table->date('starts_at');
+            $table->dateTime('starts_at');
             $table->string('name');
             $table->foreignIdFor(Track::class)->constrained();
             $table->integer('registers');
-            $table->date('registration_ends_at');
+            $table->dateTime('registration_ends_at');
             $table->integer('max_slots');
             $table->timestamps();
         });
