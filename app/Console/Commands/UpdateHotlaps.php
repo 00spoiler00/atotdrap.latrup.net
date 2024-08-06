@@ -7,6 +7,7 @@ use App\Models\Driver;
 use App\Models\Hotlap;
 use App\Models\Track;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class UpdateHotlaps extends Command
 {
@@ -31,6 +32,8 @@ class UpdateHotlaps extends Command
      */
     public function handle()
     {
+        Log::info('Updating hotlaps data from the server');
+
         $files = glob(self::$directory . '/*.json');
         foreach ($files as $file) {
             $this->processFile($file);
@@ -45,6 +48,8 @@ class UpdateHotlaps extends Command
         $date     = now()->createFromFormat('ymd', $fileDate)->format('Y-m-d');
 
         $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
+
+        dd($data);
 
         if (! isset($data['sessionResult']['leaderBoardLines'])) {
             return;

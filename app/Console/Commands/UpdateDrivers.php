@@ -7,6 +7,8 @@ use App\Models\Driver;
 use App\Models\Metric;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
 
 class UpdateDrivers extends Command
 {
@@ -29,6 +31,8 @@ class UpdateDrivers extends Command
      */
     public function handle()
     {
+        Log::info('Updating drivers data from the remote api');
+
         ClubMember::all()->each(function (ClubMember $member) {
             // Get the data from the remote api
             $data = Http::get("https://api.pitskill.io/api/pitskill/getdriverinfo?id={$member->piskill_id}")->json();

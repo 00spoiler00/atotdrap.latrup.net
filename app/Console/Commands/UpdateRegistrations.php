@@ -10,6 +10,8 @@ use App\Models\Race;
 use App\Models\Track;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+
 
 class UpdateRegistrations extends Command
 {
@@ -32,6 +34,8 @@ class UpdateRegistrations extends Command
      */
     public function handle()
     {
+        Log::info('Updating driver registrations from the remote api');
+
         Driver::all()->each(function (Driver $driver) {
             // Get the data from the remote api
             $data = Http::get("https://api.pitskill.io/api/events/upcomingRegistrations?id={$driver->clubMember->piskill_id}")->json();
