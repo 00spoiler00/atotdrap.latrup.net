@@ -11,5 +11,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 
-Schedule::command(UpdateDrivers::class)->everyFiveMinutes()->withoutOverlapping()->runInBackground();
-Schedule::command(UpdateRegistrations::class)->everyFiveMinutes()->withoutOverlapping()->runInBackground();
+Schedule::command(UpdateDrivers::class)->everyFiveMinutes();
+Schedule::command(UpdateRegistrations::class)->everyFiveMinutes();
