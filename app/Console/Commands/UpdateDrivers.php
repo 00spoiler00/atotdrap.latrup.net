@@ -35,7 +35,7 @@ class UpdateDrivers extends Command
 
         ClubMember::all()->each(function (ClubMember $member) {
             // Get the data from the remote api
-            $data = Http::get("https://api.pitskill.io/api/pitskill/getdriverinfo?id={$member->piskill_id}")->json();
+            $data = Http::get("https://api.pitskill.io/api/pitskill/getdriverinfo?id={$member->pitskill_id}")->json();
 
             if (! $data || $data['status'] !== 1) {
                 return;
@@ -66,7 +66,9 @@ class UpdateDrivers extends Command
                 ->orderBy('measured_at', 'desc')
                 ->first();
 
-            if (!$lastPitrep || $lastPitrep->value !== $pitrep) {
+            
+            if (!$lastPitrep || round($lastPitrep->value, 2) !== round($pitrep, 2)) {
+                Log::info('Inserting new pitrep metric', ['driver' => $driver->id, 'value' => $pitrep]);
                 Metric::create([
                     'driver_id'   => $driver->id,
                     'type'        => 'pitrep',
@@ -75,13 +77,15 @@ class UpdateDrivers extends Command
                 ]);
             }
 
-            $lastPiSkill = $driver
+            $lastpitskill = $driver
                 ->metrics()
                 ->where('type', 'pitskill')
                 ->orderBy('measured_at', 'desc')
                 ->first();
 
-            if (!$lastPiSkill || $lastPiSkill->value !== $pitskill) {
+            // Do a safe comparison betwee the last pitskill value and the current one assuming that one may be a rounded float and the other a float
+            if (!$lastpitskill || round($lastpitskill->value, 2) !== round($pitskill, 2)) {
+                Log::info('Inserting new pitskill metric', ['driver' => $driver->id, 'value' => $pitskill]);
                 Metric::create([
                     'driver_id'   => $driver->id,
                     'type'        => 'pitskill',

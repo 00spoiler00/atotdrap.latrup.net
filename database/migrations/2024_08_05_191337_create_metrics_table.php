@@ -16,7 +16,7 @@ return new class extends Migration
             $table->enum('type', ['pitrep', 'pitskill']);
             $table->foreignIdFor(\App\Models\Driver::class)->constrained();
             $table->float('value', 4, 1);
-            $table->dateTime('measured_at');
+            $table->timestamp('measured_at');
         });
     }
 

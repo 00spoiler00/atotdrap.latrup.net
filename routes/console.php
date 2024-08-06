@@ -2,14 +2,11 @@
 
 use App\Console\Commands\UpdateDrivers;
 use App\Console\Commands\UpdateRegistrations;
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use App\Console\Commands\NotifyRaceRegistrations;
+use App\Console\Commands\UpdateHotlaps;
 use Illuminate\Support\Facades\Schedule;
-
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
-
 
 Schedule::command(UpdateDrivers::class)->everyFiveMinutes();
 Schedule::command(UpdateRegistrations::class)->everyFiveMinutes();
+Schedule::command(NotifyRaceRegistrations::class)->everyFiveMinutes();
+Schedule::command(UpdateHotlaps::class)->everyMinute();

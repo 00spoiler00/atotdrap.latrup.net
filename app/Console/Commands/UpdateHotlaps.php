@@ -36,6 +36,7 @@ class UpdateHotlaps extends Command
 
         $files = glob(self::$directory . '/*.json');
         foreach ($files as $file) {
+            Log::info('Processing file', ['file' => $file]);
             $this->processFile($file);
             // unlink($file);
         }
@@ -45,40 +46,50 @@ class UpdateHotlaps extends Command
     {
         preg_match('/(\d{6})_/', basename($file), $matches);
         $fileDate = $matches[1] ?? 'unknown';
-        $date     = now()->createFromFormat('ymd', $fileDate)->format('Y-m-d');
-
+        
         $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
-
-        dd($data);
-
         if (! isset($data['sessionResult']['leaderBoardLines'])) {
             return;
         }
+        
+        $date     = now()->createFromFormat('ymd', $fileDate)->format('Y-m-d');
+        // Find the track by ingame_id
+        $track = Track::where('ingame_id', $data['trackName'])->first();
+        if (! $track) {
+            Log::error('Track not found', $data['trackName']);
+            return;
+        }
 
-        $hotlaps = $data['sessionResult']['leaderBoardLines'];
-        foreach ($hotlaps as $hotlap) {
+        foreach ($data['sessionResult']['leaderBoardLines'] as $hotlap) {
+
             $car    = Car::findOrFail($hotlap['car']['carModel']);
-            $driver = Driver::firstOrUpdate(
-                ['playerId' => $hotlap['currentDriver']['playerId']],
-                [
-                    'steamId' => $hotlap['currentDriver']['playerId'],
-                ]
-            );
-            $track = Track::findOrFail($data['sessionResult']['trackId']);
+            $driver = Driver::query()
+                ->where('first_name', $hotlap['currentDriver']['firstName'])
+                ->where('last_name', $hotlap['currentDriver']['lastName'])
+                ->first()
+            ;
 
+            if (! $driver) {
+                Log::error('Driver not found', $hotlap['currentDriver']);
+            }
+
+            if($driver->steam_id != $hotlap['currentDriver']['playerId']) {
+                $driver->update(['steam_id' => $hotlap['currentDriver']['playerId']]);
+            }
+                
             $laptime = $hotlap['timing']['bestLap'];
-
+                
             // Disacard bad lap times
             if ($laptime === 0 || $laptime === 2147483647) {
                 return;
             }
-
+                
             Hotlap::firstOrCreate([
                 'driver_id' => $driver->id,
                 'track_id'  => $track->id,
                 'car_id'    => $car->id,
                 'laptime'   => $laptime,
-                'date'      => $date,
+                'measured_at'      => $date,
             ]);
         }
     }

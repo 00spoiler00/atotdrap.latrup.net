@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(Track::class)->constrained();
             $table->foreignIdFor(Car::class)->constrained();
             $table->integer('laptime');
+            $table->timestamp('measured_at');
             $table->timestamps();
         });
     }

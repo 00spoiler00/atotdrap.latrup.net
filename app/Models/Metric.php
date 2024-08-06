@@ -9,6 +9,14 @@ class Metric extends BaseModel
     use HasFactory;
     public $timestamps = false;
 
+    // Define the date fields
+    protected function casts(): array
+    {
+        return [
+            'measured_at' => 'datetime',
+        ];
+    }
+    
     // region Relationships
 
     public function driver()

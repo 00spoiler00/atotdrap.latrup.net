@@ -38,7 +38,7 @@ class UpdateRegistrations extends Command
 
         Driver::all()->each(function (Driver $driver) {
             // Get the data from the remote api
-            $data = Http::get("https://api.pitskill.io/api/events/upcomingRegistrations?id={$driver->clubMember->piskill_id}")->json();
+            $data = Http::get("https://api.pitskill.io/api/events/upcomingRegistrations?id={$driver->clubMember->pitskill_id}")->json();
 
             if (! $data || $data['status'] !== 1) {
                 return;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Hotlap;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HotlapController extends Controller
 {
@@ -12,7 +13,7 @@ class HotlapController extends Controller
      */
     public function index()
     {
-        //
+        return Hotlap::all()->map(fn($t) => $t->readableLapTime);
     }
 
     /**
