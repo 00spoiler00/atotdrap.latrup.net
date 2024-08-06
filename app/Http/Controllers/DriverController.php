@@ -46,4 +46,14 @@ class DriverController extends Controller
     {
         //
     }
+
+    public function hotlaps(Driver $driver)
+    {
+        return $driver->hotlaps;
+    }
+
+    public function metrics(Driver $driver)
+    {
+        return $driver->metrics;
+    }
 }

@@ -32,11 +32,12 @@ class UpdateHotlaps extends Command
      */
     public function handle()
     {
-        Log::info('Updating hotlaps data from the server');
-
         $files = glob(self::$directory . '/*.json');
+     
+        Log::info('Updating '.count($files).' hotlap files from the server');
+
         foreach ($files as $file) {
-            Log::info('Processing file', ['file' => $file]);
+            // Log::info('Processing file', ['file' => $file]);
             $this->processFile($file);
             // unlink($file);
         }
