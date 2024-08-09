@@ -63,13 +63,18 @@ class UpdateHotlaps extends Command
 
         foreach ($data['sessionResult']['leaderBoardLines'] as $hotlap) {
 
+            // Car matching
             $car    = Car::findOrFail($hotlap['car']['carModel']);
+            
+            // Driver matching via first and last name or steam_id
             $driver = Driver::query()
                 ->where('first_name', $hotlap['currentDriver']['firstName'])
                 ->where('last_name', $hotlap['currentDriver']['lastName'])
+                ->orWhere('steam_id', $hotlap['currentDriver']['playerId'])
                 ->first()
             ;
 
+            // Otherwise just report the error
             if (! $driver) {
                 Log::error('Driver not found', $hotlap['currentDriver']);
                 continue;
