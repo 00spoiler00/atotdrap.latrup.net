@@ -25,7 +25,7 @@ class ImportOldStats extends Command
      *
      * @var string
      */
-    protected $description = 'Imports the old hotlaps data from the server';
+    protected $description = 'Imports the old stats data from the server';
 
     /**
      * Execute the console command.

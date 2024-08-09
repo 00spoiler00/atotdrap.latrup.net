@@ -72,6 +72,7 @@ class UpdateHotlaps extends Command
 
             if (! $driver) {
                 Log::error('Driver not found', $hotlap['currentDriver']);
+                continue;
             }
 
             if($driver->steam_id != $hotlap['currentDriver']['playerId']) {

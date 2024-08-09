@@ -12,7 +12,7 @@ return new class() extends Migration {
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->string('steamId')->unique()->nullable();
+            $table->string('steam_id')->unique()->nullable();
             $table->foreignIdFor(\App\Models\ClubMember::class)->constrained();
             $table->string('first_name');
             $table->string('last_name');
