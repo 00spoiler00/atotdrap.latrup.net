@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('home');
-// });
-require __DIR__.'/auth.php';
+Route::get('/', function () {
+    return view('index');
+});
+require __DIR__ . '/auth.php';

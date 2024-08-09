@@ -1,5 +1,8 @@
-import "./bootstrap";
-import { createApp } from "vue";
-import app from "./layouts/app.vue";
+import { createApp } from 'vue'
+import Counter from './components/Counter.vue'
 
-createApp(app).mount("#app");
+const app = createApp()
+
+app.component('counter', Counter)
+
+app.mount('#app')
