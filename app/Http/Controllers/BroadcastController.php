@@ -12,7 +12,7 @@ class BroadcastController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -20,7 +20,7 @@ class BroadcastController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -28,7 +28,7 @@ class BroadcastController extends Controller
      */
     public function show(Broadcast $broadcast)
     {
-        //
+
     }
 
     /**
@@ -36,7 +36,7 @@ class BroadcastController extends Controller
      */
     public function update(Request $request, Broadcast $broadcast)
     {
-        //
+
     }
 
     /**
@@ -44,6 +44,6 @@ class BroadcastController extends Controller
      */
     public function destroy(Broadcast $broadcast)
     {
-        //
+
     }
 }

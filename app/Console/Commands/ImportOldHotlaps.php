@@ -4,12 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\Car;
 use App\Models\Driver;
-use App\Models\Hotlap;
 use App\Models\Track;
-use App\Models\ClubMember;
-use App\Models\Metric;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class ImportOldHotlaps extends Command
 {
@@ -34,31 +30,28 @@ class ImportOldHotlaps extends Command
     {
         $data = json_decode(file_get_contents(storage_path('hotlaps.json')), true);
 
-        foreach($data as $track => $records){
-
-            if(!$track = Track::where('ingame_id', $track)->first()){
-                $this->info("Track not found: " . $track);
+        foreach ($data as $track => $records) {
+            if (! $track = Track::where('ingame_id', $track)->first()) {
+                $this->info('Track not found: ' . $track);
                 continue;
             }
 
-            foreach($records as $record){
+            foreach ($records as $record) {
+                // Find the driver splitting the name and surname and doing a loose comparison
+                $driver = Driver::where('first_name', 'like', '%' . explode(' ', $record['Driver'])[0] . '%')
+                    ->where('last_name', 'like', '%' . explode(' ', $record['Driver'])[1] . '%')
+                    ->first();
 
-            // Find the driver splitting the name and surname and doing a loose comparison
-            $driver = Driver::where('first_name', 'like', '%' . explode(' ', $record['Driver'])[0] . '%')
-                ->where('last_name', 'like', '%' . explode(' ', $record['Driver'])[1] . '%')
-                ->first();
+                if (! $driver) {
+                    $this->info('Driver not found: ' . $record['Driver']);
+                    continue;
+                }
 
-            if(!$driver){
-                $this->info("Driver not found: " . $record['Driver']);
-                continue;
-            }   
-
-            if(!$car = Car::find($record['CarId'])->first()){
-                $this->info("Car not found: " . $record['CarId']);
-                continue;
+                if (! $car = Car::find($record['CarId'])->first()) {
+                    $this->info('Car not found: ' . $record['CarId']);
+                    continue;
+                }
             }
-        }   
-
         }
     }
 }

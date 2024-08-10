@@ -24,7 +24,7 @@ class Driver extends BaseModel
     {
         return $this->hasMany(Enrollment::class);
     }
-    
+
     public function hotlaps()
     {
         return $this->hasMany(Hotlap::class);

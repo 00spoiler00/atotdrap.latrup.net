@@ -12,7 +12,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -20,7 +20,7 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -28,7 +28,7 @@ class DriverController extends Controller
      */
     public function show(Driver $driver)
     {
-        //
+
     }
 
     /**
@@ -36,7 +36,7 @@ class DriverController extends Controller
      */
     public function update(Request $request, Driver $driver)
     {
-        //
+
     }
 
     /**
@@ -44,7 +44,7 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
-        //
+
     }
 
     public function hotlaps(Driver $driver)
