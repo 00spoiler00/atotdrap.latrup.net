@@ -1,0 +1,546 @@
+<template>
+    <v-app dark>
+        <v-main>
+            <v-app-bar app class="elevation-4">
+
+                <!-- This should stick to the left -->
+                <v-toolbar-title>
+                    <div class="flex items-center justify-center">
+                        <a href="https://discord.gg/GFvYkjYbta">
+                            <v-avatar size="36" my-1>
+                                <v-img src='./images/icons/android-chrome-192x192.png' />
+                            </v-avatar>
+                        </a>
+                        <span class="ml-4 font-bold hidden sm:block">
+                            PitSkill A Tot Drap
+                        </span>
+                    </div>
+                </v-toolbar-title>
+
+                <v-spacer></v-spacer>
+
+
+                <!-- This should be in the center -->
+                <small>Actualitzat: {{ timeUntil(lastUpdate) }}</small>
+
+                <v-spacer></v-spacer>
+
+
+                <!-- This should be grouped with next section (v-btn and v-progress-circular) and everything be sticked to the right -->
+
+                <div class="mr-4 hidden sm:block">
+                    <a href="https://www.pitskill.io">
+                        <img src='./images/icons/pitskill.png' style="height: 16px" />
+                    </a>
+                </div>
+
+                <!-- This should be sticked to the right and keep this vertical disposition as is -->
+                <div class="flex flex-col items-end">
+                    <v-btn x-small icon @click="showChangeLog()" class="mb-2">
+                        <v-icon color="primary">mdi-file-document-outline</v-icon>
+                    </v-btn>
+
+                    <v-progress-circular
+                        :rotate="-90"
+                        :size="12"
+                        :width="6"
+                        :value="countdownValue"
+                        color="primary"
+                        class="mr-1">
+                        <!-- <small>{{ countdownTime }}</small> -->
+                    </v-progress-circular>
+                </div>
+
+            </v-app-bar>
+
+            <v-tabs v-model="tab">
+                <v-tab>
+                    <v-icon class="mr-2">mdi-file-document</v-icon>
+                    <span class="d-none d-sm-inline">Registres</span>
+                </v-tab>
+                <v-tab>
+                    <v-icon class="mr-2">mdi-trophy</v-icon>
+                    <span class="d-none d-sm-inline">Tops</span>
+                </v-tab>
+                <v-tab>
+                    <v-icon class="mr-2">mdi-chart-bar</v-icon>
+                    <span class="d-none d-sm-inline">Ranking</span>
+                </v-tab>
+                <v-tab>
+                    <v-icon class="mr-2">mdi-speedometer</v-icon>
+                    <span class="d-none d-sm-inline">HotLaps</span>
+                </v-tab>
+            </v-tabs>
+
+            <v-tabs-items v-model="tab" :touch="{}">
+                <v-tab-item>
+                    <v-card flat>
+                        <v-card-title>
+                            <v-text-field v-model="registrationsSearch" label="Cerca registres" append-icon="mdi-magnify" single-line hide-details></v-text-field>
+                        </v-card-title>
+                        <v-data-table :mobile-breakpoint="0" :headers="registrationHeaders" :items="filteredRegistrations" class="mt-5" disable-pagination :hide-default-footer="true" dense>
+                            <template v-slot:item="props">
+                                <tr class="whitespace-nowrap">
+                                    <td>
+                                        <v-progress-circular
+                                            class="mr-2"
+                                            :value="getInterest(props.item['Upcoming Event']) * (100 / 10)"
+                                            :rotate="0"
+                                            :size="32"
+                                            :width="4"
+                                            color="primary">
+                                            {{ getInterest(props.item['Upcoming Event']) }}
+                                        </v-progress-circular>
+
+                                        <!-- Actions-->
+                                        <v-btn small icon @click="openDialog('Server', props.item.Server)">
+                                            <v-icon color="primary">mdi-connection</v-icon>
+                                        </v-btn>
+
+                                        <v-btn
+                                            small
+                                            :href="'https://pitskill.io/event/' + props.item['Enroll Link']"
+                                            target="_blank"
+                                            icon>
+                                            <v-icon color="primary">mdi-account-plus</v-icon>
+                                        </v-btn>
+
+                                        <v-btn v-if="props.item['Broadcasted']" small icon @click="openDialog('Emissions', props.item['Broadcasted'])">
+                                            <v-icon color="primary">mdi-video</v-icon>
+                                        </v-btn>
+
+                                    </td>
+
+                                    <td>{{ props.item.Driver }}</td>
+                                    <td>
+                                        <div v-text="timeUntil(props.item['On Date'])"></div>
+                                        <div v-text="props.item['On Date']" class="text-xs"></div>
+                                    </td>
+                                    <td>{{ props.item['Upcoming Event'] }}</td>
+                                    <td>{{ Math.round(parseFloat(props.item['Server SoF']) * 10) / 10 }} ({{ props.item.Registration }})</td>
+                                    <td>{{ props.item.Car }}</td>
+                                    <td>
+                                        <v-btn small icon @click="openDialog('Circuit Image', props.item['Circuit Image'])">
+                                            <v-icon color="primary">mdi-image</v-icon>
+                                        </v-btn>
+                                        {{ props.item.Track }}
+                                    </td>
+                                </tr>
+                            </template>
+                        </v-data-table>
+                    </v-card>
+                </v-tab-item>
+
+                <v-tab-item>
+                    <v-container class="mt-4">
+                        <v-row>
+
+                            <v-col cols="12" sm="6" md="4">
+                                <v-card flat>
+                                    <v-card-title>Promocions</v-card-title>
+                                    <v-card-subtitle>Noves llicències</v-card-subtitle>
+                                    <v-col v-for="dId in changes.Promotions" :key="dId" cols="12">
+                                        <v-card color="warning">
+                                            <v-card-title class="flex">
+                                                <v-icon left color="white">mdi-certificate</v-icon>
+                                                <v-spacer></v-spacer>
+                                                <div class="text-white" v-html="drivers.find(d => d['Driver Id'] == dId)['Driver Name']"></div>
+                                            </v-card-title>
+                                        </v-card>
+                                    </v-col>
+                                </v-card>
+                            </v-col>
+
+
+                            <v-col cols="12" sm="6" md="4">
+                                <v-card flat>
+                                    <v-card-title>PitRep</v-card-title>
+                                    <v-card-subtitle>Pujant</v-card-subtitle>
+                                    <v-col v-for="(value, key) in changes.PitRepIncreases" :key="key" cols="12">
+                                        <v-card color="success">
+                                            <v-card-title class="flex">
+                                                <v-icon left color="white">mdi-arrow-up-bold</v-icon>
+                                                {{ Math.round(parseFloat(value) * 100) / 100 }}
+                                                <v-spacer></v-spacer>
+                                                {{ drivers.find(d => d['Driver Id'] == key)['Driver Name'] }}
+                                            </v-card-title>
+                                        </v-card>
+                                    </v-col>
+                                    <v-card-subtitle>Baixant</v-card-subtitle>
+                                    <v-col v-for="(value, key) in changes.PitRepDecreases" :key="key" cols="12">
+                                        <v-card color="error">
+                                            <v-card-title class="flex">
+                                                <v-icon left color="white">mdi-arrow-down-bold</v-icon>
+                                                {{ Math.round(parseFloat(value) * 100) / 100 }}
+                                                <v-spacer></v-spacer>
+                                                {{ drivers.find(d => d['Driver Id'] == key)['Driver Name'] }}
+                                            </v-card-title>
+                                        </v-card>
+                                    </v-col>
+                                </v-card>
+                            </v-col>
+
+                            <v-col cols="12" sm="6" md="4">
+                                <v-card flat>
+                                    <v-card-title>PitSkill</v-card-title>
+                                    <v-card-subtitle>Pujant</v-card-subtitle>
+                                    <v-col v-for="(value, key) in changes.PitSkillIncreases" :key="key" cols="12">
+                                        <v-card color="success">
+                                            <v-card-title class="flex">
+                                                <v-icon left color="white">mdi-arrow-up-bold</v-icon>
+                                                {{ Math.round(parseFloat(value) * 10) / 10 }}
+                                                <v-spacer></v-spacer>
+                                                {{ drivers.find(d => d['Driver Id'] == key)['Driver Name'] }}
+                                            </v-card-title>
+                                        </v-card>
+                                    </v-col>
+
+                                    <v-card-subtitle>Baixant</v-card-subtitle>
+                                    <v-col v-for="(value, key) in changes.PitSkillDecreases" :key="key" cols="12">
+                                        <v-card color="error">
+                                            <v-card-title class="flex">
+                                                <v-icon left color="white">mdi-arrow-down-bold</v-icon>
+                                                {{ Math.round(parseFloat(value) * 10) / 10 }}
+                                                <v-spacer></v-spacer>
+                                                {{ drivers.find(d => d['Driver Id'] == key)['Driver Name'] }}
+                                            </v-card-title>
+                                        </v-card>
+                                    </v-col>
+                                </v-card>
+                            </v-col>
+
+                        </v-row>
+
+
+                    </v-container>
+                </v-tab-item>
+
+                <v-tab-item>
+                    <v-card flat>
+                        <v-card-title>
+                            <v-text-field v-model="driversSearch" label="Cerca pilots" append-icon="mdi-magnify" single-line hide-details></v-text-field>
+                        </v-card-title>
+                        <v-data-table :mobile-breakpoint="0" :headers="driverHeaders" :items="filteredDrivers" disable-pagination :hide-default-footer="true">
+                            <template v-slot:item="props">
+                                <tr>
+                                    <td>
+                                        <v-avatar size="36" my-1>
+                                            <v-img :src='props.item.Image' />
+                                        </v-avatar>
+                                    </td>
+                                    <td>
+                                        <a :href="'https://pitskill.io/driver-license/' + props.item['Driver Id']" target="_blank">
+                                            {{ props.item['Driver Name'] }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div v-if="getLicence(props.item) === 'Provisional'" class="h-8 w-28 font-bold rounded-xl border-2 bg-red-800 border-yellow-400 text-center py-1">Provisional</div>
+                                        <div v-else-if="getLicence(props.item) === 'Bronze'" class="h-8 w-28 font-bold rounded-xl border-2 bg-red-800 border-red-800 text-center py-1">Bronze</div>
+                                        <div v-else-if="getLicence(props.item) === 'Silver'" class="h-8 w-28 font-bold rounded-xl border-2 border-gray-400 bg-gray-400  text-center py-1 text-black">Silver</div>
+                                        <div v-else-if="getLicence(props.item) === 'Platinum'" class="h-8 w-28 font-bold rounded-xl border-2 border-white bg-white text-center py-1 text-black">Platinum</div>
+                                        <div v-else-if="getLicence(props.item) === 'Elite'" class="h-8 w-28 font-bold rounded-xl border-2 border-yellow-400 text-center py-1 text-yellow-400">Elite</div>
+                                        <div v-else class="h-8 w-28 font-bold rounded-xl border-2 border-yellow-400 text-center py-1 text-yellow-400">????</div>
+                                    </td>
+                                    <td>
+                                        <v-btn icon @click="openDialog('PitRep', props.item.Stats.PitRep)">
+                                            <v-icon color="secondary">mdi-chart-line</v-icon>
+                                        </v-btn>
+                                        <span>{{ props.item.PitRep }}</span>
+                                    </td>
+                                    <td>
+                                        <v-btn icon @click="openDialog('PitSkill', props.item.Stats.PitSkill)">
+                                            <v-icon color="primary">mdi-chart-line</v-icon>
+                                        </v-btn>
+                                        <span>{{ props.item.PitSkill }}</span>
+                                    </td>
+                                </tr>
+                            </template>
+                        </v-data-table>
+
+                    </v-card>
+                </v-tab-item>
+
+                <v-tab-item>
+                    <v-card flat>
+
+                        <v-card-title>
+                            <small>Hotlaps del <i><b>ATOTDRAP 00 Ps Hotlap BoP</b></i></small>
+                        </v-card-title>
+
+                        <v-card-title>
+                            <v-row>
+                                <v-col cols="12" sm="6">
+                                    <v-select v-model="hotlapTrack" :items="hotlapTracks" label="Circuit" hide-details />
+                                </v-col>
+                                <v-col cols="12" sm="6">
+                                    <v-select v-model="hotlapCategoriesSelected" :items="hotlapCategories" label="Categoria" hide-details multiple />
+                                </v-col>
+                            </v-row>
+                        </v-card-title>
+
+                        <v-data-table :mobile-breakpoint="0" :headers="hotlapHeaders" :items="filteredHotlaps" disable-pagination :hide-default-footer="true" :sort-by.sync="hotlapSortField" :sort-desc.sync="hotlapSortDesc">
+                            <template v-slot:item="props">
+                                <tr>
+                                    <td v-html="props.item['Category']"></td>
+                                    <td v-html="props.item['Driver']"></td>
+                                    <td v-html="formatLaptime(props.item['Laptime'])"></td>
+                                    <td v-html="props.item['CarModel']"></td>
+                                    <td v-html="props.item['Date']"></td>
+                                </tr>
+                            </template>
+                        </v-data-table>
+
+                    </v-card>
+                </v-tab-item>
+
+            </v-tabs-items>
+
+            <!-- Reusable dialogs -->
+            <v-dialog v-model="isDialogOpen" max-width="800">
+                <v-card v-if="dialogData">
+                    <v-card-title>
+                        {{ dialogMode }}
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click="isDialogOpen = false">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-card-title>
+
+
+                    <v-card-text class="overflow-y-auto" style="max-height: 80dvh;">
+
+                        <div class="markdown-content" v-if="['ChangeLog'].includes(dialogMode)" v-html="dialogData"></div>
+
+                        <v-img v-if="['Circuit Image'].includes(dialogMode)" :src="'https://cdn.pitskill.io/public/TrackPhoto-' + dialogData"></v-img>
+
+                        <v-template v-if="['Emissions'].includes(dialogMode)">
+                            <div class="font-bold" v-html="dialogData"></div>
+                        </v-template>
+
+                        <v-template v-if="['Server'].includes(dialogMode)">
+                            <div class="font-bold">Detalls del servidor</div>
+                            <div>{{ dialogData }}</div>
+                        </v-template>
+
+                        <v-template v-if="['PitSkill', 'PitRep'].includes(dialogMode)">
+                            <v-sparkline auto-draw smooth :value="dialogData" :color="dialogMode == 'PitSkill' ? 'primary' : 'secondary'" :height="300" :width="400" stroke-linecap="round" />
+                        </v-template>
+                    </v-card-text>
+
+                </v-card>
+            </v-dialog>
+
+
+
+        </v-main>
+    </v-app>
+</template>
+
+<script>
+// import Counter from '../components/Counter.vue'
+export default {
+    name: 'App',
+    // components: {
+    //     Counter
+    // },
+    data: () => ({
+        tab: null,
+        driversSearch: '',
+        registrationsSearch: '',
+        progress: 100,
+        interval: null,
+        driverHeaders: [
+            { text: '', align: 'start', sortable: false, value: 'Image' },
+            { text: 'Pilot', value: 'Driver Name' },
+            { text: 'Llicència', value: 'Licence' },
+            { text: 'PitRep', value: 'PitRep' },
+            { text: 'PitSkill', value: 'PitSkill' },
+        ],
+        registrationHeaders: [
+            { text: '', value: '', align: 'center' },
+            { text: 'Pilot', value: 'Driver' },
+            { text: 'Data', value: 'On Date' },
+            { text: 'Esdevenimment', value: 'Upcoming Event' },
+            { text: 'SoF (#)', value: 'Server SoF' },
+            { text: 'Cotxe', value: 'Car' },
+            { text: 'Circuit', value: 'Track' },
+        ],
+        hotlapHeaders: [
+            { text: 'Categoria', value: 'Category' },
+            { text: 'Pilot', value: 'Driver' },
+            { text: 'Temps', value: 'Laptime' },
+            { text: 'Cotxe', value: 'CarModel' },
+            { text: 'Data', value: 'Date' },
+        ],
+
+        hotlapSortField: 'Laptime',
+        hotlapSortDesc: false,
+
+        drivers: [],
+        registrations: [],
+        changes: {
+            PitRepIncreases: {},
+            PitRepDecreases: {},
+            PitSkillIncreases: {},
+            PitSkillDecreases: {},
+        },
+        countdownValue: 100,
+        countdownTime: 10,
+        lastUpdate: 0,
+
+        dialogData: null,
+        dialogMode: null,
+        isDialogOpen: false,
+
+        hotlaps: [],
+        hotlapTracks: [],
+        hotlapCategories: ['GT2', 'GT3', 'GT4', 'GTC', 'TCX'],
+        hotlapCategoriesSelected: ['GT2', 'GT3', 'GT4', 'GTC', 'TCX'],
+        hotlapTrack: null,
+    }),
+    computed: {
+
+        filteredDrivers() {
+            return this.drivers.filter(driver => {
+                const searchTerm = this.driversSearch.toLowerCase()
+                return Object.values(driver).some(value =>
+                    value.toString().toLowerCase().includes(searchTerm)
+                )
+            })
+        },
+
+        filteredRegistrations() {
+            return this.registrations.filter(registration => {
+                const searchTerm = this.registrationsSearch.toLowerCase()
+                return Object.values(registration).some(value =>
+                    value.toString().toLowerCase().includes(searchTerm)
+                )
+            })
+        },
+
+        filteredHotlaps() {
+            hotlaps = this.hotlaps[this.hotlapTrack]
+            return hotlaps ? hotlaps.filter(hl => this.hotlapCategoriesSelected.includes(hl.Category)) : []
+        },
+
+    },
+
+    created() {
+        this.fetchData()
+        this.startCountdown()
+    },
+
+    methods: {
+
+        fetchData() {
+
+            fetch('/data.json')
+                .then(response => response.json())
+                .then(data => {
+
+                    const specifiedVersion = 2
+                    if (data.version > specifiedVersion) {
+                        window.location.reload()
+                        return
+                    }
+
+                    this.drivers = data.drivers.data
+                    this.registrations = data.registrations.data
+                    this.changes = data.changes
+                    this.lastUpdate = data.lastUpdate
+                })
+                .catch(error => console.error('Error fetching data:', error))
+
+            fetch('/hotlaps.json')
+                .then(response => response.json())
+                .then(data => {
+                    this.hotlaps = data
+                    this.hotlapTracks = Object.keys(data).map(track => ({
+                        text: track.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(''),
+                        value: track
+                    }))
+
+                    let mostRecentlyUpdatedHotlapTrack = this.getMostRecentUpdatedHotlapTrack(data)
+
+                    if (!this.hotlapTrack || this.hotlapTrack != mostRecentlyUpdatedHotlapTrack) {
+                        this.hotlapTrack = mostRecentlyUpdatedHotlapTrack
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error))
+        },
+
+        getInterest(upcomingEvent) {
+            const eventCount = this.registrations.filter(reg => reg['Upcoming Event'] === upcomingEvent).length
+            return Math.min(10, eventCount)
+        },
+
+        getLicence(item) {
+            const pitrep = item.PitRep
+            const pitskill = item.PitSkill
+
+            if (pitrep >= 20 && pitskill >= 3500) return 'Elite'
+            if (pitrep >= 15 && pitskill >= 2750) return 'Platinum'
+            if (pitrep >= 10 && pitskill >= 1900) return 'Silver'
+            return (pitrep > 5) ? 'Bronze' : 'Provisional'
+        },
+
+        timeUntil(dateString) {
+            return moment(dateString, "DD/MM/YY HH:mm").fromNow()
+        },
+
+        formatLaptime(ms) {
+            const minutes = Math.floor(ms / 60000);
+            const seconds = ((ms % 60000) / 1000).toFixed(3);
+            return `${minutes}:${seconds.padStart(6, '0')}`;
+        },
+
+        startCountdown() {
+            setInterval(() => {
+                if (this.countdownTime > 0) {
+                    this.countdownTime--
+                    this.countdownValue = (this.countdownTime / 10) * 100
+                } else {
+                    this.countdownTime = 10
+                    this.fetchData()
+                }
+            }, 1000)
+        },
+
+        openDialog(mode, data) {
+            this.dialogData = data
+            this.dialogMode = mode
+            this.isDialogOpen = true
+        },
+
+        showChangeLog() {
+            fetch('./README.md')
+                .then(response => response.text())
+                .then(data => this.openDialog('ChangeLog', marked.parse(data)))
+                .catch(error => console.error('Error fetching data:', error))
+        },
+
+        getMostRecentUpdatedHotlapTrack(data) {
+            let mostRecentTrack = null;
+            let mostRecentDate = null;
+
+            for (const [track, laps] of Object.entries(data)) {
+                laps.forEach(lap => {
+                    const lapDate = new Date(lap.Date);
+                    if (!mostRecentDate || lapDate > mostRecentDate) {
+                        mostRecentDate = lapDate;
+                        mostRecentTrack = track;
+                    }
+                });
+            }
+
+            return mostRecentTrack;
+        }
+
+    },
+
+    beforeDestroy() {
+        clearInterval(this.interval)
+    },
+
+}
+</script>

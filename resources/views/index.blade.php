@@ -5,7 +5,7 @@
 	</head>
 	<body>
 		<div id="app">
-            <counter />
+            <App />
 		</div>
 	</body>
 </html>

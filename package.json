@@ -26,9 +26,13 @@
         "vue": "^3.4.37"
     },
     "dependencies": {
+        "@mdi/font": "^7.4.47",
+        "moment": "^2.30.1",
         "pinia": "^2.1.7",
         "quasar": "^2.16.4",
+        "vite-plugin-vuetify": "^2.0.4",
         "vue-loader": "^17.4.2",
-        "vue-router": "^4.3.2"
+        "vue-router": "^4.3.2",
+        "vuetify": "^3.6.14"
     }
 }

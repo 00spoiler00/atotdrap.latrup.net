@@ -1,8 +1,9 @@
 import { createApp } from 'vue'
-import Counter from './components/Counter.vue'
+import AppLayout from './layouts/App.vue'
+import vuetify from "./vuetify";
 
-const app = createApp()
+createApp(app)
+    .use(vuetify)
+    .component('app', AppLayout)
+    .mount("#app");
 
-app.component('counter', Counter)
-
-app.mount('#app')
