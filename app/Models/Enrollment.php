@@ -24,5 +24,4 @@ class Enrollment extends BaseModel
     {
         return $this->belongsTo(Car::class);
     }
-    
 }

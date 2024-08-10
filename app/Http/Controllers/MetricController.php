@@ -12,7 +12,7 @@ class MetricController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -20,7 +20,7 @@ class MetricController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -28,7 +28,7 @@ class MetricController extends Controller
      */
     public function show(Metric $metric)
     {
-        //
+
     }
 
     /**
@@ -36,7 +36,7 @@ class MetricController extends Controller
      */
     public function update(Request $request, Metric $metric)
     {
-        //
+
     }
 
     /**
@@ -44,6 +44,6 @@ class MetricController extends Controller
      */
     public function destroy(Metric $metric)
     {
-        //
+
     }
 }

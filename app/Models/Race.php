@@ -7,14 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Race extends BaseModel
 {
     use HasFactory;
-    
-    // Define the date fields
-    protected function casts(): array
-    {
-        return [
-            'starts_at' => 'datetime:m-d H:i',
-        ];
-    }
 
     // region Relationships
 
@@ -38,5 +30,13 @@ class Race extends BaseModel
     public function getEnrollLinkAttribute()
     {
         return "https://pitskill.io/event/{$this->event_id}";
+    }
+
+    // Define the date fields
+    protected function casts(): array
+    {
+        return [
+            'starts_at' => 'datetime:m-d H:i',
+        ];
     }
 }

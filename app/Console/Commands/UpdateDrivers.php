@@ -9,7 +9,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-
 class UpdateDrivers extends Command
 {
     /**
@@ -66,8 +65,7 @@ class UpdateDrivers extends Command
                 ->orderBy('measured_at', 'desc')
                 ->first();
 
-            
-            if (!$lastPitrep || round($lastPitrep->value, 2) !== round($pitrep, 2)) {
+            if (! $lastPitrep || round($lastPitrep->value, 2) !== round($pitrep, 2)) {
                 Log::info('Inserting new pitrep metric', ['driver' => $driver->id, 'value' => $pitrep]);
                 Metric::create([
                     'driver_id'   => $driver->id,
@@ -84,7 +82,7 @@ class UpdateDrivers extends Command
                 ->first();
 
             // Do a safe comparison betwee the last pitskill value and the current one assuming that one may be a rounded float and the other a float
-            if (!$lastpitskill || round($lastpitskill->value, 2) !== round($pitskill, 2)) {
+            if (! $lastpitskill || round($lastpitskill->value, 2) !== round($pitskill, 2)) {
                 Log::info('Inserting new pitskill metric', ['driver' => $driver->id, 'value' => $pitskill]);
                 Metric::create([
                     'driver_id'   => $driver->id,

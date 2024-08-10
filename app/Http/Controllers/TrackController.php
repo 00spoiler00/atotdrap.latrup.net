@@ -12,7 +12,7 @@ class TrackController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -20,7 +20,7 @@ class TrackController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -28,7 +28,7 @@ class TrackController extends Controller
      */
     public function show(Track $track)
     {
-        //
+
     }
 
     /**
@@ -36,7 +36,7 @@ class TrackController extends Controller
      */
     public function update(Request $request, Track $track)
     {
-        //
+
     }
 
     /**
@@ -44,6 +44,6 @@ class TrackController extends Controller
      */
     public function destroy(Track $track)
     {
-        //
+
     }
 }

@@ -12,7 +12,7 @@ class ClubMemberController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -20,7 +20,7 @@ class ClubMemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -28,7 +28,7 @@ class ClubMemberController extends Controller
      */
     public function show(ClubMember $clubMember)
     {
-        //
+
     }
 
     /**
@@ -36,7 +36,7 @@ class ClubMemberController extends Controller
      */
     public function update(Request $request, ClubMember $clubMember)
     {
-        //
+
     }
 
     /**
@@ -44,6 +44,6 @@ class ClubMemberController extends Controller
      */
     public function destroy(ClubMember $clubMember)
     {
-        //
+
     }
 }

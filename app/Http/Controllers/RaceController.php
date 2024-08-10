@@ -12,7 +12,7 @@ class RaceController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -20,7 +20,7 @@ class RaceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -28,7 +28,7 @@ class RaceController extends Controller
      */
     public function show(Race $race)
     {
-        //
+
     }
 
     /**
@@ -36,7 +36,7 @@ class RaceController extends Controller
      */
     public function update(Request $request, Race $race)
     {
-        //
+
     }
 
     /**
@@ -44,6 +44,6 @@ class RaceController extends Controller
      */
     public function destroy(Race $race)
     {
-        //
+
     }
 }

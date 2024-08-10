@@ -18,7 +18,7 @@ return new class() extends Migration {
             $table->foreignIdFor(Driver::class)->constrained();
             $table->foreignIdFor(Race::class)->constrained();
             $table->foreignIdFor(Car::class)->constrained();
-            $table->string('server_name');           
+            $table->string('server_name');
             $table->float('sof', 5, 1);
             $table->integer('split');
             $table->boolean('is_notified')->default(false);

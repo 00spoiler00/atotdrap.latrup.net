@@ -12,7 +12,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -20,7 +20,7 @@ class CarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -28,7 +28,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        //
+
     }
 
     /**
@@ -36,7 +36,7 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        //
+
     }
 
     /**
@@ -44,6 +44,6 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+
     }
 }
