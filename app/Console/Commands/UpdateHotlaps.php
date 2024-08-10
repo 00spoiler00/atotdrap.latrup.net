@@ -8,6 +8,7 @@ use App\Models\Hotlap;
 use App\Models\Track;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class UpdateHotlaps extends Command
 {
@@ -37,9 +38,8 @@ class UpdateHotlaps extends Command
         Log::info('Updating '.count($files).' hotlap files from the server');
 
         foreach ($files as $file) {
-            // Log::info('Processing file', ['file' => $file]);
+            Log::info('Processing file', ['file' => $file]);
             $this->processFile($file);
-            // unlink($file);
         }
     }
 
@@ -53,7 +53,6 @@ class UpdateHotlaps extends Command
             return;
         }
         
-        $date     = now()->createFromFormat('ymd', $fileDate)->format('Y-m-d');
         // Find the track by ingame_id
         $track = Track::where('ingame_id', $data['trackName'])->first();
         if (! $track) {
@@ -61,11 +60,33 @@ class UpdateHotlaps extends Command
             return;
         }
 
-        foreach ($data['sessionResult']['leaderBoardLines'] as $hotlap) {
+        $date     = now()->createFromFormat('ymd', $fileDate);
+        
+        $fails = collect($data['sessionResult']['leaderBoardLines'])
+            ->map(fn($hotlap) => $this->processHotlap($date, $track, $hotlap))
+            ->filter(fn($fail) => $fail)
+            ->isEmpty()
+        ;
+
+        // Delete the file if 'date' is older that two days
+        if(! $fails && $date->diffInDays(now()) > 2) {
+            Log::error('Deleting file', ['file' => $file]);
+            unlink($file);
+        }
+    }
+
+    private function processHotlap(Carbon $date, Track $track,array $hotlap)
+    {
 
             // Car matching
-            $car    = Car::findOrFail($hotlap['car']['carModel']);
-            
+            $car = Car::find($hotlap['car']['carModel']);
+
+            // Otherwise just report the error
+            if (! $car) {
+                Log::error('Car not found', $hotlap['car']['carModel']);
+                return false;
+            }
+
             // Driver matching via first and last name or steam_id
             $driver = Driver::query()
                 ->where('first_name', $hotlap['currentDriver']['firstName'])
@@ -77,7 +98,7 @@ class UpdateHotlaps extends Command
             // Otherwise just report the error
             if (! $driver) {
                 Log::error('Driver not found', $hotlap['currentDriver']);
-                continue;
+                return false;
             }
 
             if($driver->steam_id != $hotlap['currentDriver']['playerId']) {
@@ -88,16 +109,15 @@ class UpdateHotlaps extends Command
                 
             // Disacard bad lap times
             if ($laptime === 0 || $laptime === 2147483647) {
-                return;
+                return true;
             }
                 
-            Hotlap::firstOrCreate([
+            return Hotlap::firstOrCreate([
                 'driver_id' => $driver->id,
                 'track_id'  => $track->id,
                 'car_id'    => $car->id,
                 'laptime'   => $laptime,
-                'measured_at'      => $date,
+                'measured_at'      => $date->format('Y-m-d'),
             ]);
-        }
     }
 }
