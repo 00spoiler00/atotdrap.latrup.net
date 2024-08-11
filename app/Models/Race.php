@@ -36,7 +36,7 @@ class Race extends BaseModel
     protected function casts(): array
     {
         return [
-            'starts_at' => 'datetime:m-d H:i',
+            'starts_at' => 'datetime',
         ];
     }
 }

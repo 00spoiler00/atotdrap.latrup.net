@@ -1,6 +1,5 @@
 <template>
     <v-card flat>
-
         <v-card-title>
             <small>Hotlaps del <i><b>ATOTDRAP 00 Ps Hotlap BoP</b></i></small>
         </v-card-title>
@@ -16,7 +15,12 @@
             </v-row>
         </v-card-title>
 
-        <v-data-table :mobile-breakpoint="0" :headers="headers" :items="filteredItems" disable-pagination :hide-default-footer="true">
+        <v-data-table
+            :mobile-breakpoint="0"
+            :headers="headers"
+            :items="filteredItems"
+            disable-pagination
+            :hide-default-footer="true">
             <template v-slot:item="props">
                 <tr>
                     <td v-html="props.item['Category']"></td>
@@ -27,87 +31,73 @@
                 </tr>
             </template>
         </v-data-table>
-
     </v-card>
 </template>
 
-<script>
-export default {
-    name: 'Hotlaps',
-    data: () => ({
-        headers: [
-            { text: 'Categoria', value: 'Category' },
-            { text: 'Pilot', value: 'Driver' },
-            { text: 'Temps', value: 'Laptime' },
-            { text: 'Cotxe', value: 'CarModel' },
-            { text: 'Data', value: 'Date' },
-        ],
+<script setup>
+import { ref, computed, onMounted } from 'vue';
 
-        sortBy: { key: 'Laptime', order: 'desc' },
+const headers = [
+    { text: 'Categoria', value: 'Category' },
+    { text: 'Pilot', value: 'Driver' },
+    { text: 'Temps', value: 'Laptime' },
+    { text: 'Cotxe', value: 'CarModel' },
+    { text: 'Data', value: 'Date' },
+];
 
-        items: [],
-        tracks: [],
-        categories: ['GT2', 'GT3', 'GT4', 'GTC', 'TCX'],
-        categoriesSelected: ['GT2', 'GT3', 'GT4', 'GTC', 'TCX'],
-        track: null,
-    }),
+const sortBy = ref({ key: 'Laptime', order: 'desc' });
 
-    computed: {
+const items = ref([]);
+const tracks = ref([]);
+const categories = ref(['GT2', 'GT3', 'GT4', 'GTC', 'TCX']);
+const categoriesSelected = ref(['GT2', 'GT3', 'GT4', 'GTC', 'TCX']);
+const track = ref(null);
 
-        filteredItems() {
-            return this.items[this.track] ?? []
-            // const trackHotlaps = this.items[this.track]
-            // return trackHotlaps ? trackHotlaps.filter(hl => this.categoriesSelected.includes(hl.Category)) : []
-        },
+const fetchData = () => {
+    fetch('/hotlaps.json')
+        .then((response) => response.json())
+        .then((data) => {
+            items.value = data;
+            tracks.value = Object.keys(data).map((track) => ({
+                text: track
+                    .toLowerCase()
+                    .split('_')
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(''),
+                value: track,
+            }));
 
-    },
+            track.value = track.value ?? getMostRecentUpdatedHotlapTrack(data);
+        })
+        .catch((error) => console.error('Error fetching data:', error));
+};
 
-    created() {
-        this.fetchData()
-    },
+const filteredItems = computed(() => {
+    return items.value[track.value] ?? [];
+});
 
-    methods: {
+const formatLaptime = (ms) => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = ((ms % 60000) / 1000).toFixed(3);
+    return `${minutes}:${seconds.padStart(6, '0')}`;
+};
 
-        fetchData() {
+const getMostRecentUpdatedHotlapTrack = (data) => {
+    let mostRecentTrack = null;
+    let mostRecentDate = null;
 
-            fetch('/hotlaps.json')
-                .then(response => response.json())
-                .then(data => {
-                    this.items = data
-                    this.tracks = Object.keys(data).map(track => ({
-                        text: track.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(''),
-                        value: track
-                    }))
-
-                    this.track = this.track ?? this.getMostRecentUpdatedHotlapTrack(data);
-                })
-                .catch(error => console.error('Error fetching data:', error))
-        },
-
-        formatLaptime(ms) {
-            const minutes = Math.floor(ms / 60000);
-            const seconds = ((ms % 60000) / 1000).toFixed(3);
-            return `${minutes}:${seconds.padStart(6, '0')}`;
-        },
-
-        getMostRecentUpdatedHotlapTrack(data) {
-            let mostRecentTrack = null;
-            let mostRecentDate = null;
-
-            for (const [track, laps] of Object.entries(data)) {
-                laps.forEach(lap => {
-                    const lapDate = new Date(lap.Date);
-                    if (!mostRecentDate || lapDate > mostRecentDate) {
-                        mostRecentDate = lapDate;
-                        mostRecentTrack = track;
-                    }
-                });
+    for (const [track, laps] of Object.entries(data)) {
+        laps.forEach((lap) => {
+            const lapDate = new Date(lap.Date);
+            if (!mostRecentDate || lapDate > mostRecentDate) {
+                mostRecentDate = lapDate;
+                mostRecentTrack = track;
             }
+        });
+    }
 
-            return mostRecentTrack;
-        }
+    return mostRecentTrack;
+};
 
-    },
-
-}
+onMounted(() => fetchData());
 </script>
