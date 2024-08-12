@@ -20,14 +20,16 @@
             :headers="headers"
             :items="filteredItems"
             disable-pagination
-            :hide-default-footer="true">
+            hide-default-footer
+            :items-per-page="100"
+            :sort-by="sortBy">
             <template v-slot:item="props">
                 <tr>
-                    <td v-html="props.item['Category']"></td>
-                    <td v-html="props.item['Driver']"></td>
-                    <td v-html="formatLaptime(props.item['Laptime'])"></td>
-                    <td v-html="props.item['CarModel']"></td>
-                    <td v-html="props.item['Date']"></td>
+                    <td v-html="props.item.car_category"></td>
+                    <td v-html="props.item.driver"></td>
+                    <td v-html="formatLaptime(props.item.laptime)"></td>
+                    <td v-html="props.item.car"></td>
+                    <td v-html="props.item.measured_at"></td>
                 </tr>
             </template>
         </v-data-table>
@@ -38,14 +40,14 @@
 import { ref, computed, onMounted } from 'vue';
 
 const headers = [
-    { text: 'Categoria', value: 'Category' },
-    { text: 'Pilot', value: 'Driver' },
-    { text: 'Temps', value: 'Laptime' },
-    { text: 'Cotxe', value: 'CarModel' },
-    { text: 'Data', value: 'Date' },
+    { title: 'Categoria', value: 'car_category' },
+    { title: 'Pilot', value: 'driver' },
+    { title: 'Temps', value: 'laptime' },
+    { title: 'Cotxe', value: 'car' },
+    { title: 'Data', value: 'measured_at' },
 ];
 
-const sortBy = ref({ key: 'Laptime', order: 'desc' });
+const sortBy = ref([{ key: 'laptime', order: 'asc' }]);
 
 const items = ref([]);
 const tracks = ref([]);
@@ -54,49 +56,28 @@ const categoriesSelected = ref(['GT2', 'GT3', 'GT4', 'GTC', 'TCX']);
 const track = ref(null);
 
 const fetchData = () => {
-    fetch('/hotlaps.json')
+    fetch('/api/hotlap')
         .then((response) => response.json())
         .then((data) => {
             items.value = data;
-            tracks.value = Object.keys(data).map((track) => ({
-                text: track
-                    .toLowerCase()
-                    .split('_')
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(''),
-                value: track,
-            }));
-
-            track.value = track.value ?? getMostRecentUpdatedHotlapTrack(data);
+            const allTracks = items.value.map(i => i.track);
+            tracks.value = [...new Set(allTracks)];
+            track.value = track.value ?? items.value[0].track;
         })
         .catch((error) => console.error('Error fetching data:', error));
 };
 
 const filteredItems = computed(() => {
-    return items.value[track.value] ?? [];
+    return items
+        .value
+        .filter(i => i.track === track.value)
+    // .filter((item) => categoriesSelected.value.includes(item.Category));
 });
 
 const formatLaptime = (ms) => {
     const minutes = Math.floor(ms / 60000);
     const seconds = ((ms % 60000) / 1000).toFixed(3);
     return `${minutes}:${seconds.padStart(6, '0')}`;
-};
-
-const getMostRecentUpdatedHotlapTrack = (data) => {
-    let mostRecentTrack = null;
-    let mostRecentDate = null;
-
-    for (const [track, laps] of Object.entries(data)) {
-        laps.forEach((lap) => {
-            const lapDate = new Date(lap.Date);
-            if (!mostRecentDate || lapDate > mostRecentDate) {
-                mostRecentDate = lapDate;
-                mostRecentTrack = track;
-            }
-        });
-    }
-
-    return mostRecentTrack;
 };
 
 onMounted(() => fetchData());

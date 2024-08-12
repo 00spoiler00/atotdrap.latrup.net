@@ -1,5 +1,10 @@
 <template>
     <v-app-bar app class="elevation-4">
+
+        <v-btn x-small icon to="/">
+            <v-icon color="primary">mdi-home</v-icon>
+        </v-btn>
+
         <!-- This should stick to the left -->
         <v-toolbar-title>
             <div class="flex items-center justify-center">

@@ -15,9 +15,11 @@ class DriverWithAvatar extends Resource
     public function toArray(Request $request): array
     {
         return [
-            'id'              => $this->id,
-            'name' => $this->shortReadableId,
-            'avatar_url'      => $this->avatar_url,
+            'id'         => $this->id,
+            'name'       => $this->shortReadableId,
+            'pitskill'   => $this->pitskill,
+            'pitrep'     => $this->pitrep,
+            'avatar_url' => $this->avatar_url,
         ];
     }
 }

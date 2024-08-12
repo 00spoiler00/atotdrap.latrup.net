@@ -12,6 +12,10 @@ Route::get('/frontVersion', fn() => response()->json(['version' => '1.0.0']));
 Route::get('/race/upcoming', 'App\Http\Controllers\RaceController@upcoming');
 Route::get('/race/{race}', 'App\Http\Controllers\RaceController@show');
 
+Route::get('/track/{track}', 'App\Http\Controllers\TrackController@show');
+Route::get('/enrollment/{enrollment}', 'App\Http\Controllers\EnrollmentController@show');
+Route::get('/hotlap', 'App\Http\Controllers\HotlapController@index');
+
 Route::get('/driver/', 'App\Http\Controllers\DriverController@show');
 
 Route::get('/track/{track}/hotlaps', 'App\Http\Controllers\TrackController@hotlaps');

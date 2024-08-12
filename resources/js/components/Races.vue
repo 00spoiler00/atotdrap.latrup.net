@@ -16,8 +16,7 @@
                         <v-btn small icon :href="'https://pitskill.io/event/' + props.item.event_id" target="_blank">
                             <v-icon color="primary">mdi-account-plus</v-icon>
                         </v-btn>
-                        <v-btn small icon>
-                            <RaceDetailDialog :id="props.item.id" />
+                        <v-btn small icon :to="'/race/' + props.item.id">
                             <v-icon color="primary">mdi-information</v-icon>
                         </v-btn>
                     </td>
@@ -48,7 +47,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import moment from 'moment';
-import RaceDetailDialog from './Dialogs/RaceDetailDialog.vue';
+import RaceDetailDialog from './RaceDetail.vue';
 
 import { useLoaderStore } from '../stores/loader';
 const loaderStore = useLoaderStore();

@@ -1,14 +1,15 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import AppLayout from './layouts/App.vue'
 import vuetify from "./vuetify";
-
-const pinia = createPinia()
-
+import { createPinia } from 'pinia'
+import router from "./router";
+import dateTransformerPlugin from './plugins/dateTransformerPlugin';
+import AppLayout from './layouts/App.vue'
 
 createApp(app)
     .use(vuetify)
-    .use(pinia)
+    .use(createPinia())
+    .use(router)
+    // .use(dateTransformerPlugin)
     .component('app', AppLayout)
     .mount("#app");
 

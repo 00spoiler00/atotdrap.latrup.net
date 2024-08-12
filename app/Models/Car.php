@@ -19,4 +19,16 @@ class Car extends BaseModel
     {
         return $this->hasMany(Hotlap::class);
     }
+
+    // region Accessors
+
+    public function getShortReadableIdAttribute()
+    {
+        return $this->name;
+    }
+
+    public function getReadableIdAttribute()
+    {
+        return $this->name . ' ' . $this->category;
+    }
 }
