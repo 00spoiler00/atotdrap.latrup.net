@@ -38,7 +38,7 @@ export default {
     }),
 
     mounted() {
-        fetch('./README.md')
+        fetch('./CHANGELOG.md')
             .then(response => response.text())
             .then(data => this.changelog = marked.parse(data))
             .catch(error => console.error('Error fetching data:', error))

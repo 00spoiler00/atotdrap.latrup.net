@@ -73,3 +73,4 @@
 - Disposem d'un subdomini directe per accedir al contingut https://pitskill.latrup.net
 - Es pot accedir al perfil del pilot de PitSkill des de la llista de pilots
 - L'informe d'inscripcions indica el temps que queda fins a la cursa
+
