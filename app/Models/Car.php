@@ -22,12 +22,12 @@ class Car extends BaseModel
 
     // region Accessors
 
-    public function getShortReadableIdAttribute()
+    public function getShortReadableIdAttribute(): string
     {
         return $this->name;
     }
 
-    public function getReadableIdAttribute()
+    public function getReadableIdAttribute(): string
     {
         return $this->name . ' ' . $this->category;
     }

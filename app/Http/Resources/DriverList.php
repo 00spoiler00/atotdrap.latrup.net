@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 // use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource as Resource;
 
-class RaceList extends Resource
+class DriverList extends Resource
 {
     /**
      * Transform the resource collection into an array.
@@ -18,14 +18,12 @@ class RaceList extends Resource
         // dd($this->resource);
         // return parent::toArray($request);
         return [
-            'id'         => $this->id,
-            'event_id'   => $this->event_id,
-            'starts_at'  => $this->starts_at->timestamp,
-            'name'       => $this->name,
-            'registers'  => $this->registers,
-            'drivers'    => DriverWithAvatar::collection($this->enrollments->map(fn ($e) => $e->driver)),
-            'track_id'   => $this->track->id,
-            'track_name' => $this->track->name,
+            'id'          => $this->id,
+            'pitskill_id' => $this->event_id,
+            'name'        => $this->shortReadableId,
+            'avatar'      => $this->avatar_url,
+            'pitskill'    => $this->pitskill,
+            'pitrep'      => $this->pitrep,
         ];
     }
 }

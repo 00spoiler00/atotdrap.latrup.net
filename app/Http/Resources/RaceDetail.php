@@ -35,9 +35,9 @@ class RaceDetail extends Resource
                         'split'   => $enrollments->first()->split,
                         'sof'     => $enrollments->first()->sof,
                         'split'   => $enrollments->first()->split,
-                        'enrolls' => $enrollments->map(fn($e) => [
-                            'driver' => new DriverWithAvatar($e->driver),
-                            'car'    => $e->car->readableId,
+                        'enrolls' => $enrollments->map(fn ($e) => [
+                            'driver_id' => $e->driver->id,
+                            'car'       => $e->car->readableId,
                         ]),
                     ];
                 })

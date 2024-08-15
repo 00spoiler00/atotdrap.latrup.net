@@ -19,4 +19,11 @@ class Track extends BaseModel
     {
         return $this->hasMany(Race::class);
     }
+
+    // region Accessors
+
+    public function getAvatarUrlAttribute(): string
+    {
+        return 'https://cdn.pitskill.io/public/TrackPhoto-' . $this->thumbnail;
+    }
 }

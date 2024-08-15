@@ -32,13 +32,13 @@ class Driver extends BaseModel
 
     // region Accessors
 
-    public function getReadableIdAttribute()
+    public function getReadableIdAttribute(): string
     {
         // Get the first name and the full last name and, trim and title case it
         return ucfirst(trim($this->first_name)) . ' ' . ucfirst($this->last_name);
     }
 
-    public function getShortReadableIdAttribute()
+    public function getShortReadableIdAttribute(): string
     {
         // Get the first letter of the first name and the full last name and, trim and make each part title case
         return ucfirst(trim($this->first_name)[0]) . '.' . ucfirst($this->last_name);

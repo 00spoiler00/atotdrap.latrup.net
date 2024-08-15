@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DriverList;
 use App\Models\Driver;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-
+        return DriverList::collection(Driver::all());
     }
 
     /**
@@ -20,7 +21,6 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-
     }
 
     /**
@@ -28,7 +28,6 @@ class DriverController extends Controller
      */
     public function show(Driver $driver)
     {
-
     }
 
     /**
@@ -36,7 +35,6 @@ class DriverController extends Controller
      */
     public function update(Request $request, Driver $driver)
     {
-
     }
 
     /**
@@ -44,7 +42,6 @@ class DriverController extends Controller
      */
     public function destroy(Driver $driver)
     {
-
     }
 
     public function hotlaps(Driver $driver)

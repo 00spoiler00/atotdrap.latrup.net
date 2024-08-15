@@ -10,4 +10,16 @@ abstract class BaseModel extends Model
     use HasFactory;
     // Allow mass assignment except for the id field
     protected $guarded = ['id'];
+
+    // region Accessors
+
+    public function getReadableIdAttribute(): string
+    {
+        return $this->name;
+    }
+
+    public function getShortReadableIdAttribute(): string
+    {
+        return $this->readableId;
+    }
 }

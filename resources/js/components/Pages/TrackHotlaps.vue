@@ -27,7 +27,7 @@
                 <tr>
                     <td v-html="props.item.car_category"></td>
                     <td v-html="props.item.driver"></td>
-                    <td v-html="formatLaptime(props.item.laptime)"></td>
+                    <td v-html="useLaptimeTransformer(props.item.laptime).ms2human"></td>
                     <td v-html="props.item.car"></td>
                     <td v-html="props.item.measured_at"></td>
                 </tr>
@@ -38,6 +38,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useLaptimeTransformer } from '../../composables/useLaptimeTransformer';
 
 const headers = [
     { title: 'Categoria', value: 'car_category' },
@@ -74,11 +75,6 @@ const filteredItems = computed(() => {
     // .filter((item) => categoriesSelected.value.includes(item.Category));
 });
 
-const formatLaptime = (ms) => {
-    const minutes = Math.floor(ms / 60000);
-    const seconds = ((ms % 60000) / 1000).toFixed(3);
-    return `${minutes}:${seconds.padStart(6, '0')}`;
-};
 
 onMounted(() => fetchData());
 </script>

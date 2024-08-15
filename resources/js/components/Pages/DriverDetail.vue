@@ -5,6 +5,13 @@
             Detall del pilot
         </v-card-title>
 
+        <!-- <a
+                            :href="'https://pitskill.io/driver-license/' + props.item['Driver Id']"
+                            target="_blank">
+                            {{ props.item['Driver Name'] }}
+                        </a> -->
+
+
         <v-card-text>
             <v-row>
                 <v-col cols="12" sm="6" md="4">
@@ -17,20 +24,18 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router'
-import { useDateTransformer } from '../composables/useDateTransformer';
+import { onMounted, ref } from 'vue';
+import { useDateTransformer } from '@/composables/useDateTransformer';
 
+import { useRoute } from 'vue-router'
 const route = useRoute()
+
 const driver = ref(null);
 
 const fetchData = () => {
     fetch(`/api/driver/${route.params.id}`)
         .then(response => response.json())
-        .then(data => {
-            driver.value = data
-            console.log(data)
-        });
+        .then(data => driver.value = data);
 }
 
 // const startsAt = useDateTransformer(driver.value?.starts_at).readableHour

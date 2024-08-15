@@ -37,11 +37,11 @@
 import { computed } from 'vue';
 
 // Add a prop for the driver
-const props = defineProps(['driver']);
+const props = defineProps(['pitskill', 'pitrep']);
 
 const license = computed(() => {
-    const pitrep = props.driver.PitRep;
-    const pitskill = props.driver.PitSkill;
+    const pitrep = props.pitrep;
+    const pitskill = props.pitskill;
 
     if (pitrep >= 20 && pitskill >= 3500) return 'Elite';
     if (pitrep >= 15 && pitskill >= 2750) return 'Platinum';

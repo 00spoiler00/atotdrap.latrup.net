@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="overflow-y-auto">
 
 <head>
 	<meta charset="UTF-8">
@@ -10,8 +10,8 @@
 	@vite(['resources/js/app.js'])
 </head>
 
-<body>
-	<div id="app">
+<body >
+	<div id="app" >
 		<App />
 	</div>
 </body>
