@@ -4,6 +4,7 @@
         <v-toolbar height="48">
             <v-toolbar-title :text="track.name" />
         </v-toolbar>
+
         <v-img
             color="surface-variant"
             height="200"
@@ -16,27 +17,27 @@
         <v-card-text>
             <v-row dense>
 
-                <v-col cols="12" sm="2" md="2">
+                <v-col cols="12" sm="2">
                     <v-text-field variant="solo-filled" readonly label="Any" v-model="track.track_year" />
                 </v-col>
 
-                <v-col cols="12" sm="2" md="2">
+                <v-col cols="12" sm="2">
                     <v-text-field variant="solo-filled" readonly label="País" v-model="track.country" />
                 </v-col>
 
-                <v-col cols="12" sm="2" md="2">
+                <v-col cols="12" sm="2">
                     <v-text-field variant="solo-filled" readonly label="Corbes" v-model="track.corners" />
                 </v-col>
 
-                <v-col cols="12" sm="2" md="2">
+                <v-col cols="12" sm="2">
                     <v-text-field variant="solo-filled" readonly label="Longitud" v-model="track.length" />
                 </v-col>
 
-                <v-col cols="12" sm="2" md="2">
+                <v-col cols="12" sm="2">
                     <v-text-field variant="solo-filled" readonly label="Dificultat" v-model="track.difficulty" />
                 </v-col>
 
-                <v-col cols="12" sm="2" md="2">
+                <v-col cols="12" sm="2">
                     <v-text-field variant="solo-filled" readonly label="Posicions" v-model="track.max_entries" />
                 </v-col>
 
@@ -70,7 +71,7 @@
                     <td>{{ item.driver }}</td>
                     <td>{{ useLaptimeTransformer(item.laptime).ms2human }}</td>
                     <td>{{ item.car }}</td>
-                    <td>{{ useDateTransformer(item.measured_at).readableDate }}</td>
+                    <td>{{ useDateTransformer(item.measured_at).hDate }}</td>
                 </tr>
             </tbody>
         </v-table>
@@ -79,14 +80,13 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router'
 import { useDateTransformer } from '@/composables/useDateTransformer';
 import { useLaptimeTransformer } from '@/composables/useLaptimeTransformer';
 
+import { useRoute } from 'vue-router'
 const route = useRoute()
 
 const track = ref(null);
-
 const fetchData = () => {
     fetch(`/api/track/${route.params.id}`)
         .then(response => response.json())

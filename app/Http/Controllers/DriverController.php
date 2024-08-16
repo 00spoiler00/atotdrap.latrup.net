@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DriverDetail;
 use App\Http\Resources\DriverList;
 use App\Models\Driver;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class DriverController extends Controller
      */
     public function show(Driver $driver)
     {
+        return new DriverDetail($driver);
     }
 
     /**

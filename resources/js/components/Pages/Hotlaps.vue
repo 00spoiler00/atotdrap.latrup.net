@@ -29,7 +29,7 @@
                     <td v-html="props.item.driver"></td>
                     <td v-html="useLaptimeTransformer(props.item.laptime).ms2human"></td>
                     <td v-html="props.item.car"></td>
-                    <td v-html="props.item.measured_at"></td>
+                    <td v-html="useDateTransformer(props.item.measured_at).hDate"></td>
                 </tr>
             </template>
         </v-data-table>
@@ -38,7 +38,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { useLaptimeTransformer } from '../../composables/useLaptimeTransformer';
+import { useLaptimeTransformer } from '@/composables/useLaptimeTransformer';
+import { useDateTransformer } from '@/composables/useDateTransformer';
 
 const headers = [
     { title: 'Categoria', value: 'car_category' },

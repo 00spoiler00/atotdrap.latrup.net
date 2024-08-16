@@ -1,16 +1,39 @@
 import { computed } from 'vue';
 import moment from 'moment-timezone'
 
-export function useDateTransformer(timestamp, locale = 'ca', timezone = 'UTC') {
+export function useDateTransformer(timestamp, locale = 'ca') {
 
-    timestamp = timestamp * 1000;
-
+    const m  = moment.utc(timestamp*1000)
     moment.locale(locale);
 
     return {
-        date: computed(() => moment.utc(timestamp).tz(timezone)),  // Treat as UTC and then convert to local timezone
-        readableDate: computed(() => moment.utc(timestamp).tz(timezone).format('LL')),
-        readableHour: computed(() => moment.utc(timestamp).tz(timezone).format('LLL')),
-        isoString: computed(() => moment.utc(timestamp).toISOString()),
+        date: computed({
+            get: () => m.format('DD/MM/YYYY'),
+            set: (value) => m = moment(value).format('u')
+        }),
+        time: computed({
+            get: () => m.format('HH:mm'),
+            set: (value) => m = moment(value).format('u')
+        }),
+        timeFromNow: computed({
+            get:() => m.format('DD/MM HH:mm') + ' (' + m.fromNow() + ')',
+            set: (value) => m = moment(value).format('u')
+        }),
+        fromNow: computed({
+            get:() => m.fromNow(),
+            set: (value) => m = moment(value).format('u')
+        }),
+        hDate: computed({
+            get:() => m.format('LL'),
+            set: (value) => m = moment(value).format('u')
+        }),
+        hTime: computed({
+            get:() => m.format('LLL'),
+            set: (value) => m = moment(value).format('u')
+        }),
+        isoString: computed({
+            get:() => m.toISOString(),
+            set: (value) => m = moment(value).format('u')
+        }),
     };
 }

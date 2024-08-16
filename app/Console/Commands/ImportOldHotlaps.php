@@ -6,6 +6,7 @@ use App\Models\Car;
 use App\Models\Driver;
 use App\Models\Track;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class ImportOldHotlaps extends Command
 {
@@ -28,7 +29,8 @@ class ImportOldHotlaps extends Command
      */
     public function handle()
     {
-        $data = json_decode(file_get_contents(storage_path('hotlaps.json')), true);
+        $content = Storage::disk('local')->get('hotlaps.json');
+        $data    = json_decode($content, true);
 
         foreach ($data as $track => $records) {
             if (! $track = Track::where('ingame_id', $track)->first()) {

@@ -15,15 +15,12 @@ class DriverList extends Resource
      */
     public function toArray(Request $request): array
     {
-        // dd($this->resource);
-        // return parent::toArray($request);
         return [
-            'id'          => $this->id,
-            'pitskill_id' => $this->event_id,
-            'name'        => $this->shortReadableId,
-            'avatar'      => $this->avatar_url,
-            'pitskill'    => $this->pitskill,
-            'pitrep'      => $this->pitrep,
+            'id'       => $this->id,
+            'name'     => $this->shortReadableId,
+            'avatar'   => $this->avatar_url,
+            'pitskill' => $this->pitskill,
+            'pitrep'   => $this->pitrep,
         ];
     }
 }

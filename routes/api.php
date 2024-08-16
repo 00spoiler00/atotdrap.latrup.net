@@ -20,5 +20,6 @@ Route::get('/enrollment/{enrollment}', 'App\Http\Controllers\EnrollmentControlle
 Route::get('/hotlap', 'App\Http\Controllers\HotlapController@index');
 
 Route::get('/driver/', 'App\Http\Controllers\DriverController@index');
+Route::get('/driver/{driver}', 'App\Http\Controllers\DriverController@show');
 Route::get('/driver/{driver}/hotlaps', 'App\Http\Controllers\DriverController@hotlaps');
 Route::get('/driver/{driver}/metrics', 'App\Http\Controllers\DriverController@metrics');

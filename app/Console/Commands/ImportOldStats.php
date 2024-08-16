@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\ClubMember;
 use App\Models\Metric;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 
 class ImportOldStats extends Command
 {
@@ -27,7 +28,8 @@ class ImportOldStats extends Command
      */
     public function handle()
     {
-        $data = json_decode(file_get_contents(storage_path('stats.json')), true);
+        $content = Storage::disk('local')->get('stats.json');
+        $data    = json_decode($content, true);
 
         foreach ($data as $pitskillId => $records) {
             $driver = ClubMember::where('pitskill_id', $pitskillId)->first();

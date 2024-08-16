@@ -12,37 +12,13 @@
             <template v-slot:item="props">
                 <tr class="whitespace-nowrap">
                     <td>
-                        <!-- Actions-->
-                        <v-btn density="compact" :href="'https://pitskill.io/event/' + props.item.event_id" target="_blank" variant="text" icon>
-                            <v-icon size="sm" color="primary">mdi-account-plus</v-icon>
-                        </v-btn>
+                        <ModelButton model="race" :id="props.item.id" />
                     </td>
                     <td>
-                        <v-btn color="primary" density="compact" size="small" :color="props.item.drivers.length > 2 ? 'danger' :  (props.item.drivers.length > 1 ? 'warning' : 'primary') ">
-                            {{ props.item.drivers.length }}
-                            <v-menu activator="parent">
-                                <v-list>
-                                    <v-list-item v-for="(item, index) in props.item.drivers" :key="index" :value="index" :prepend-avatar="item.avatar_url" :to="'/driver/' + item.id">
-                                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                    </v-list-item>
-                                </v-list>
-                            </v-menu>
-                        </v-btn>
-
+                        {{ props.item.drivers.length }}/{{props.item.registers}}
                     </td>
-                    <td v-html="momentToDate(props.item.starts_at)"></td>
-                    <td v-html="timeUntil(props.item.starts_at)"></td>
-                    <td>
-                        <v-btn :to="'race/' + props.item.id" text density="compact" color="primary" variant="plain">
-                            {{ props.item.name }}
-                        </v-btn>
-                    </td>
-                    <td>
-                        <v-btn :to="'track/' + props.item.track_id" text density="compact" color="primary" variant="plain">
-                            {{ props.item.track_name }}
-                        </v-btn>
-                    </td>
-                    <td v-html="props.item.registers"></td>
+                    <td v-text="useDateTransformer(props.item.starts_at).fromNow"></td>
+                    <td v-text="props.item.name"></td>
                 </tr>
             </template>
         </v-data-table>
@@ -50,21 +26,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import moment from 'moment';
 
+import { useDateTransformer } from '@/composables/useDateTransformer';
+
 import { useLoaderStore } from '@/stores/loader';
+import ModelButton from '../Shared/ModelButton.vue';
 const loaderStore = useLoaderStore();
 
-const search = ref('');
 const headers = [
     { align: 'center' },
     { title: 'Pilots', key: 'drivers', value: v => v.length },
     { title: 'Quan', key: 'starts_at', value: 'starts_at' },
-    {},
     { title: 'Cursa', key: 'name', },
-    { title: 'Circuit', key: 'track_name' },
-    { title: 'Registres', key: 'registers' },
 ];
 
 const items = ref([]);
@@ -81,13 +56,6 @@ const fetchData = () => {
         });
 };
 
-const timeUntil = (ts) => {
-    return moment.unix(ts).fromNow();
-};
-
-const momentToDate = (ts) => {
-    return moment.unix(ts).format('DD/MM HH:mm');
-};
 
 onMounted(() => fetchData());
 

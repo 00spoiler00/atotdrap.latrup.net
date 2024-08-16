@@ -6,36 +6,19 @@
             :items="items"
             :items-per-page="999"
             hide-default-footer
-            :sort-by="sortBy">
+            :sort-by="sortBy"
+            density="compact">
             <template v-slot:item="props">
                 <tr>
                     <td>
-                        <v-avatar size="36" my-1>
-                            <v-img :src="props.item.avatar" />
-                        </v-avatar>
+                        <ModelButton model="driver" :id="props.item.id" />
                     </td>
-                    <td>
-                        <v-btn :to="'driver/' + props.item.id" text density="compact" color="primary" variant="plain">
-                            {{ props.item.name }}
-                        </v-btn>
-                    </td>
+                    <td v-html="props.item.name"></td>
                     <td>
                         <DriverLicense :pitskill="props.item.pitskill" :pitrep="props.item.pitrep" />
                     </td>
-                    <td>
-                        <v-btn icon @click="openDialog('PitRep', props.item.pitrep)">
-                            <v-icon color="secondary">mdi-chart-line</v-icon>
-                        </v-btn>
-                        <span>{{ props.item.pitrep }}</span>
-                    </td>
-                    <td>
-                        <v-btn
-                            icon
-                            @click="openDialog('PitSkill', props.item.Stats.pitskill)">
-                            <v-icon color="primary">mdi-chart-line</v-icon>
-                        </v-btn>
-                        <span>{{ props.item.pitskill }}</span>
-                    </td>
+                    <td class="text-primary" v-html="props.item.pitrep"></td>
+                    <td class="text-blue-400" v-html="props.item.pitskill"></td>
                 </tr>
             </template>
         </v-data-table>
@@ -46,13 +29,13 @@
 import { ref, onMounted } from 'vue';
 import { useLoaderStore } from '@/stores/loader';
 import DriverLicense from '@/components/Shared/DriverLicense.vue';
-import ModelCard from '@/components/Shared/ModelCard.vue';
+import ModelButton from '../Shared/ModelButton.vue';
 const loaderStore = useLoaderStore();
 
 const headers = [
-    { title: '', align: 'start', sortable: false, value: 'avatar_url' },
-    { title: 'Pilot', key: 'name' },
-    { title: 'Llicència', key: 'license' },
+    { title: '', key: '' },
+    { title: 'Pilot' },
+    { title: 'Llicència' },
     { title: 'PitRep', key: 'pitrep' },
     { title: 'PitSkill', key: 'pitskill' },
 ];

@@ -1,5 +1,9 @@
 # Pla d'Actuació per a la Millora de l'Aplicació
 
+## 0. Others
+- Moure l'accés al hotlaps via la Storage facade (FTP?)
+- Optimitzar el hotlap viewer perquè sigui autònom (si driver/s, si circuit/s)
+
 ## 1. Creació del Dashboard
 
 - **Disseny del Layout del Dashboard**
@@ -60,12 +64,6 @@
 
 - **Creació de la Ruta de Detall de Pilots**
   - Desenvolupar pàgina per mostrar detalls complets d'un pilot.
-
-- **Creació de la Ruta de Detall de Circuits**
-  - Desenvolupar pàgina per mostrar la informació detallada d'un circuit.
-
-- **Creació de la Ruta de Detall de Carreres**
-  - Desenvolupar pàgina per als detalls d'una carrera.
 
 - **Creació de la Ruta de Detall de Cotxes**
   - Desenvolupar pàgina per als detalls de cada cotxe.

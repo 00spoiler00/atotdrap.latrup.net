@@ -11,12 +11,19 @@
             <!-- Header info-->
             <v-row dense>
 
-                <v-col cols="12" md="8">
+                <v-col cols="12" md="6">
                     <v-text-field variant="solo-filled" readonly label="Nom" v-model="race.name" />
                 </v-col>
 
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                     <v-text-field variant="solo-filled" readonly label="Data" v-model="startsAt" />
+                </v-col>
+
+                <!-- Enroll-->
+                <v-col cols="12" md="3" align="center" justify="center">
+                    <v-btn block color="primary" @click="openOnBlank('https://pitskill.io/event/' + race.event_id)" prepend-icon="mdi-account-plus">
+                        Apuntar-se
+                    </v-btn>
                 </v-col>
 
                 <v-col cols="12">
@@ -43,7 +50,7 @@
                     <v-text-field variant="solo-filled" readonly label="Split" v-model="server.split" />
                 </v-col>
 
-                <v-col cols="12" >
+                <v-col cols="12">
                     <v-progress-linear
                         color="primary"
                         v-model="server.sof"
@@ -66,41 +73,34 @@
                 </v-col>
 
             </v-row>
-
-            <v-row>
-
-                <v-col cols="12">
-                    Circuit
-                </v-col>
-
-                <v-col cols="12">
-                    <TrackDetail :id="race.track_id" />
-                </v-col>
-
-            </v-row>
-
         </v-card-text>
+
+        <TrackDetail :id="race.track_id" />
 
     </v-card>
 </template>
 
 <script setup>
-import {  onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useRoute } from 'vue-router'
-import { useDateTransformer } from '../../composables/useDateTransformer';
+// import { useDateTransformer } from '../../composables/useDateTransformer';
+import moment from 'moment';
 import TrackDetail from '@/components/Pages/TrackDetail.vue';
 import ModelCard from '@/components/Shared/ModelCard.vue';
 
 const route = useRoute()
 const race = ref(null);
 
-const startsAt = useDateTransformer(race.value?.starts_at).readableHour
+// TODO: Move to useDateTransformer 
+const startsAt = computed(() => moment(race?.value?.starts_at * 1000).format('DD/MM HH:mm'));
 
 onMounted(() => {
     fetch(`/api/race/${route.params.id}`)
         .then(response => response.json())
         .then(data => race.value = data);
 })
+
+const openOnBlank = (url) => window.open(url, '_blank')
 
 
 </script>

@@ -32,7 +32,7 @@
 
         <!-- This should be sticked to the right and keep this vertical disposition as is -->
         <div class="flex flex-col items-end">
-            <v-btn x-small icon class="mb-2" to="/changelog">
+            <v-btn x-small icon class="mb-2" @click="openChangelog">
                 <v-icon color="primary">mdi-file-document-outline</v-icon>
             </v-btn>
         </div>
@@ -67,6 +67,10 @@ const checkFrontVersion = () => {
         .catch((error) => console.error('Error fetching data:', error))
         .finally(() => loaderStore.remove());
 };
+
+const openChangelog = () => {
+    window.open('/changelog', '_blank');
+}
 
 onMounted(() => checkFrontVersion());
 </script>
