@@ -1,24 +1,27 @@
 <template>
     <v-card flat>
 
+        <v-card-title class="text-center">Properes curses</v-card-title>
+
         <v-data-table
-            :mobile-breakpoint="0"
             :headers="headers"
             :items="items"
-            class="mt-5"
             disable-pagination
             :hide-default-footer="true"
             density="compact">
             <template v-slot:item="props">
                 <tr class="whitespace-nowrap">
+
                     <td>
-                        <ModelButton model="race" :id="props.item.id" />
-                    </td>
-                    <td>
-                        {{ props.item.drivers.length }}/{{props.item.registers}}
+                        <RouterLink :to="{ name: 'Race', params: { id: props.item.id } }" class="text-primary">
+                            {{ props.item.name }}
+                        </RouterLink>
                     </td>
                     <td v-text="useDateTransformer(props.item.starts_at).fromNow"></td>
-                    <td v-text="props.item.name"></td>
+                    <td>
+                        {{ props.item.drivers.length }}/{{ props.item.registers }}
+                    </td>
+
                 </tr>
             </template>
         </v-data-table>
@@ -27,19 +30,16 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import moment from 'moment';
 
 import { useDateTransformer } from '@/composables/useDateTransformer';
 
 import { useLoaderStore } from '@/stores/loader';
-import ModelButton from '../Shared/ModelButton.vue';
 const loaderStore = useLoaderStore();
 
 const headers = [
-    { align: 'center' },
-    { title: 'Pilots', key: 'drivers', value: v => v.length },
-    { title: 'Quan', key: 'starts_at', value: 'starts_at' },
     { title: 'Cursa', key: 'name', },
+    { title: 'Quan', key: 'starts_at', value: 'starts_at' },
+    { title: 'Pilots', key: 'drivers', value: v => v.length },
 ];
 
 const items = ref([]);

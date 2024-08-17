@@ -12,13 +12,13 @@ import Hotlaps from '@/components/Pages/Hotlaps.vue'
 const routes = [
     // { path: '/', component: Dashboard },
     { path: '/', redirect: '/race'},
-    { path: '/race', component: Races },
-    { path: '/race/:id', component: RaceDetail },
-    { path: '/driver', component: Drivers },
-    { path: '/driver/:id', component: DriverDetail },
-    { path: '/track/:id', component: TrackDetail },
-    { path: '/track/:id/hotlaps', component: Hotlaps },
-    { path: '/statistics', component: Statistics },
+    { path: '/race', component: Races, name: 'Races' },
+    { path: '/race/:id', component: RaceDetail, name: 'Race' },
+    { path: '/driver', component: Drivers, name: 'Drivers' },
+    { path: '/driver/:id', component: DriverDetail, name: 'Driver' },
+    { path: '/track/:id', component: TrackDetail, name: 'Track' },
+    { path: '/track/:id/hotlaps', component: Hotlaps, name: 'Hotlaps' },
+    { path: '/statistics', component: Statistics, name: 'Statistics' },
 ]
 
 const router = createRouter({

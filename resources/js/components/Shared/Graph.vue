@@ -64,35 +64,52 @@ const props = defineProps({
     type: {
         type: String,
         required: true,
-        validator: (value) => ['PitSkill', 'PitRep'].includes(value),
+        validator: (value) => ['PitSkill', 'PitRep', 'ELO', 'SR'].includes(value),
     },
 });
 
 // Define the computed property to get the correct color
 const color = computed(() => {
-    return props.type === 'PitSkill' ? 'primary' : 'secondary';
+    return ['PitSkill', 'ELO'].includes(props.type) ? 'primary' : 'secondary';
 });
 
 // Define the range to be shown var
 const range = ref('week');
 
 // Create a computed that filters the values based on the range
-const inRangeValues = computed(() => props
-    .value
-    .filter((item) => {
-        const date = new Date(item.measured_at);
-        const now = new Date();
-        switch (range.value) {
-            case 'week':
-                return date > new Date(now.setDate(now.getDate() - 7));
-            case 'month':
-                return date > new Date(now.setMonth(now.getMonth() - 1));
-            case 'year':
-                return date > new Date(now.setFullYear(now.getFullYear() - 1));
-            default:
-                return true;
-        }
-    })
-    .map((item) => item.value))
+const inRangeValues = computed(() => {
+    
+    // No data
+    if(props.value.length === 0) {
+        return [];
+    }
+
+    // Single data
+    if(props.value.length === 1) {
+        return [
+            props.value[0].value,
+            props.value[0].value,
+        ]
+    }
+
+    // Multiple data
+    return props
+        .value
+        .filter((item) => {
+            const date = new Date(item.measured_at);
+            const now = new Date();
+            switch (range.value) {
+                case 'week':
+                    return date > new Date(now.setDate(now.getDate() - 7));
+                case 'month':
+                    return date > new Date(now.setMonth(now.getMonth() - 1));
+                case 'year':
+                    return date > new Date(now.setFullYear(now.getFullYear() - 1));
+                default:
+                    return true;
+            }
+        })
+        .map((item) => item.value)
+    });
 
 </script>

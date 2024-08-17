@@ -3,7 +3,6 @@ import moment from 'moment-timezone'
 
 export function useDateTransformer(datetime, locale = 'ca') {
 
-    console.log(datetime)
     const m = moment(datetime);
     moment.locale(locale);
 

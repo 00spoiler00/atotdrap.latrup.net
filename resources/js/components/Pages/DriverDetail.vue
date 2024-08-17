@@ -1,6 +1,6 @@
 <template>
 
-    <v-card v-if="driver" class="ma-4">
+    <v-card v-if="driver">
 
         <v-toolbar height="48">
             <v-toolbar-title :text="driver.name" />
@@ -39,44 +39,68 @@
         <v-card-text>
             <v-row dense>
                 <v-col cols="12" sm="2">
-                    <v-text-field variant="solo-filled" readonly label="Id" v-model="driver.pitskill_id" />
+                    <v-text-field variant="solo-filled" readonly label="Id" v-model="driver.pitskill.id" />
                 </v-col>
                 <v-col cols="12" sm="2">
-                    <v-text-field variant="solo-filled" readonly label="Ranking" v-model="driver.pitskill_ranking" />
+                    <v-text-field variant="solo-filled" readonly label="Ranking" v-model="driver.pitskill.ranking" />
                 </v-col>
                 <v-col cols="12" sm="2">
-                    <v-text-field variant="solo-filled" readonly label="PitSkill" v-model="driver.pitskill" />
+                    <v-text-field variant="solo-filled" readonly label="PitSkill" v-model="driver.pitskill.pitskill" />
                 </v-col>
                 <v-col cols="12" sm="2">
-                    <v-text-field variant="solo-filled" readonly label="PitRep" v-model="driver.pitrep" />
+                    <v-text-field variant="solo-filled" readonly label="PitRep" v-model="driver.pitskill.pitrep" />
                 </v-col>
                 <v-col cols="12" sm="2">
-                    <v-text-field variant="solo-filled" readonly label="Participacions" v-model="driver.pitskill_enrollments" />
+                    <v-text-field variant="solo-filled" readonly label="Participacions" v-model="driver.pitskill.enrollments" />
                 </v-col>
                 <v-col cols="12" sm="2" align="center" justify="center">
-                    <v-btn block color="primary" @click="openOnBlank('https://pitskill.io/driver-license/' + driver.pitskill_id)" prepend-icon="mdi-magnify">
+                    <v-btn block color="primary" @click="openOnBlank('https://pitskill.io/driver-license/' + driver.pitskill.id)" prepend-icon="mdi-magnify">
                         Perfil
                     </v-btn>
                 </v-col>
                 <v-col cols="12" sm="6">
-                    <Graph :value="driver.pitskill_graph" type="PitSkill" />
+                    <Graph :value="driver.pitskill.pitskill_graph" type="PitSkill" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                    <Graph :value="driver.pitrep_graph" type="PitRep" />
+                    <Graph :value="driver.pitskill.pitrep_graph" type="PitRep" />
                 </v-col>
             </v-row>
         </v-card-text>
 
         <v-toolbar height="36">
-            <v-toolbar-title>LowFuelMotorsport</v-toolbar-title>
+            <v-toolbar-title>LowFuelMotorsport (WIP!)</v-toolbar-title>
         </v-toolbar>
 
-        <v-row>
-            <v-col cols="12">
-                Aviat...
-            </v-col>
-        </v-row>
-
+        <v-card-text>
+            <v-row dense>
+                <v-col cols="12" sm="2">
+                    <v-text-field variant="solo-filled" readonly label="Id" v-model="driver.lfm.id" />
+                </v-col>
+                <v-col cols="12" sm="2">
+                    <v-text-field variant="solo-filled" readonly label="Ranking" v-model="driver.lfm.ranking" />
+                </v-col>
+                <v-col cols="12" sm="2">
+                    <v-text-field variant="solo-filled" readonly label="ELO" v-model="driver.lfm.elo" />
+                </v-col>
+                <v-col cols="12" sm="2">
+                    <v-text-field variant="solo-filled" readonly label="SR" v-model="driver.lfm.sr" />
+                </v-col>
+                <v-col cols="12" sm="2">
+                    <v-text-field variant="solo-filled" readonly label="Participacions" v-model="driver.lfm.enrollments" />
+                </v-col>
+                <v-col cols="12" sm="2" align="center" justify="center">
+                    <v-btn block color="primary" @click="openOnBlank('https://lfm.com/driver-license/' + driver.lfm.id)" prepend-icon="mdi-magnify">
+                        Perfil
+                    </v-btn>
+                </v-col>
+                <v-col cols="12" sm="6">
+                    <Graph :value="driver.lfm.elo_graph" type="ELO" />
+                </v-col>
+                <v-col cols="12" sm="6">
+                    <Graph :value="driver.lfm.sr_graph" type="SR" />
+                </v-col>
+            </v-row>
+        </v-card-text>
 
         <v-toolbar height="36">
             <v-toolbar-title>Hotlaps</v-toolbar-title>

@@ -1,5 +1,5 @@
 <template>
-    <v-card v-if="track" class="ma-4">
+    <v-card v-if="track">
 
         <v-toolbar height="48">
             <v-toolbar-title :text="track.name" />
