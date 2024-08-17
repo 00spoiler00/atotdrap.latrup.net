@@ -1,2 +1,2 @@
 #!/bin/bash
-gpr && composer install && npm i && npm run build
+git pull && composer install && npm i && npm run build
