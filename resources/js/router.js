@@ -10,8 +10,8 @@ import TrackDetail from '@/components/Pages/TrackDetail.vue'
 import Hotlaps from '@/components/Pages/Hotlaps.vue'
 
 const routes = [
-    // { path: '/', component: Dashboard },
-    { path: '/', redirect: '/race'},
+    { path: '/', component: Dashboard },
+    // { path: '/', redirect: '/race'},
     { path: '/race', component: Races, name: 'Races' },
     { path: '/race/:id', component: RaceDetail, name: 'Race' },
     { path: '/driver', component: Drivers, name: 'Drivers' },

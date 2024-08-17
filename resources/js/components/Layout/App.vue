@@ -3,11 +3,7 @@
 
         <v-system-bar app height="2" absolute>
 
-            <v-progress-linear
-                v-if="isLoading"
-                color="accent"
-                height="3"
-                indeterminate />
+            <v-progress-linear v-if="isLoading" color="accent" height="3" indeterminate />
         </v-system-bar>
 
         <v-app-bar app prominent>
@@ -39,7 +35,6 @@
                 </a>
             </div>
 
-
         </v-app-bar>
 
         <v-navigation-drawer :rail="$vuetify.display.mobile" temporary v-model="drawer">
@@ -54,13 +49,13 @@
             </v-list>
         </v-navigation-drawer>
 
-        <div class="lg:w-[66.66%] mx-auto">
+        <div class="w-full xl:w-[66.66%] mx-auto">
             <div class="p-0 md:p-4 lg:p-6">
-        <v-main>
-                <RouterView />
-            </v-main>
+                <v-main>
+                    <RouterView />
+                </v-main>
+            </div>
         </div>
-    </div>
 
     </v-app>
 </template>
@@ -77,18 +72,18 @@ const isLoading = computed(() => loaderStore.isLoading);
 const drawer = ref(false);
 
 // Route management
-import { useRoute, useRouter } from 'vue-router';
-const route = useRoute();
-const router = useRouter();
-const goBack = () => router.back()
-const showBackButton = computed(() => route.path !== '/');
+// import { useRoute, useRouter } from 'vue-router';
+// const route = useRoute();
+// const router = useRouter();
+// const goBack = () => router.back()
+// const showBackButton = computed(() => route.path !== '/');
 
 
 
 const openChangelog = () => window.open('/changelog', '_blank');
 
 const routes = [
-    // { title: 'Dashboard', path: '/', icon: 'mdi-view-dashboard' },
+    { title: 'Dashboard', path: '/', icon: 'mdi-view-dashboard' },
     { title: 'Curses', path: '/race', icon: 'mdi-flag-checkered' },
     { title: 'Pilots', path: '/driver', icon: 'mdi-account' },
     // { title: 'Statistics', path: '/statistics', icon: 'mdi-chart-bar' },

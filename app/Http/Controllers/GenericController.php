@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Dashboard\Dashboard;
+
 class GenericController extends Controller
 {
     /**
@@ -18,5 +20,13 @@ class GenericController extends Controller
 
         // Return the resource
         return new $resource($model);
+    }
+
+    /**
+     * The dashboard resource.
+     */
+    public function dashboard()
+    {
+        return new Dashboard([]);
     }
 }
