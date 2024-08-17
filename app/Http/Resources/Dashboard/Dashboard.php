@@ -25,11 +25,23 @@ class Dashboard extends Resource
 
         // Compute the pitskill earners:
         // Measure the biggest increase in 'pitskill' Metric between today and one week ago
-        // $pitskillEarners = Driver::whereHas('pitskillHistory', function ($q) {
-        //     $q->where('created_at', '>', now()->subWeek());
-        // })->get()->sortByDesc(function ($driver) {
-        //     return $driver->pitskillHistory->first()->pitskill - $driver->pitskillHistory->last()->pitskill;
-        // })->take($listLimit);
+        $pitskillEarners = Driver::query()
+            ->whereHas('metrics', fn ($q) => $q->where('created_at', '>', now()->subWeek()))
+            ->get()->sortByDesc(function ($driver) {
+                return
+                    $driver->metrics()->where('type', 'pitskill')->where('created_at', '<=', now()->subWeek())->last()->pitskill
+                    - $driver->metrics()->where('type', 'pitskill')->last()->pitskill;
+            })
+            ->take($listLimit);
+
+        $pitreplEarners = Driver::query()
+            ->whereHas('metrics', fn ($q) => $q->where('created_at', '>', now()->subWeek()))
+            ->get()->sortByDesc(function ($driver) {
+                return
+                    $driver->metrics()->where('type', 'pitrep')->where('created_at', '<=', now()->subWeek())->last()->pitrep
+                    - $driver->metrics()->where('type', 'pitrep')->last()->pitrep;
+            })
+            ->take($listLimit);
 
         // Get the track of the last recorded hotlap
         $hotlapTrack = Hotlap::orderBy('created_at', 'desc')->first()->track;
@@ -43,11 +55,11 @@ class Dashboard extends Resource
                     'data'        => UpcomingRace::collection($upcomingRaces),
                 ],
                 'pitskill' => [
-                    // 'earners' => [
-                    //     'title'       => 'Pujades Skill',
-                    //     'targetModel' => 'Driver',
-                    //     'data'        => PitSkillEarners::collection($pitskillEarners),
-                    // ],
+                    'earners' => [
+                        'title'       => 'Pujades Skill',
+                        'targetModel' => 'Driver',
+                        'data'        => PitskillEarner::collection($pitskillEarners),
+                    ],
                     'ranking' => [
                         'title'       => 'PitSkill ranking',
                         'targetModel' => 'Driver',
@@ -55,7 +67,11 @@ class Dashboard extends Resource
                     ],
                 ],
                 'pitrep' => [
-                    'earners' => [],
+                    'earners' => [
+                        'title'       => 'Pujades Rep',
+                        'targetModel' => 'Driver',
+                        'data'        => PitrepEarner::collection($pitreplEarners),
+                    ],
                     'ranking' => [
                         'title'       => 'PitRep ranking',
                         'targetModel' => 'Driver',
