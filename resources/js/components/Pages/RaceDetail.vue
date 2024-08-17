@@ -92,7 +92,7 @@ const route = useRoute()
 const race = ref(null);
 
 // TODO: Move to useDateTransformer 
-const startsAt = computed(() => moment(race?.value?.starts_at * 1000).format('DD/MM HH:mm'));
+const startsAt = computed(() => moment(race?.value?.starts_at).format('DD/MM HH:mm'));
 
 onMounted(() => {
     fetch(`/api/race/${route.params.id}`)

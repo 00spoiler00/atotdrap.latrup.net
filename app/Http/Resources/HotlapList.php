@@ -30,7 +30,7 @@ class HotlapList extends Resource
             'car'          => $this->car->shortReadableId,
             'car_category' => $this->car->category,
             'laptime'      => $this->laptime,
-            'measured_at'  => $this->measured_at->timestamp,
+            'measured_at'  => $this->measured_at,
         ];
     }
 }

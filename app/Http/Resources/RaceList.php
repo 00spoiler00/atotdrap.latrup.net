@@ -20,7 +20,7 @@ class RaceList extends Resource
         return [
             'id'         => $this->id,
             'event_id'   => $this->event_id,
-            'starts_at'  => $this->starts_at->timestamp,
+            'starts_at'  => $this->starts_at,
             'name'       => $this->name,
             'registers'  => $this->registers,
             'drivers'    => DriverWithAvatar::collection($this->enrollments->map(fn ($e) => $e->driver)),

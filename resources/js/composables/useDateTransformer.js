@@ -1,9 +1,10 @@
 import { computed } from 'vue';
 import moment from 'moment-timezone'
 
-export function useDateTransformer(timestamp, locale = 'ca') {
+export function useDateTransformer(datetime, locale = 'ca') {
 
-    const m  = moment.utc(timestamp*1000)
+    console.log(datetime)
+    const m = moment(datetime);
     moment.locale(locale);
 
     return {

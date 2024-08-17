@@ -17,7 +17,7 @@ class RaceDetail extends Resource
         return [
             'id'        => $this->id,
             'event_id'  => $this->event_id,
-            'starts_at' => $this->starts_at->timestamp,
+            'starts_at' => $this->starts_at,
             'name'      => $this->name,
             'registers' => $this->registers,
             'track_id'  => $this->track->id,
