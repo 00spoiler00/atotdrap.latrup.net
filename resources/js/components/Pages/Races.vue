@@ -1,7 +1,7 @@
 <template>
     <v-card flat>
-
-        <v-card-title class="text-center">Properes curses</v-card-title>
+        
+        <v-toolbar class="text-center" color="primary" title="Properes curses" height="36"/>
 
         <v-data-table
             :headers="headers"

@@ -2,9 +2,7 @@
 
     <v-card v-if="driver">
 
-        <v-toolbar height="48">
-            <v-toolbar-title :text="driver.name" />
-        </v-toolbar>
+        <v-toolbar class="text-center" color="primary" :title="'Detall de ' + driver.name" height="36"/>
 
         <v-img
             color="surface-variant"

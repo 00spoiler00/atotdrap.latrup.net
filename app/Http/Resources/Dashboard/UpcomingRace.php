@@ -33,7 +33,7 @@ class UpcomingRace extends Resource
             'subtitle' => $this->starts_at->diffForHumans(),
             'value'    => [
                 'color' => $color,
-                'text'  => $enrollments . '/' . $this->registers,
+                'text'  => $enrollments . ' / ' . $this->registers,
             ],
         ];
     }

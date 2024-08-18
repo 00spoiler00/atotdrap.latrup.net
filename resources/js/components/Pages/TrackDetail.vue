@@ -1,18 +1,13 @@
 <template>
     <v-card v-if="track">
 
-        <v-toolbar height="48">
-            <v-toolbar-title :text="track.name" />
-        </v-toolbar>
+        <v-toolbar class="text-center" color="primary" :title="track.name" height="36" />
 
         <v-img
             color="surface-variant"
             height="200"
             :src="track.avatar"
-            cover>
-
-        </v-img>
-
+            cover />
 
         <v-card-text>
             <v-row dense>

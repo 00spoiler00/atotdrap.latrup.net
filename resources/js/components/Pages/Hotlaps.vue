@@ -1,8 +1,7 @@
 <template>
     <v-card flat>
-        <v-card-title>
-            <small>Hotlaps del <i><b>ATOTDRAP 00 Ps Hotlap BoP</b></i></small>
-        </v-card-title>
+
+        <v-toolbar class="text-center" color="primary" title="Hotlaps del ATOTDRAP 00 Ps Hotlap BoP" height="36"/>
 
         <v-card-title>
             <v-row>

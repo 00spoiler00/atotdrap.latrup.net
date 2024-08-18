@@ -2,9 +2,7 @@
 
     <v-card v-if="race">
 
-        <v-card-title>
-            Detall de la cursa
-        </v-card-title>
+        <v-toolbar class="text-center" color="primary" title="Detall de la cursa" height="36"/>
 
         <v-card-text>
 

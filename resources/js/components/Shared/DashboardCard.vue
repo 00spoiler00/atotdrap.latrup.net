@@ -10,7 +10,11 @@
                 <v-list-item-title v-text="i.title" />
                 <v-list-item-subtitle v-if="i.subtitle" v-text="i.subtitle" />
                 <template v-slot:append>
-                    <v-chip :color="i.value.color" size="small" v-text="i.value.text" />
+                    <v-chip :color="i.value.color">
+                        <span class="font-bold text-center w-16">
+                            {{ i.value.text }}
+                            </span>
+                    </v-chip>
                 </template>
             </v-list-item>
         </v-list>

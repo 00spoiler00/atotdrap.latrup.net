@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Dashboard;
 
+use App\Models\Metric;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource as Resource;
 
@@ -14,9 +15,24 @@ class PitskillEarner extends Resource
      */
     public function toArray(Request $request): array
     {
-        $start = $this->metrics()->where('type', 'pitskill')->where('created_at', '<=', now()->subWeek())->last()->pitskill;
-        $end   = $this->metrics()->where('type', 'pitskill')->last()->pitskill;
-        $gain  = $end - $start;
+        $type = 'pitskill';
+
+        $start = Metric::whereHas('driver', fn ($q) => $q->where('id', $this->id))
+            ->where('type', $type)
+            ->where('measured_at', '<', now()->subWeek())
+            ->orderBy('measured_at', 'desc')
+            ->first()
+            ->value;
+
+        $end = Metric::query()
+            ->whereHas('driver', fn ($q) => $q->where('id', $this->id))
+            ->where('type', $type)
+            ->where('measured_at', '>', now()->subWeek())
+            ->orderBy('measured_at', 'desc')
+            ->first()
+            ->value;
+
+        $gain = $end - $start;
 
         return [
             'id'     => $this->id,

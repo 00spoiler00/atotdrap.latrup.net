@@ -40,7 +40,10 @@ class Driver extends BaseModel
 
     public function getShortReadableIdAttribute(): string
     {
+        // If the last name is composed, we only want the first part
+        $lastName = explode(' ', $this->last_name)[0];
+
         // Get the first letter of the first name and the full last name and, trim and make each part title case
-        return ucfirst(trim($this->first_name)[0]) . '.' . ucfirst($this->last_name);
+        return ucfirst(trim($this->first_name)[0]) . '.' . ucfirst($lastName);
     }
 }

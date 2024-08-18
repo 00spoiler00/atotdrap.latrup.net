@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Dashboard;
 
+use App\Models\Metric;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource as Resource;
 
@@ -14,15 +15,31 @@ class PitrepEarner extends Resource
      */
     public function toArray(Request $request): array
     {
-        $start = $this->metrics()->where('type', 'pitrep')->where('created_at', '<=', now()->subWeek())->last()->pitrep;
-        $end   = $this->metrics()->where('type', 'pitrep')->last()->pitrep;
-        $gain  = $end - $start;
+        $type = 'pitrep';
+
+        $start = Metric::whereHas('driver', fn ($q) => $q->where('id', $this->id))
+            ->where('type', $type)
+            ->where('measured_at', '<', now()->subWeek())
+            ->orderBy('measured_at', 'desc')
+            ->first()
+            ->value;
+
+        $end = Metric::query()
+            ->whereHas('driver', fn ($q) => $q->where('id', $this->id))
+            ->where('type', $type)
+            ->where('measured_at', '>', now()->subWeek())
+            ->orderBy('measured_at', 'desc')
+            ->first()
+            ->value;
+
+        $gain = $end - $start;
 
         return [
             'id'     => $this->id,
             'avatar' => $this->avatar_url,
             'title'  => $this->shortReadableId,
-            'value'  => [
+            // 'subtitle' => $this->starts_at->diffForHumans(),
+            'value' => [
                 'color' => 'blue',
                 'text'  => $gain,
             ],
