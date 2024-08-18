@@ -109,7 +109,7 @@ const updateDashboard = () => {
         .catch(error => console.error('Error fetching data:', error))
         .finally(() => {
             loaderStore.remove()
-            refreshThread = setTimeout(() => updateDashboard(), 1000);
+            refreshThread = setTimeout(() => updateDashboard(), 10000);
         });
 };
 
