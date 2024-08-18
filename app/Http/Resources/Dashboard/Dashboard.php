@@ -21,7 +21,7 @@ class Dashboard extends Resource
     {
         $limit = $request->get('limit', 5);
 
-        $upcomingRaces = Race::where('starts_at', '>', now())->limit($limit)->get();
+        $upcomingRaces = Race::where('starts_at', '>', now()->subHours(1))->orderBy('starts_at', 'asc')->limit($limit)->get();
 
         $pitskillLeaders = Driver::where('pitskill', '>', 0)->orderBy('pitskill', 'desc')->limit($limit)->get();
         $pitrepLeaders   = Driver::where('pitrep', '>', 0)->orderBy('pitrep', 'desc')->limit($limit)->get();
