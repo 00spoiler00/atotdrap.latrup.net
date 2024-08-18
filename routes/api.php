@@ -9,6 +9,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::get('/frontVersion', fn () => response()->json(['version' => '1.0.0']));
 Route::get('/dashboard', 'App\Http\Controllers\GenericController@dashboard');
+Route::get('/test', 'App\Http\Controllers\TestController');
 
 Route::get('/race/upcoming', 'App\Http\Controllers\RaceController@upcoming');
 Route::get('/race/{race}', 'App\Http\Controllers\RaceController@show');

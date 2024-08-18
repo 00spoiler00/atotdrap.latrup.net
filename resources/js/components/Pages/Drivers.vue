@@ -1,25 +1,52 @@
 <template>
     <v-card flat>
-        <v-card-title class="text-center">Pilots</v-card-title>
+
+        <v-toolbar class="text-center" color="primary" title="Ranking de pilots" height="36"/>
+
         <v-data-table
             :headers="headers"
             :items="items"
             :items-per-page="999"
             hide-default-footer
             :sort-by="sortBy"
-            density="compact">
+            density="comfortable"
+            >
             <template v-slot:item="props">
-                <tr>
-                    <td>
-                        <RouterLink :to="{ name: 'Driver', params: { id: props.item.id } }" class="text-primary">
+                <tr class="text-center">
+                    <td class="text-left">
+                        <!-- <v-avatar size="36">
+                            <v-img :src="props.item.avatar" class="relative">
+                                <div class="absolute inset-0 bg-gradient-to-l from-black to-transparent opacity-60"></div>
+                            </v-img>
+                        </v-avatar>
+                        <RouterLink :to="{ name: 'Driver', params: { id: props.item.id } }" class=" relative right-2 top-2">
+                                {{ props.item.name }}
+                        </RouterLink> -->
+
+                        <v-chip link pill :to="{ name: 'Driver', params: { id: props.item.id } }" variant="text">
+                            <v-avatar start>
+                                <v-img :src="props.item.avatar" />
+                            </v-avatar>
                             {{ props.item.name }}
-                        </RouterLink>
+                        </v-chip>
                     </td>
                     <td>
                         <DriverLicense :pitskill="props.item.pitskill" :pitrep="props.item.pitrep" />
                     </td>
-                    <td class="text-red-400" v-html="props.item.pitrep"></td>
-                    <td class="text-blue-400" v-html="props.item.pitskill"></td>
+                    <td>
+                        <v-chip color="primary" >
+                            <span class="font-bold">
+                                {{ props.item.pitskill }}
+                            </span>
+                        </v-chip>
+                    </td>
+                    <td>
+                        <v-chip color="secondary" >
+                            <span class="font-bold">
+                                {{ props.item.pitrep }}
+                            </span>
+                        </v-chip>
+                    </td>
                 </tr>
             </template>
         </v-data-table>
@@ -27,18 +54,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useLoaderStore } from '@/stores/loader';
+import { ref, onMounted, computed } from 'vue';
 import DriverLicense from '@/components/Shared/DriverLicense.vue';
-import ModelButton from '../Shared/ModelButton.vue';
+
+import { useLoaderStore } from '@/stores/loader';
 const loaderStore = useLoaderStore();
+
+import { useDisplay } from 'vuetify';
+const display = useDisplay();
 
 const headers = [
     { title: 'Pilot' },
-    { title: 'Llicència' },
-    { title: 'PitSkill', key: 'pitskill' }, 
-    { title: 'PitRep', key: 'pitrep' }, 
-];
+    { title: 'Llicència', align: 'center' },
+    { title: 'PS', key: 'pitskill', align: 'center' },
+    { title: 'PR', key: 'pitrep', align: 'center' },
+]
 
 const items = ref([]);
 const sortBy = ref([{ key: 'pitskill', order: 'desc' }]);

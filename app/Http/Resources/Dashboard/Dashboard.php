@@ -2,11 +2,13 @@
 
 namespace App\Http\Resources\Dashboard;
 
+use App\Actions\GetMetricEarners;
 use App\Models\Driver;
 use App\Models\Hotlap;
 use App\Models\Race;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource as Resource;
+use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Resource
 {
@@ -17,35 +19,32 @@ class Dashboard extends Resource
      */
     public function toArray(Request $request): array
     {
-        $listLimit = 3;
+        $limit = $request->get('limit', 5);
 
-        $upcomingRaces   = Race::where('starts_at', '>', now())->limit($listLimit)->get();
-        $pitskillLeaders = Driver::orderBy('pitskill', 'desc')->limit($listLimit)->get();
-        $pitrepLeaders   = Driver::orderBy('pitrep', 'desc')->limit($listLimit)->get();
+        $upcomingRaces   = Race::where('starts_at', '>', now())->limit($limit)->get();
+        $pitskillLeaders = Driver::orderBy('pitskill', 'desc')->limit($limit)->get();
+        $pitrepLeaders   = Driver::orderBy('pitrep', 'desc')->limit($limit)->get();
 
         // Compute the pitskill earners:
         // Measure the biggest increase in 'pitskill' Metric between today and one week ago
-        $pitskillEarners = Driver::query()
-            ->whereHas('metrics', fn ($q) => $q->where('created_at', '>', now()->subWeek()))
-            ->get()->sortByDesc(function ($driver) {
-                return
-                    $driver->metrics()->where('type', 'pitskill')->where('created_at', '<=', now()->subWeek())->last()->pitskill
-                    - $driver->metrics()->where('type', 'pitskill')->last()->pitskill;
-            })
-            ->take($listLimit);
-
-        $pitreplEarners = Driver::query()
-            ->whereHas('metrics', fn ($q) => $q->where('created_at', '>', now()->subWeek()))
-            ->get()->sortByDesc(function ($driver) {
-                return
-                    $driver->metrics()->where('type', 'pitrep')->where('created_at', '<=', now()->subWeek())->last()->pitrep
-                    - $driver->metrics()->where('type', 'pitrep')->last()->pitrep;
-            })
-            ->take($listLimit);
+        $pitskillEarners = GetMetricEarners::execute('pitskill', $limit);
+        $pitreplEarners  = GetMetricEarners::execute('pitrep', $limit);
 
         // Get the track of the last recorded hotlap
         $hotlapTrack = Hotlap::orderBy('created_at', 'desc')->first()->track;
-        $hotlaps     = Hotlap::whereHas('track', fn ($q) => $q->where('id', $hotlapTrack->id))->orderBy('laptime', 'asc')->limit($listLimit)->get();
+        $subQuery    = Hotlap::select('driver_id', DB::raw('MIN(laptime) as best_laptime'))
+            ->where('track_id', $hotlapTrack->id)
+            ->groupBy('driver_id');
+
+        $hotlaps = Hotlap::where('track_id', $hotlapTrack->id)
+            ->whereIn(DB::raw('(driver_id, laptime)'), function ($query) use ($subQuery) {
+                $query->select('driver_id', 'best_laptime')
+                    ->from(DB::raw("({$subQuery->toSql()}) as sub"))
+                    ->mergeBindings($subQuery->getQuery());
+            })
+            ->orderBy('laptime', 'asc')
+            ->limit($limit)
+            ->get();
 
         return [
             'pitskill' => [

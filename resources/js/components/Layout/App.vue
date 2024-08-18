@@ -49,7 +49,7 @@
             </v-list>
         </v-navigation-drawer>
 
-        <div class="w-full xl:w-[66.66%] mx-auto">
+        <div class="w-full xl:w-[90%] 2xl:w-[80%]  mx-auto">
             <div class="p-0 md:p-4 lg:p-6">
                 <v-main>
                     <RouterView />
@@ -108,10 +108,10 @@ onMounted(() => {
 
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Quicksand:wght@300..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:wght@300..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
 .v-application {
-    font-family: "Quicksand", sans-serif;
+    font-family: "Roboto", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
