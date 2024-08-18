@@ -24,6 +24,8 @@ class Track extends BaseModel
 
     public function getAvatarUrlAttribute(): string
     {
-        return 'https://cdn.pitskill.io/public/TrackPhoto-' . $this->thumbnail;
+        return $this->platform == 'pitskill'
+            ? 'https://cdn.pitskill.io/public/TrackPhoto-' . $this->thumbnail
+            : 'https://lowfuelmotorsport.com/assets/img/tracks/' . $this->thumbnail;
     }
 }

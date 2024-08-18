@@ -29,7 +29,9 @@ class Race extends BaseModel
 
     public function getEnrollLinkAttribute()
     {
-        return "https://pitskill.io/event/{$this->event_id}";
+        return $this->platform == 'pitskill'
+            ? "https://pitskill.io/event/{$this->event_id}"
+            : "https://lowfuelmotorsport.com/seasonsv2/{$this->lfm_enrollment_code}";
     }
 
     // Define the date fields

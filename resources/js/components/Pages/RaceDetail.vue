@@ -9,16 +9,16 @@
             <!-- Header info-->
             <v-row dense>
 
-                <v-col cols="12" md="6">
+                <v-col cols="12" sm="9">
                     <v-text-field variant="solo-filled" readonly label="Nom" v-model="race.name" />
                 </v-col>
 
-                <v-col cols="12" md="3">
+                <v-col cols="12" sm="3">
                     <v-text-field variant="solo-filled" readonly label="Data" v-model="startsAt" />
                 </v-col>
 
                 <!-- Enroll-->
-                <v-col cols="12" md="3" align="center" justify="center">
+                <v-col cols="12" align="center" justify="center">
                     <v-btn block color="primary" @click="openOnBlank('https://pitskill.io/event/' + race.event_id)" prepend-icon="mdi-account-plus">
                         Apuntar-se
                     </v-btn>
@@ -40,11 +40,11 @@
                     Servers
                 </v-col>
 
-                <v-col cols="12" md="8">
+                <v-col cols="12" sm="8">
                     <v-text-field variant="solo-filled" readonly label="Server" v-model="server.name" />
                 </v-col>
 
-                <v-col cols="12" md="4">
+                <v-col cols="12" sm="4">
                     <v-text-field variant="solo-filled" readonly label="Split" v-model="server.split" />
                 </v-col>
 
@@ -64,8 +64,8 @@
 
                 <v-col cols="12">
                     <v-row>
-                        <v-col cols="12" md="3" v-for="enroll in server.enrolls" :key="enroll.driver_id">
-                            <ModelCard model="driver" :id="enroll.driver_id" :subtitle="enroll.car" />
+                        <v-col cols="12" sm="3" v-for="enroll in server.enrolls" :key="enroll.driver_id">
+                            <DriverChip :id="enroll.driver_id" :name="enroll.driver_name" :avatar="enroll.driver_avatar" size="x-large" />
                         </v-col>
                     </v-row>
                 </v-col>
@@ -85,6 +85,7 @@ import { useRoute } from 'vue-router'
 import moment from 'moment';
 import TrackDetail from '@/components/Pages/TrackDetail.vue';
 import ModelCard from '@/components/Shared/ModelCard.vue';
+import DriverChip from '../Shared/DriverChip.vue';
 
 const route = useRoute()
 const race = ref(null);

@@ -11,77 +11,64 @@
         </v-toolbar>
 
 
+        <v-row class="ma-0 sm:ma-2">
+            <v-col cols="12" md="6">
+                <DashboardCard :data="dashboard.races" />
+            </v-col>
+            <v-col cols="12" md="6">
+                <DashboardCard :data="dashboard.hotlaps" />
+            </v-col>
+        </v-row>
+
         <v-toolbar height="48">
-            <v-toolbar-title text="Pitskill IO" />
+            <v-toolbar-title text="PitSkill" />
         </v-toolbar>
 
-        <v-card>
+        <v-row class="ma-0 sm:ma-2">
 
-            <v-row class="ma-0 sm:ma-2">
-                <v-col cols="12" md="4">
-                    <DashboardCard :data="dashboard.pitskill.races" />
-                </v-col>
-                <v-col cols="12" md="4">
-                    <DashboardCard :data="dashboard.pitskill.pitskill.ranking" />
-                </v-col>
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.pitskill.pitskill.ranking" />
+            </v-col>
 
-                <v-col cols="12" md="4">
-                    <DashboardCard :data="dashboard.pitskill.pitrep.ranking" />
-                </v-col>
-            </v-row>
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.pitskill.pitrep.ranking" />
+            </v-col>
 
-            <v-toolbar height="24">
-                <v-toolbar-title text="Setmanals" />
-            </v-toolbar>
 
-            <v-row class="ma-0 sm:ma-2">
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.pitskill.pitskill.earners" />
+            </v-col>
 
-                <v-col cols="12" md="4">
-                    <DashboardCard :data="dashboard.pitskill.hotlaps" />
-                </v-col>
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.pitskill.pitrep.earners" />
+            </v-col>
 
-                <v-col cols="12" md="4">
-                    <DashboardCard :data="dashboard.pitskill.pitskill.earners" />
-                </v-col>
-
-                <v-col cols="12" md="4">
-                    <DashboardCard :data="dashboard.pitskill.pitrep.earners" />
-                </v-col>
-
-            </v-row>
-
-        </v-card>
+        </v-row>
 
         <v-toolbar height="48">
             <v-toolbar-title text="Low Fuel Motorsport" />
         </v-toolbar>
 
-        <v-card>
-            <v-row>
-                <v-col cols="12" sm="6">
-                    <v-card flat subtitle="PitSkill ranking">
-                        <v-list>
-                            <v-list-item rounded="shaped" v-for="i in 3" :key="i">
-                                <v-list-item-title>TODO</v-list-item-title>
-                                <v-list-item-subtitle>2234</v-list-item-subtitle>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-col>
+        <v-row class="ma-0 sm:ma-2">
 
-                <v-col cols="12" sm="6">
-                    <v-card flat subtitle="PitRep ranking">
-                        <v-list>
-                            <v-list-item rounded="shaped" v-for="i in 3" :key="i">
-                                <v-list-item-title>TODO</v-list-item-title>
-                                <v-list-item-subtitle>2345</v-list-item-subtitle>
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-col>
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.lfm.elo.ranking" />
+            </v-col>
 
-            </v-row>
-        </v-card>
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.lfm.sr.ranking" />
+            </v-col>
+
+
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.lfm.elo.earners" />
+            </v-col>
+
+            <v-col cols="12" sm="6"  lg="3">
+                <DashboardCard :data="dashboard.lfm.sr.earners" />
+            </v-col>
+
+        </v-row>
 
 
     </v-card>

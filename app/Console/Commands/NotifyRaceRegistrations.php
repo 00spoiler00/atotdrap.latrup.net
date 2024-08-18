@@ -52,8 +52,14 @@ class NotifyRaceRegistrations extends Command
 
             $sof = $race->enrollments->last()->sof;
 
+            // Convert the race platform string to uppercase
+            $platform      = strtoupper($race->platform);
+            $driversString = $drivers->join(', ');
+            $joiner        = $drivers->count() > 1 ? 'apuntats' : 'apuntat';
+            $dateString    = $race->starts_at->format('d/M h:i');
+
             // Build the message
-            $message = "**{$drivers->join(', ')}** " . ($drivers->count() > 1 ? 'apuntats' : 'apuntat') . " per [{$race->name}](<{$race->enrollLink}>) *{$race->starts_at->format('d/M h:i')}* SoF:{$sof}, Regs: {$race->registers}";
+            $message = "** [{$platform}] {$driversString}** {$joiner} per [{$race->name}](<{$race->enrollLink}>) *{$dateString}* SoF:{$sof}, Regs: {$race->registers}";
 
             // Get the Discord webhook URL from config
             $webhookUrl = config('atotdrap.discord.webhook_url');
