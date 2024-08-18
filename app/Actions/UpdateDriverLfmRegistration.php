@@ -51,6 +51,9 @@ class UpdateDriverLfmRegistration
                 ]
             );
 
+            // Parse the start date and handle the timezone
+            $raceStart = now()->parse($event['race_date'])->setTimezone(config('app.timezone'));
+
             $race = Race::updateOrCreate(
                 [
                     'event_id' => $event['race_id'],
@@ -58,11 +61,11 @@ class UpdateDriverLfmRegistration
                 ],
                 [
                     'name'                 => $event['event_name'],
-                    'starts_at'            => now()->parse($event['race_date']),
+                    'starts_at'            => $raceStart,
                     'track_id'             => $track->id,
                     'registers'            => $raceData['splits']['driver_count'],
                     'max_slots'            => $raceData['server_settings']['server_settings']['settings']['data']['maxCarSlots'],
-                    'registration_ends_at' => now()->parse($event['race_date'])->subMinutes(5),
+                    'registration_ends_at' => $raceStart->clone()->subMinutes(5),
                     'lfm_enrollment_code'  => $raceData['event']['url_code'],
                 ]
             );
