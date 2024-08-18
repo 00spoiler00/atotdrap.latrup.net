@@ -23,13 +23,13 @@ class Dashboard extends Resource
 
         $upcomingRaces = Race::where('starts_at', '>', now())->limit($limit)->get();
 
-        $pitskillLeaders = Driver::orderBy('pitskill', 'desc')->limit($limit)->get();
-        $pitrepLeaders   = Driver::orderBy('pitrep', 'desc')->limit($limit)->get();
+        $pitskillLeaders = Driver::where('pitskill', '>', 0)->orderBy('pitskill', 'desc')->limit($limit)->get();
+        $pitrepLeaders   = Driver::where('pitrep', '>', 0)->orderBy('pitrep', 'desc')->limit($limit)->get();
         $pitskillEarners = GetMetricEarners::execute('pitskill', $limit);
         $pitreplEarners  = GetMetricEarners::execute('pitrep', $limit);
 
-        $eloLeaders = Driver::orderBy('elo', 'desc')->limit($limit)->get();
-        $srLeaders  = Driver::orderBy('sr', 'desc')->limit($limit)->get();
+        $eloLeaders = Driver::where('elo', '>', 0)->orderBy('elo', 'desc')->limit($limit)->get();
+        $srLeaders  = Driver::where('sr', '>', 0)->orderBy('sr', 'desc')->limit($limit)->get();
         $eloEarners = GetMetricEarners::execute('elo', $limit);
         $srEarners  = GetMetricEarners::execute('sr', $limit);
 
