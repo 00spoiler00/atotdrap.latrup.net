@@ -32,7 +32,7 @@ class PitrepEarner extends Resource
             ->first()
             ->value;
 
-        $gain = $end - $start;
+        $gain = round($end - $start, 2);
 
         return [
             'id'     => $this->id,
