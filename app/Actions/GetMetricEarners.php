@@ -19,8 +19,8 @@ class GetMetricEarners
         abort_if(! in_array($type, ['pitskill', 'pitrep', 'elo', 'sr']), 404);
 
         return Driver::query()
-            ->whereHas('metrics', fn ($q) => $q->where('measured_at', '>', now()->subWeek()))
-            ->whereHas('metrics', fn ($q) => $q->where('measured_at', '<', now()->subWeek()))
+            ->whereHas('metrics', fn ($q) => $q->where('type', $type)->where('measured_at', '>', now()->subWeek()))
+            ->whereHas('metrics', fn ($q) => $q->where('type', $type)->where('measured_at', '<', now()->subWeek()))
             ->get()
             ->sortByDesc(function ($driver) use ($type) {
                 $start = Metric::whereHas('driver', fn ($q) => $q->where('id', $driver->id))
