@@ -56,7 +56,7 @@ class NotifyRaceRegistrations extends Command
             $platform      = strtoupper($race->platform);
             $driversString = $drivers->join(', ');
             $joiner        = $drivers->count() > 1 ? 'apuntats' : 'apuntat';
-            $dateString    = $race->starts_at->format('d/M h:i');
+            $dateString    = $race->starts_at->format('d/M H:i');
 
             // Build the message
             $message = "** [{$platform}] {$driversString}** {$joiner} per [{$race->name}](<{$race->enrollLink}>) *{$dateString}* SoF:{$sof}, Regs: {$race->registers}";
