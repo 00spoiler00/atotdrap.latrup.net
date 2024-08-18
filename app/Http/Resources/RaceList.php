@@ -19,6 +19,7 @@ class RaceList extends Resource
         // return parent::toArray($request);
         return [
             'id'         => $this->id,
+            'platform'   => $this->platform,
             'event_id'   => $this->event_id,
             'starts_at'  => $this->starts_at,
             'name'       => $this->name,

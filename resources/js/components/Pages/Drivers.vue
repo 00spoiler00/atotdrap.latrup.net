@@ -23,12 +23,8 @@
                                 {{ props.item.name }}
                         </RouterLink> -->
 
-                        <v-chip link pill :to="{ name: 'Driver', params: { id: props.item.id } }" variant="text">
-                            <v-avatar start>
-                                <v-img :src="props.item.avatar" />
-                            </v-avatar>
-                            {{ props.item.name }}
-                        </v-chip>
+                        <DriverChip :id="props.item.id" :name="props.item.name" :avatar="props.item.avatar" />
+
                     </td>
                     <td>
                         <DriverLicense :pitskill="props.item.pitskill" :pitrep="props.item.pitrep" />
@@ -61,6 +57,7 @@ import { useLoaderStore } from '@/stores/loader';
 const loaderStore = useLoaderStore();
 
 import { useDisplay } from 'vuetify';
+import DriverChip from '../Shared/DriverChip.vue';
 const display = useDisplay();
 
 const headers = [

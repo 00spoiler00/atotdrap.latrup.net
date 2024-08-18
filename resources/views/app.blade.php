@@ -10,7 +10,7 @@
 	@vite(['resources/js/app.js'])
 </head>
 
-<body >
+<body>
 	<div id="app" >
 		<App />
 	</div>

@@ -12,35 +12,35 @@
         <v-card-text>
             <v-row dense>
 
-                <v-col cols="12" sm="2">
+                <v-col cols="3">
                     <v-text-field variant="solo-filled" readonly label="Any" v-model="track.track_year" />
                 </v-col>
 
-                <v-col cols="12" sm="2">
+                <v-col cols="3">
                     <v-text-field variant="solo-filled" readonly label="País" v-model="track.country" />
                 </v-col>
 
-                <v-col cols="12" sm="2">
+                <v-col cols="3">
                     <v-text-field variant="solo-filled" readonly label="Corbes" v-model="track.corners" />
                 </v-col>
 
-                <v-col cols="12" sm="2">
+                <v-col cols="3">
                     <v-text-field variant="solo-filled" readonly label="Longitud" v-model="track.length" />
                 </v-col>
 
-                <v-col cols="12" sm="2">
+                <v-col cols="3">
                     <v-text-field variant="solo-filled" readonly label="Dificultat" v-model="track.difficulty" />
                 </v-col>
 
-                <v-col cols="12" sm="2">
+                <v-col cols="3">
                     <v-text-field variant="solo-filled" readonly label="Posicions" v-model="track.max_entries" />
                 </v-col>
 
-                <v-col cols="12" sm="2" md="6">
+                <v-col cols="6">
                     <v-text-field variant="solo-filled" readonly label="Ciutat" v-model="track.city" />
                 </v-col>
 
-                <v-col cols="12" sm="2" md="6">
+                <v-col cols="12">
                     <v-text-field variant="solo-filled" readonly label="Guia del circuit" v-model="track.track_guide" />
                 </v-col>
             </v-row>
@@ -74,16 +74,25 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, defineProps } from 'vue';
 import { useDateTransformer } from '@/composables/useDateTransformer';
 import { useLaptimeTransformer } from '@/composables/useLaptimeTransformer';
 
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
+// Define the props (id, required)
+const props = defineProps({
+    id: {
+        type: Number,
+        required: true
+    }
+})
+
+
 const track = ref(null);
 const fetchData = () => {
-    fetch(`/api/track/${route.params.id}`)
+    fetch(`/api/track/${props.id}`)
         .then(response => response.json())
         .then(data => track.value = data);
 }

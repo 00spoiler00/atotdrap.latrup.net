@@ -17,6 +17,7 @@
                             {{ props.item.name }}
                         </RouterLink>
                     </td>
+                    <td v-text="props.item.platform"></td>
                     <td v-text="useDateTransformer(props.item.starts_at).fromNow"></td>
                     <td>
                         {{ props.item.drivers.length }}/{{ props.item.registers }}
@@ -38,6 +39,7 @@ const loaderStore = useLoaderStore();
 
 const headers = [
     { title: 'Cursa', key: 'name', },
+    { title: 'Plataforma', key: 'platform', },
     { title: 'Quan', key: 'starts_at', value: 'starts_at' },
     { title: 'Pilots', key: 'drivers', value: v => v.length },
 ];

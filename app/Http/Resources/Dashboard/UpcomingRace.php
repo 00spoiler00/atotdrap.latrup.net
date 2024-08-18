@@ -28,6 +28,7 @@ class UpcomingRace extends Resource
 
         return [
             'id'       => $this->id,
+            'platform' => $this->platform,
             'avatar'   => $this->track->avatar_url,
             'title'    => $this->name,
             'subtitle' => $this->starts_at->diffForHumans(),

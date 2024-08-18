@@ -21,14 +21,17 @@ class Dashboard extends Resource
     {
         $limit = $request->get('limit', 5);
 
-        $upcomingRaces   = Race::where('starts_at', '>', now())->limit($limit)->get();
+        $upcomingRaces = Race::where('starts_at', '>', now())->limit($limit)->get();
+
         $pitskillLeaders = Driver::orderBy('pitskill', 'desc')->limit($limit)->get();
         $pitrepLeaders   = Driver::orderBy('pitrep', 'desc')->limit($limit)->get();
-
-        // Compute the pitskill earners:
-        // Measure the biggest increase in 'pitskill' Metric between today and one week ago
         $pitskillEarners = GetMetricEarners::execute('pitskill', $limit);
         $pitreplEarners  = GetMetricEarners::execute('pitrep', $limit);
+
+        $eloLeaders = Driver::orderBy('elo', 'desc')->limit($limit)->get();
+        $srLeaders  = Driver::orderBy('sr', 'desc')->limit($limit)->get();
+        $eloEarners = GetMetricEarners::execute('elo', $limit);
+        $srEarners  = GetMetricEarners::execute('sr', $limit);
 
         // Get the track of the last recorded hotlap
         $hotlapTrack = Hotlap::orderBy('created_at', 'desc')->first()->track;
@@ -47,12 +50,17 @@ class Dashboard extends Resource
             ->get();
 
         return [
+            'races' => [
+                'title'       => 'Properes curses',
+                'targetModel' => 'Race',
+                'data'        => UpcomingRace::collection($upcomingRaces),
+            ],
+            'hotlaps' => [
+                'title'       => 'Hotlaps ' . $hotlapTrack->readableId,
+                'targetModel' => 'Driver',
+                'data'        => HotlapRanking::collection($hotlaps),
+            ],
             'pitskill' => [
-                'races' => [
-                    'title'       => 'Properes curses',
-                    'targetModel' => 'Race',
-                    'data'        => UpcomingRace::collection($upcomingRaces),
-                ],
                 'pitskill' => [
                     'earners' => [
                         'title'       => 'Pujades Skill',
@@ -77,10 +85,32 @@ class Dashboard extends Resource
                         'data'        => PitrepRanking::collection($pitrepLeaders),
                     ],
                 ],
-                'hotlaps' => [
-                    'title'       => 'Hotlaps ' . $hotlapTrack->readableId,
-                    'targetModel' => 'Driver',
-                    'data'        => HotlapRanking::collection($hotlaps),
+
+            ],
+            'lfm' => [
+                'elo' => [
+                    'earners' => [
+                        'title'       => 'Pujades ELO',
+                        'targetModel' => 'Driver',
+                        'data'        => EloEarner::collection($eloEarners),
+                    ],
+                    'ranking' => [
+                        'title'       => 'ELO ranking',
+                        'targetModel' => 'Driver',
+                        'data'        => EloRanking::collection($eloLeaders),
+                    ],
+                ],
+                'sr' => [
+                    'earners' => [
+                        'title'       => 'Pujades SR',
+                        'targetModel' => 'Driver',
+                        'data'        => SrEarner::collection($srEarners),
+                    ],
+                    'ranking' => [
+                        'title'       => 'SR ranking',
+                        'targetModel' => 'Driver',
+                        'data'        => SrRanking::collection($srLeaders),
+                    ],
                 ],
             ],
         ];

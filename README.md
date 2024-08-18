@@ -75,8 +75,7 @@ Aquesta ordre iniciarà el servidor de Laravel i l'aplicació estarà disponible
 El projecte pot requerir la importació de dades des de fonts externes. Per fer-ho, executa els comandaments situats a la carpeta `commands`:
 
 ```bash
-php artisan app:update-drivers
-php artisan app:update-registrations
+php artisan app:update-drivers-and-registrations
 ```
 
 ## 10. Comprovacions Finals
