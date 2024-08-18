@@ -31,7 +31,7 @@ class UpcomingRace extends Resource
             'platform' => $this->platform,
             'avatar'   => $this->track->avatar_url,
             'title'    => $this->name,
-            'subtitle' => $this->starts_at->diffForHumans(),
+            'subtitle' => strtoupper($this->platform) . ' - ' . $this->starts_at->diffForHumans(),
             'value'    => [
                 'color' => $color,
                 'text'  => $enrollments . ' / ' . $this->registers,
