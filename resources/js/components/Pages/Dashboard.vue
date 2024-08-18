@@ -17,7 +17,7 @@
 
         <v-card>
 
-            <v-row class="ma-2">
+            <v-row class="ma-0 sm:ma-2">
                 <v-col cols="12" md="4">
                     <DashboardCard :data="dashboard.pitskill.races" />
                 </v-col>
@@ -34,7 +34,7 @@
                 <v-toolbar-title text="Setmanals" />
             </v-toolbar>
 
-            <v-row class="ma-2">
+            <v-row class="ma-0 sm:ma-2">
 
                 <v-col cols="12" md="4">
                     <DashboardCard :data="dashboard.pitskill.hotlaps" />
@@ -93,6 +93,8 @@
 import { useLoaderStore } from '@/stores/loader';
 const loaderStore = useLoaderStore();
 
+import { useDisplay } from 'vuetify';
+const display = useDisplay();
 
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import DashboardCard from '../Shared/DashboardCard.vue';
