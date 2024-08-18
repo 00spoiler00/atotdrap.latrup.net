@@ -59,7 +59,7 @@ class NotifyRaceRegistrations extends Command
             $dateString    = $race->starts_at->format('d/M H:i');
 
             // Build the message
-            $message = "** [{$platform}] {$driversString}** {$joiner} per [{$race->name}](<{$race->enrollLink}>) *{$dateString}* SoF:{$sof}, Regs: {$race->registers}";
+            $message = "**[{$platform}] {$driversString}** {$joiner} per [{$race->name}](<{$race->enrollLink}>) *{$dateString}* SoF:{$sof}, Regs: {$race->registers}";
 
             // Get the Discord webhook URL from config
             $webhookUrl = config('atotdrap.discord.webhook_url');
