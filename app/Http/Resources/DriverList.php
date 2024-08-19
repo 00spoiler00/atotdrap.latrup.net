@@ -21,6 +21,8 @@ class DriverList extends Resource
             'avatar'   => $this->avatar_url,
             'pitskill' => $this->pitskill,
             'pitrep'   => $this->pitrep,
+            'elo'      => $this->elo,
+            'sr'       => $this->sr,
         ];
     }
 }
