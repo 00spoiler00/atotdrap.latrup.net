@@ -3,10 +3,8 @@
 
         <v-toolbar height="48" color="primary" title="Resum" elevation="10">
 
-            <v-btn-toggle v-model="limit" size="small" variant="text" rounded density="compact" mandatory>
-                <v-btn :value="v" v-for="v in [1, 3, 5, 10]" :key="v">
-                    <v-icon v-text="v" />
-                </v-btn>
+            <v-btn-toggle v-model="limit" size="small" variant="text" rounded density="compact" divided>
+                <v-btn :value="v" v-for="v in [1, 3, 5, 10]" :key="v" v-text="v" />
             </v-btn-toggle>
         </v-toolbar>
 
