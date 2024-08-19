@@ -2,37 +2,45 @@
 
     <v-card v-if="driver">
 
-        <v-toolbar class="text-center" color="primary" :title="'Detall de ' + driver.name" height="36"/>
-
-        <v-img
-            color="surface-variant"
-            height="200"
-            :src="driver.avatar"
-            cover>
-
-        </v-img>
+        <v-toolbar class="text-center" color="primary" :title="'Detall de ' + driver.name" height="36" />
 
         <v-card-text>
-            <v-row dense>
 
-                <v-col cols="12" sm="4">
-                    <v-text-field variant="solo-filled" readonly label="Nom" v-model="driver.first_name" />
+            <v-row>
+                <v-col cols="12" sm="6">
+                    
+                    <v-row dense>
+                        
+                        <v-col cols="12">
+                            <v-text-field variant="solo-filled" readonly label="Nom" v-model="driver.first_name" />
+                        </v-col>
+                        
+                        <v-col cols="12">
+                            <v-text-field variant="solo-filled" readonly label="Cognom" v-model="driver.last_name" />
+                        </v-col>
+                        
+                        <v-col cols="12">
+                            <v-text-field variant="solo-filled" readonly label="Nick" v-model="driver.nickname" />
+                        </v-col>
+                        
+                    </v-row>
                 </v-col>
-
-                <v-col cols="12" sm="4">
-                    <v-text-field variant="solo-filled" readonly label="Cognom" v-model="driver.last_name" />
+                
+                
+                <v-col cols="12" sm="6" align="center" >
+                    <v-avatar size="256">
+                        <v-img
+                        color="surface-variant"
+                        :src="driver.avatar"
+                        cover />
+                    </v-avatar>
                 </v-col>
-
-                <v-col cols="12" sm="4">
-                    <v-text-field variant="solo-filled" readonly label="Nick" v-model="driver.nickname" />
-                </v-col>
-
             </v-row>
         </v-card-text>
-
-        <v-toolbar height="36">
-            <v-toolbar-title>PitSkill IO</v-toolbar-title>
-        </v-toolbar>
+            
+            <v-toolbar height="36">
+                <v-toolbar-title>PitSkill IO</v-toolbar-title>
+            </v-toolbar>
 
         <v-card-text>
             <v-row dense>
@@ -108,7 +116,7 @@
             <thead>
                 <tr>
                     <th>Categoria</th>
-                    <th>Pilot</th>
+                    <th>Circuit</th>
                     <th>Temps</th>
                     <th>Cotxe</th>
                     <th>Data</th>
@@ -117,7 +125,7 @@
             <tbody>
                 <tr v-for="item in driver.hotlaps" :key="item.id">
                     <td>{{ item.car_category }}</td>
-                    <td>{{ item.driver }}</td>
+                    <td>{{ item.track }}</td>
                     <td>{{ useLaptimeTransformer(item.laptime).ms2human }}</td>
                     <td>{{ item.car }}</td>
                     <td>{{ useDateTransformer(item.measured_at).hDate }}</td>
