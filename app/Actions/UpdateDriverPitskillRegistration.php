@@ -47,11 +47,11 @@ class UpdateDriverPitskillRegistration
                     'platform' => 'pitskill',
                 ],
                 [
-                    'starts_at'            => now()->parse($event['start_date']),
+                    'starts_at'            => now()->parse($event['start_date'])->setTimezone(config('app.timezone')),
                     'name'                 => $event['event_name'],
                     'track_id'             => $track->id,
                     'registers'            => $event['registration_count'],
-                    'registration_ends_at' => now()->parse($event['registration_close_date']),
+                    'registration_ends_at' => now()->parse($event['registration_close_date'])->setTimezone(config('app.timezone')),
                     'max_slots'            => $event['max_slots'],
                 ]
             );
