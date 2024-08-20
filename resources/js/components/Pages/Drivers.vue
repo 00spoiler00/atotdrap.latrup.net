@@ -2,7 +2,7 @@
     <v-card flat>
 
         <v-toolbar class="text-center" color="primary" title="Ranking de pilots" height="36">
-            <v-btn-toggle v-if="xs" v-model="mode" size="small" variant="text" rounded density="compact" divided>
+            <v-btn-toggle v-if="xs" v-model="mode" size="small" variant="text" rounded density="compact" divided mandatory>
                 <v-btn :value="v" v-for="v in ['PS', 'LFM']" :key="v" v-text="v" />
             </v-btn-toggle>
         </v-toolbar>
@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import DriverLicense from '@/components/Shared/DriverLicense.vue';
 
 import { useLoaderStore } from '@/stores/loader';
@@ -101,6 +101,12 @@ const headers = computed(() => {
 const items = ref([]);
 const sortBy = ref([{ key: 'pitskill', order: 'desc' }]);
 const mode = ref('PS');
+
+watch(() => mode.value, () => {
+    mode.value == 'PS'  
+        ? [{ key: 'pitskill', order: 'desc' }]
+        : [{ key: 'elo', order: 'desc' }]
+})
 
 const fetchDrivers = () => {
     loaderStore.add();
