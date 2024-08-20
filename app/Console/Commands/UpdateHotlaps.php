@@ -68,8 +68,7 @@ class UpdateHotlaps extends Command
             ->filter(fn ($fail) => $fail)
             ->isEmpty();
 
-        // Delete the file if 'date' is older that two days
-        if (! $fails && $date->diffInDays(now()) > 2) {
+        if (! $fails) {
             Log::error('Deleting file', ['file' => $file]);
             unlink($file);
         }
