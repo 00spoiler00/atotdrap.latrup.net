@@ -21,7 +21,7 @@
                     </td>
                     <template v-if="xs === false || mode == 'PS'">
                         <td>
-                            <DriverLicense :pitskill="props.item.pitskill" :pitrep="props.item.pitrep" />
+                            <PitskillLicense :pitskill="props.item.pitskill" :pitrep="props.item.pitrep" />
                         </td>
                         <td>
                             <v-chip color="primary">
@@ -62,7 +62,7 @@
 
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
-import DriverLicense from '@/components/Shared/DriverLicense.vue';
+import PitskillLicense from '@/components/Shared/PitskillLicense.vue';
 
 import { useLoaderStore } from '@/stores/loader';
 const loaderStore = useLoaderStore();
@@ -102,8 +102,8 @@ const items = ref([]);
 const sortBy = ref([{ key: 'pitskill', order: 'desc' }]);
 const mode = ref('PS');
 
-watch(() => mode.value, () => {
-    mode.value == 'PS'  
+watch(() => mode.value, (v) => {
+    sortBy.value = v === 'PS'
         ? [{ key: 'pitskill', order: 'desc' }]
         : [{ key: 'elo', order: 'desc' }]
 })
