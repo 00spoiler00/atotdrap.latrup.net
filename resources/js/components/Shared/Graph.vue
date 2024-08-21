@@ -29,7 +29,7 @@
 
         <v-card-actions class="justify-center">
 
-            <v-btn-toggle v-model="range" variant="text">
+            <v-btn-toggle v-model="range" size="small" variant="text" rounded density="compact" divided mandatory>
                 <v-btn value="week">
                     Setmana
                 </v-btn>

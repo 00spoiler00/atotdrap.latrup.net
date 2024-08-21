@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Car;
 use App\Models\Driver;
 use App\Models\Track;
+use App\Models\Hotlap;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,9 +40,18 @@ class ImportOldHotlaps extends Command
             }
 
             foreach ($records as $record) {
+
+                $record['TrackId'] = $track->id;
+                $record['TrackName'] = $track->name;
+
                 // Find the driver splitting the name and surname and doing a loose comparison
-                $driver = Driver::where('first_name', 'like', '%' . explode(' ', $record['Driver'])[0] . '%')
-                    ->where('last_name', 'like', '%' . explode(' ', $record['Driver'])[1] . '%')
+                $driver = Driver::query()
+                    ->where(fn($q) => 
+                        $q
+                            ->where('first_name', 'like', '%' . explode(' ', $record['Driver'])[0] . '%')
+                            ->where('last_name', 'like', '%' . explode(' ', $record['Driver'])[1] . '%')
+                    )
+                    ->orWhere('steam_id', $record['DriverId']) 
                     ->first();
 
                 if (! $driver) {
@@ -53,7 +63,29 @@ class ImportOldHotlaps extends Command
                     $this->info('Car not found: ' . $record['CarId']);
                     continue;
                 }
+
+                $hotlap = Hotlap::where([
+                    'driver_id' => $driver->id,
+                    'track_id' => $track->id,
+                    'car_id' => $car->id,
+                    'laptime' => $record['Laptime'],
+                    'measured_at' => now()->parse($record['Date']),
+                ])->first();
+                
+                if (!$hotlap) {
+                    $this->info('Hotlap not found: ' . $record['Driver'] . ' - ' . $record['Laptime']);
+                    $hotlap = Hotlap::create([
+                        'driver_id' => $driver->id,
+                        'track_id' => $track->id,
+                        'car_id' => $car->id,
+                        'laptime' => $record['Laptime'],
+                        'measured_at' => now()->parse($record['Date']),
+                    ]);
+                }
+
             }
         }
+
+        $this->table(array_keys($records[0]), $notFound ?? []);
     }
 }
