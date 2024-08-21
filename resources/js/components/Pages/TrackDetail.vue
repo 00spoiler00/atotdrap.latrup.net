@@ -40,8 +40,8 @@
                     <v-text-field variant="solo-filled" readonly label="Ciutat" v-model="track.city" />
                 </v-col>
 
-                <v-col cols="12">
-                    <v-text-field variant="solo-filled" readonly label="Guia del circuit" v-model="track.track_guide" />
+                <v-col cols="12" v-if="track.track_guide">
+                    <v-text-field variant="solo-filled" readonly label="Guia del circuit" v-model="track.track_guide" append-icon="mdi-open-in-new" @click:append="openOnBlank(track.track_guide)" />
                 </v-col>
             </v-row>
         </v-card-text>
@@ -98,5 +98,7 @@ const fetchData = () => {
 }
 
 onMounted(() => fetchData())
+const openOnBlank = (url) => window.open(url, '_blank')
+
 
 </script>
