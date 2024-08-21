@@ -12,7 +12,8 @@ class ChangelogController extends Controller
      */
     public function show()
     {
-        $markdown = Storage::disk('local')->get('CHANGELOG.md');
+        // List the files in the public disk
+        $markdown = Storage::disk('public')->get('CHANGELOG.md');
 
         $parsedown = new Parsedown();
         $html      = $parsedown->text($markdown);
