@@ -3,6 +3,7 @@
 use App\Console\Commands\NotifyRaceRegistrations;
 use App\Console\Commands\UpdateDriversAndRegistrations;
 use App\Console\Commands\UpdateHotlaps;
+use App\Console\Commands\UpdateStats;
 use Illuminate\Support\Facades\Schedule;
 
 // Reuse the denseBeforeRaceStarts function to set proper launch times for the commands
@@ -14,8 +15,7 @@ $denseBeforeRaceStarts = function () {
     return $generalRepetition || $denseZone;
 };
 
-Schedule::command(UpdateDriversAndRegistrations::class)->everyMinute()->when($denseBeforeRaceStarts);
 Schedule::command(UpdateHotlaps::class)->everyMinute();
-Schedule::command(NotifyRaceRegistrations::class)
-    ->everyMinute()
-    ->when($denseBeforeRaceStarts);
+Schedule::command(UpdateDriversAndRegistrations::class)->everyMinute()->when($denseBeforeRaceStarts);
+Schedule::command(NotifyRaceRegistrations::class)->everyMinute()->when($denseBeforeRaceStarts);
+Schedule::command(UpdateStats::class)->everyFiveMinutes();
