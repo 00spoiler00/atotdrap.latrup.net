@@ -74,14 +74,14 @@ const color = computed(() => {
 });
 
 // Define the range to be shown var
-const range = ref('week');
+const range = ref('month');
 
 // Create a computed that filters the values based on the range
 const inRangeValues = computed(() => {
     
     // No data
     if(props.value.length === 0) {
-        return [];
+        return [0, 0];
     }
 
     // Single data
@@ -92,8 +92,7 @@ const inRangeValues = computed(() => {
         ]
     }
 
-    // Multiple data
-    return props
+    const inRange = props
         .value
         .filter((item) => {
             const date = new Date(item.measured_at);
@@ -108,8 +107,23 @@ const inRangeValues = computed(() => {
                 default:
                     return true;
             }
-        })
-        .map((item) => item.value)
-    });
+        });
+
+    if(inRange.length === 0) {
+        // return last value of props.value
+        return [
+            props.value[props.value.length - 1].value,
+            props.value[props.value.length - 1].value,
+        ]
+    } else if(inRange.length === 1) {
+        return [
+            inRange[0].value,
+            inRange[0].value,
+        ]
+    } else{
+        return inRange.map((item) => item.value)
+    }
+
+});
 
 </script>
