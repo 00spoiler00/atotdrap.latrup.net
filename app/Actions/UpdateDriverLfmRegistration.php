@@ -75,7 +75,13 @@ class UpdateDriverLfmRegistration
 
             // Find in the participants collection
             $participant = $participants->firstWhere('user_id', '=', $driver->clubMember->lfm_id);
-            $car         = Car::findOrFail($participant['car_model']);
+
+            // Log if the participant is not found
+            if (! $participant) {
+                Log::error('Participant not found in race, skipping', ['driver' => $driver->id]);
+            }
+
+            $car = Car::findOrFail($participant['car_model']);
 
             // UpdateOrCreate the driver
             Enrollment::updateOrCreate(
