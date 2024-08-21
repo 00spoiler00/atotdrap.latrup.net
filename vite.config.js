@@ -18,6 +18,9 @@ export default defineConfig({
         }),
         vuetify({ autoImport: true }), // Enabled by default
     ],
+    build: {
+        manifest: true,
+    },
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
