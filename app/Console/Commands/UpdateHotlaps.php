@@ -45,33 +45,53 @@ class UpdateHotlaps extends Command
 
     private function processFile($file)
     {
-        preg_match('/(\d{6})_/', basename($file), $matches);
-        $fileDate = $matches[1] ?? 'unknown';
-
-        $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
-        if (! isset($data['sessionResult']['leaderBoardLines'])) {
-            return;
+        
+        if(preg_match('/(\d{6})_/', basename($file), $matches)){
+            $date = now()->createFromFormat('ymd', $matches[1]);
         }
-
+        
+        if(!$date){
+            return $this->finishAndReport(false, $file, 'ERROR: Unparseable date in filename');
+        }
+        
+        $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
+        
         // Find the track by ingame_id
         $track = Track::where('ingame_id', $data['trackName'])->first();
         if (! $track) {
-            Log::error('Track not found', $data['trackName']);
-
-            return;
+            return $this->finishAndReport(false, $file, 'ERROR: Track not found ' + $data['trackName']);
+        }
+        
+        if (! isset($data['sessionResult']['leaderBoardLines'])) {
+            return $this->finishAndReport(true, $file, 'No leaderBoardLines array found in record');
         }
 
-        $date = now()->createFromFormat('ymd', $fileDate);
+        $results = collect($data['sessionResult']['leaderBoardLines']);
 
-        $fails = collect($data['sessionResult']['leaderBoardLines'])
+        if($results->isEmpty()){
+            return $this->finishAndReport(true, $file, 'No leaderBoardLines found in record');
+        }
+
+        $fails = $results
             ->map(fn ($hotlap) => $this->processHotlap($date, $track, $hotlap))
-            ->filter(fn ($fail) => $fail)
+            ->filter(fn ($success) => !$success)
             ->isEmpty();
 
-        if (! $fails) {
-            Log::error('Deleting file', ['file' => $file]);
+        return $fails 
+            ? $this->finishAndReport(false, $file, 'File failed processing')
+            : $this->finishAndReport(true, $file, 'File processed successfully') 
+        ;
+    }
+    
+    private function finishAndReport($deleteFile, string $file, string $message)
+    {
+        if($deleteFile){
+            Log::info('Deleting file. Finished: ', ['message' => $message, 'file' => $file]);
             unlink($file);
+        }else{
+            Log::info('Finished:', ['message' => $message, 'file' => $file]);
         }
+        return;
     }
 
     private function processHotlap(Carbon $date, Track $track, array $hotlap)
@@ -111,12 +131,14 @@ class UpdateHotlaps extends Command
             return true;
         }
 
-        return Hotlap::firstOrCreate([
+        Hotlap::firstOrCreate([
             'driver_id'   => $driver->id,
             'track_id'    => $track->id,
             'car_id'      => $car->id,
             'laptime'     => $laptime,
             'measured_at' => $date->format('Y-m-d'),
         ]);
+
+        return true;
     }
 }
