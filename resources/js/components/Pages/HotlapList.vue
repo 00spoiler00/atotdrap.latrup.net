@@ -4,14 +4,17 @@
 
     <v-row class="ma-0 sm:ma-2">
         
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="3">
             <ModelSelector v-model="track" modelName="track" multiple clearable chips hide-details label="Circuit" />
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="3">
             <ModelSelector v-model="driver" modelName="driver" multiple clearable chips hide-details label="Pilot" />
         </v-col>
-        <v-col cols="12" sm="4">
+        <v-col cols="12" sm="3">
             <ModelSelector v-model="car" modelName="car" multiple clearable chips hide-details label="Cotxe" />
+        </v-col>
+        <v-col cols="12" sm="3">
+            <v-select v-model="mode" :items="modes" hide-details label="Mode" />
         </v-col>
 
         <v-col cols="12">
@@ -58,8 +61,14 @@ const headers = [
     { title: 'Data', value: 'measured_at' },
 ];
 
-
 const sortBy = ref([{ key: 'laptime', order: 'asc' }]);
+
+const modes = [
+    { title: 'Millor', value: 'best_driver' },
+    { title: 'Incloure combos ', value: 'best_combo' },
+    { title: 'Tots els registres', value: 'all' },
+];
+const mode = ref('best_driver');
 
 const items = ref([]);
 const track = ref([]);
@@ -70,6 +79,7 @@ const url = computed(() => {
     if (track.value.length) params.append('track_id', track.value.join(','));
     if (driver.value.length) params.append('driver_id', driver.value.join(','));
     if (car.value.length) params.append('car_id', car.value.join(','));
+    params.append('mode', mode.value);
     return '/api/hotlap?' + params.toString();
 });
 watch([url], () => fetchData());

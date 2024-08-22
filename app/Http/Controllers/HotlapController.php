@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\HotlapList;
 use App\Models\Hotlap;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HotlapController extends Controller
 {
@@ -13,23 +14,57 @@ class HotlapController extends Controller
      */
     public function index(Request $request)
     {
-        // Convert the comma-separated string into an array
         $driverIds = $request->has('driver_id') ? explode(',', $request->driver_id) : [];
         $trackIds  = $request->has('track_id') ? explode(',', $request->track_id) : [];
         $carIds    = $request->has('car_id') ? explode(',', $request->car_id) : [];
+        $mode      = $request->input('mode', 'all'); // Default to 'all' if mode is not provided
 
-        $hotlaps = Hotlap::query()
-            // If the request has a driver_id parameter, filter the hotlaps by driver_id
-            ->when($driverIds, fn ($q) => $q->whereIn('driver_id', $driverIds))
-            // If the request has a track_id parameter, filter the hotlaps by track_id
-            ->when($trackIds, fn ($q) => $q->whereIn('track_id', $trackIds))
-            // If the request has a car_id parameter, filter the hotlaps by car_id
-            ->when($carIds, fn ($q) => $q->whereIn('car_id', $carIds))
-            // If the request has a category parameter, filter the hotlaps by car's category
-            ->when($request->has('category'), fn ($q) => $q->whereHas('car', fn ($q) => $q->where('category', $request->category)))
-            // Sort by laptime
-            ->orderBy('laptime')
-            // Limit the results to 100
+        $hotlapsQuery = Hotlap::query()
+            ->when($driverIds, fn ($q) => $q->whereIn('hotlaps.driver_id', $driverIds))
+            ->when($trackIds, fn ($q) => $q->whereIn('hotlaps.track_id', $trackIds))
+            ->when($carIds, fn ($q) => $q->whereIn('hotlaps.car_id', $carIds));
+        // ->when($request->has('category'), fn ($q) => $q->whereHas('car', fn ($q) => $q->where('category', $request->category)));
+
+        // Apply the mode logic
+        if ($mode === 'best_combo') {
+            $subQuery = DB::table('hotlaps')
+                ->select('hotlaps.car_id', 'hotlaps.driver_id', 'hotlaps.track_id', DB::raw('MIN(laptime) as min_laptime'))
+                ->groupBy('hotlaps.car_id', 'hotlaps.driver_id', 'hotlaps.track_id');
+
+            $hotlapsQuery->joinSub($subQuery, 'min_laps', function ($join) {
+                $join->on('hotlaps.car_id', '=', 'min_laps.car_id')
+                    ->on('hotlaps.driver_id', '=', 'min_laps.driver_id')
+                    ->on('hotlaps.track_id', '=', 'min_laps.track_id')
+                    ->on('hotlaps.laptime', '=', 'min_laps.min_laptime');
+            });
+        } elseif ($mode === 'best_driver') {
+            $subQuery = DB::table('hotlaps')
+                ->select('hotlaps.driver_id', 'hotlaps.track_id', DB::raw('MIN(laptime) as min_laptime'))
+                ->groupBy('hotlaps.driver_id', 'hotlaps.track_id');
+
+            $hotlapsQuery->joinSub($subQuery, 'min_laps', function ($join) {
+                $join->on('hotlaps.driver_id', '=', 'min_laps.driver_id')
+                    ->on('hotlaps.track_id', '=', 'min_laps.track_id')
+                    ->on('hotlaps.laptime', '=', 'min_laps.min_laptime');
+            });
+        }
+
+        // Ensure that all where clauses are properly prefixed with table names to avoid ambiguity
+        $hotlapsQuery->where(function ($query) use ($trackIds, $driverIds, $carIds) {
+            if ($trackIds) {
+                $query->whereIn('hotlaps.track_id', $trackIds);
+            }
+            if ($driverIds) {
+                $query->whereIn('hotlaps.driver_id', $driverIds);
+            }
+            if ($carIds) {
+                $query->whereIn('hotlaps.car_id', $carIds);
+            }
+        });
+
+        // Sorting and limiting results
+        $hotlaps = $hotlapsQuery
+            ->orderBy('hotlaps.laptime')
             ->limit(100)
             ->get();
 
