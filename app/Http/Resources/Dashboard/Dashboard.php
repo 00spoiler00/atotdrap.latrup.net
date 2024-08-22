@@ -56,14 +56,14 @@ class Dashboard extends Resource
                 'data'        => UpcomingRace::collection($upcomingRaces),
             ],
             'hotlaps' => [
-                'title'       => 'Hotlaps ' . $hotlapTrack->readableId,
+                'title'       => 'Hotlaps @ ' . $hotlapTrack->readableId,
                 'targetModel' => 'Driver',
                 'data'        => HotlapRanking::collection($hotlaps),
             ],
             'pitskill' => [
                 'pitskill' => [
                     'earners' => [
-                        'title'       => 'Pujades Skill',
+                        'title'       => 'PitSkill earners (7d)',
                         'targetModel' => 'Driver',
                         'data'        => PitskillEarner::collection($pitskillEarners),
                     ],
@@ -75,7 +75,7 @@ class Dashboard extends Resource
                 ],
                 'pitrep' => [
                     'earners' => [
-                        'title'       => 'Pujades Rep',
+                        'title'       => 'PitRep earners (7d)',
                         'targetModel' => 'Driver',
                         'data'        => PitrepEarner::collection($pitreplEarners),
                     ],
@@ -90,7 +90,7 @@ class Dashboard extends Resource
             'lfm' => [
                 'elo' => [
                     'earners' => [
-                        'title'       => 'Pujades ELO',
+                        'title'       => 'ELO earners (7d)',
                         'targetModel' => 'Driver',
                         'data'        => EloEarner::collection($eloEarners),
                     ],
@@ -102,7 +102,7 @@ class Dashboard extends Resource
                 ],
                 'sr' => [
                     'earners' => [
-                        'title'       => 'Pujades SR',
+                        'title'       => 'SR earners (7d)',
                         'targetModel' => 'Driver',
                         'data'        => SrEarner::collection($srEarners),
                     ],
