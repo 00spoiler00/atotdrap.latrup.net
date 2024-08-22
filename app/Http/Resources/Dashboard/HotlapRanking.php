@@ -18,7 +18,7 @@ class HotlapRanking extends Resource
             'id'       => $this->driver->id,
             'avatar'   => $this->driver->avatar_url,
             'title'    => $this->driver->shortReadableId,
-            'subtitle' => $this->car->readableId,
+            'subtitle' => $this->car->shortReadableId,
             'value'    => [
                 'color' => 'success',
                 'text'  => $this->readableLapTime,
