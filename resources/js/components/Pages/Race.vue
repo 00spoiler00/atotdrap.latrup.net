@@ -73,7 +73,7 @@
             </v-row>
         </v-card-text>
 
-        <TrackDetail :id="race.track_id" />
+        <Track :id="race.track_id" />
 
     </v-card>
 </template>
@@ -83,8 +83,7 @@ import { onMounted, ref, computed } from 'vue';
 import { useRoute } from 'vue-router'
 // import { useDateTransformer } from '../../composables/useDateTransformer';
 import moment from 'moment';
-import TrackDetail from '@/components/Pages/TrackDetail.vue';
-import ModelCard from '@/components/Shared/ModelCard.vue';
+import Track from '@/components/Pages/Track.vue';
 import DriverChip from '../Shared/DriverChip.vue';
 
 const route = useRoute()

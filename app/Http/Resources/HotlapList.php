@@ -16,13 +16,13 @@ class HotlapList extends Resource
     public function toArray(Request $request): array
     {
         return [
-            'id'           => $this->id,
-            'driver'       => $this->driver->readableId,
-            'track'        => $this->track->name,
-            'car'          => $this->car->shortReadableId,
-            'car_category' => $this->car->category,
-            'laptime'      => $this->laptime,
-            'measured_at'  => $this->measured_at,
+            'id'          => $this->id,
+            'category'    => $this->car->category,
+            'track'       => $this->track->name,
+            'driver'      => $this->driver->shortReadableId,
+            'car'         => $this->car->shortReadableId,
+            'laptime'     => $this->laptime,
+            'measured_at' => $this->measured_at,
         ];
     }
 }

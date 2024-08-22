@@ -114,10 +114,10 @@
             </thead>
             <tbody>
                 <tr v-for="item in driver.hotlaps" :key="item.id">
-                    <td>{{ item.car_category }}</td>
+                    <td>{{ item.category }}</td>
                     <td>{{ item.track }}</td>
-                    <td>{{ useLaptimeTransformer(item.laptime).ms2human }}</td>
                     <td>{{ item.car }}</td>
+                    <td>{{ useLaptimeTransformer(item.laptime).ms2human }}</td>
                     <td>{{ useDateTransformer(item.measured_at).hDate }}</td>
                 </tr>
             </tbody>

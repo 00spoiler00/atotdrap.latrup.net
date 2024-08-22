@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Dashboard\Dashboard;
+use App\Http\Resources\Selector;
 
 class GenericController extends Controller
 {
@@ -20,6 +21,18 @@ class GenericController extends Controller
 
         // Return the resource
         return new $resource($model);
+    }
+
+    /**
+     * Display the specified resource card.
+     */
+    public function selector(string $modelName)
+    {
+        $model  = 'App\\Models\\' . ucfirst($modelName);
+        $models = $model::all();
+
+        // Return the resource
+        return Selector::collection($models);
     }
 
     /**

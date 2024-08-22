@@ -1,12 +1,7 @@
 <template>
     <v-app dark>
 
-        <v-system-bar app height="2" absolute>
-
-            <v-progress-linear v-if="isLoading" color="accent" height="3" indeterminate />
-        </v-system-bar>
-
-        <v-app-bar app prominent>
+        <v-app-bar app prominent :extension-height="3   ">
 
             <!-- Add a back button -->
             <!-- <v-btn v-if="showBackButton" icon @click="goBack">
@@ -16,14 +11,9 @@
             <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer" />
 
             <!-- This should stick to the left -->
-            <v-toolbar-title>
-                <span class="ml-2">
+            <v-app-bar-title>
                     A Tot Drap
-                </span>
-            </v-toolbar-title>
-
-            <!-- This should be grouped with next section (v-btn and v-progress-circular) and everything be sticked to the right -->
-            <!-- <v-img src="./images/pitskill.png" height="16" /> -->
+            </v-app-bar-title>
 
             <v-spacer />
 
@@ -34,8 +24,14 @@
                     </v-avatar>
                 </a>
             </div>
+            
+            <template v-slot:extension>
+                <v-progress-linear v-if="isLoading" color="secondary" height="3" indeterminate class="position" />
+            </template>
 
         </v-app-bar>
+
+
 
         <v-navigation-drawer :rail="$vuetify.display.mobile" temporary v-model="drawer">
             <v-list density="compact" nav>
@@ -86,6 +82,8 @@ const routes = [
     { title: 'Dashboard', path: '/', icon: 'mdi-view-dashboard' },
     { title: 'Curses', path: '/race', icon: 'mdi-flag-checkered' },
     { title: 'Pilots', path: '/driver', icon: 'mdi-account' },
+    { title: 'Hotlaps', path: '/hotlap', icon: 'mdi-trophy-award' },
+    // { title: 'Circuits', path: '/track', icon: 'mdi-map-marker' },
     // { title: 'Statistics', path: '/statistics', icon: 'mdi-chart-bar' },
 ]
 
