@@ -1,9 +1,10 @@
 <template>
-    <v-autocomplete :items="items" v-model="internalValue" v-bind="$attrs" @update:modelValue="emitValue" />
+    <v-autocomplete v-if="props.autocomplete" :items="items" v-model="internalValue" v-bind="$attrs" @update:modelValue="emitValue" />
+    <v-select v-else :items="items" v-model="internalValue" v-bind="$attrs" @update:modelValue="emitValue" />
 </template>
 
 <script setup>
-import { onMounted, ref, defineProps, defineEmits } from 'vue';
+import { onMounted, ref, defineProps, defineEmits, watch } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -13,14 +14,14 @@ const props = defineProps({
         type: String,
         required: true
     },
+    autocomplete: {
+        type: Boolean,
+        default: true
+    }
 })
 const internalValue = ref(props.modelValue.value);
 const emit = defineEmits(['update:modelValue']);
-const emitValue = (event) => {
-    console.log(event)
-    emit('update:modelValue', event)
-}
-
+const emitValue = (event) => emit('update:modelValue', event)
 const items = ref([]);
 const fetchData = () => {
     fetch('/api/selector/' + props.modelName)

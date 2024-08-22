@@ -5,7 +5,7 @@
     <v-row class="ma-0 sm:ma-2">
         
         <v-col cols="12" sm="3">
-            <ModelSelector v-model="track" modelName="track" multiple clearable chips hide-details label="Circuit" />
+            <v-select v-model="track" :items="tracks"  hide-details label="Circuit" />
         </v-col>
         <v-col cols="12" sm="3">
             <ModelSelector v-model="driver" modelName="driver" multiple clearable chips hide-details label="Pilot" />
@@ -64,24 +64,29 @@ const headers = [
 const sortBy = ref([{ key: 'laptime', order: 'asc' }]);
 
 const modes = [
-    { title: 'Millor', value: 'best_driver' },
-    { title: 'Incloure combos ', value: 'best_combo' },
+    { title: 'Millor x pilot', value: 'best_driver' },
+    { title: 'Millors combos', value: 'best_driver_combo' },
     { title: 'Tots els registres', value: 'all' },
 ];
 const mode = ref('best_driver');
 
+const track = ref(null);
+const tracks = ref([]);
+
 const items = ref([]);
-const track = ref([]);
 const driver = ref([]);
 const car = ref([]);
 const url = computed(() => {
+    // If the track is still loading, don't fetch anything
+    if (!track.value) return null;
     const params = new URLSearchParams();
-    if (track.value.length) params.append('track_id', track.value.join(','));
+    params.append('track_id', track.value);
+    params.append('mode', mode.value);
     if (driver.value.length) params.append('driver_id', driver.value.join(','));
     if (car.value.length) params.append('car_id', car.value.join(','));
-    params.append('mode', mode.value);
     return '/api/hotlap?' + params.toString();
 });
+
 watch([url], () => fetchData());
 const fetchData = () => {
     fetch(url.value)
@@ -89,5 +94,23 @@ const fetchData = () => {
         .then((data) => items.value = data)
         .catch((error) => console.error('Error fetching data:', error));
 };
-onMounted(() => fetchData());
+
+const fetchTracks = () => {
+    fetch('/api/selector/track')
+        .then(response => response.json())
+        .then(data => {
+            tracks.value = data;
+            setLiveTrack()
+        })
+        .catch(error => console.error('Error fetching data:', error));
+};
+
+const setLiveTrack = () => {
+    fetch('/api/hotlap/liveTrack')
+        .then(response => response.json())
+        .then(data => track.value = data.value)
+        .catch(error => console.error('Error fetching data:', error));
+};
+
+onMounted(() => fetchTracks());
 </script>

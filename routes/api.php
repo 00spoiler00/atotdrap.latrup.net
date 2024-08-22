@@ -20,6 +20,7 @@ Route::get('/track/{track}/hotlaps', 'App\Http\Controllers\TrackController@hotla
 
 Route::get('/enrollment/{enrollment}', 'App\Http\Controllers\EnrollmentController@show');
 Route::get('/hotlap', 'App\Http\Controllers\HotlapController@index');
+Route::get('/hotlap/liveTrack', 'App\Http\Controllers\HotlapController@liveTrack');
 
 Route::get('/driver/', 'App\Http\Controllers\DriverController@index');
 Route::get('/driver/{driver}', 'App\Http\Controllers\DriverController@show');

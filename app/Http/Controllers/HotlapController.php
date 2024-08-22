@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\HotlapList;
+use App\Http\Resources\Selector;
 use App\Models\Hotlap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,10 +24,9 @@ class HotlapController extends Controller
             ->when($driverIds, fn ($q) => $q->whereIn('hotlaps.driver_id', $driverIds))
             ->when($trackIds, fn ($q) => $q->whereIn('hotlaps.track_id', $trackIds))
             ->when($carIds, fn ($q) => $q->whereIn('hotlaps.car_id', $carIds));
-        // ->when($request->has('category'), fn ($q) => $q->whereHas('car', fn ($q) => $q->where('category', $request->category)));
 
         // Apply the mode logic
-        if ($mode === 'best_combo') {
+        if ($mode === 'best_driver_combo') {
             $subQuery = DB::table('hotlaps')
                 ->select('hotlaps.car_id', 'hotlaps.driver_id', 'hotlaps.track_id', DB::raw('MIN(laptime) as min_laptime'))
                 ->groupBy('hotlaps.car_id', 'hotlaps.driver_id', 'hotlaps.track_id');
@@ -69,6 +69,11 @@ class HotlapController extends Controller
             ->get();
 
         return HotlapList::collection($hotlaps);
+    }
+
+    public function liveTrack()
+    {
+        return new Selector(Hotlap::orderBy('created_at', 'desc')->first()->track);
     }
 
     /**
