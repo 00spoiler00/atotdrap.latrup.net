@@ -31,79 +31,81 @@ class UpdateHotlaps extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $files = glob(self::$directory . '/*.json');
 
         Log::info('Updating ' . count($files) . ' hotlap files from the server');
 
         foreach ($files as $file) {
-            Log::info('Processing file', ['file' => $file]);
+            // Reenable when files are getting deleted
+            // Log::info('Processing file', ['file' => $file]);
             $this->processFile($file);
         }
     }
 
-    private function processFile($file)
+    private function processFile(string $file)
     {
-        
-        if(preg_match('/(\d{6})_/', basename($file), $matches)){
+        if (preg_match('/(\d{6})_/', basename($file), $matches)) {
             $date = now()->createFromFormat('ymd', $matches[1]);
         }
-        
-        if(!$date){
+
+        if (! $date) {
             return $this->finishAndReport(false, $file, 'ERROR: Unparseable date in filename');
         }
-        
+
         $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
-        
+
         // Find the track by ingame_id
+
+        if (! isset($data['trackName'])) {
+            return $this->finishAndReport(true, $file, 'ERROR: trackName key not found in record, probably and entrylist file');
+        }
+
         $track = Track::where('ingame_id', $data['trackName'])->first();
         if (! $track) {
             return $this->finishAndReport(false, $file, 'ERROR: Track not found ' + $data['trackName']);
         }
-        
+
         if (! isset($data['sessionResult']['leaderBoardLines'])) {
-            return $this->finishAndReport(true, $file, 'No leaderBoardLines array found in record');
+            return $this->finishAndReport(true, $file, 'No leaderBoardLines key found in record');
         }
 
         $results = collect($data['sessionResult']['leaderBoardLines']);
 
-        if($results->isEmpty()){
+        if ($results->isEmpty()) {
             return $this->finishAndReport(true, $file, 'No leaderBoardLines found in record');
         }
 
         $fails = $results
             ->map(fn ($hotlap) => $this->processHotlap($date, $track, $hotlap))
-            ->filter(fn ($success) => !$success)
-            ->isEmpty();
+            ->filter(fn ($response) => $response !== true);
 
-        return $fails 
-            ? $this->finishAndReport(false, $file, 'File failed processing')
-            : $this->finishAndReport(true, $file, 'File processed successfully') 
-        ;
+        return $fails->isEmpty()
+            ? $this->finishAndReport(true, $file, 'File processed successfully')
+            : $this->finishAndReport(false, $file, 'File failed processing: '.$fails->join('||'));
     }
-    
-    private function finishAndReport($deleteFile, string $file, string $message)
+
+    protected function finishAndReport(bool $deleteFile, string $file, string $message): void
     {
-        if($deleteFile){
+        if ($deleteFile) {
             Log::info('Deleting file. Finished: ', ['message' => $message, 'file' => $file]);
-            unlink($file);
-        }else{
+            
+            // Reeanble when archiving is implemented
+            // unlink($file);
+        } else {
             Log::info('Finished:', ['message' => $message, 'file' => $file]);
         }
-        return;
     }
 
-    private function processHotlap(Carbon $date, Track $track, array $hotlap)
+    protected function processHotlap(Carbon $date, Track $track, array $hotlap): true|string
     {
         // Car matching
         $car = Car::find($hotlap['car']['carModel']);
 
         // Otherwise just report the error
         if (! $car) {
-            Log::error('Car not found', $hotlap['car']['carModel']);
-
-            return false;
+            return 'Car not found' . $hotlap['car']['carModel'];
         }
 
         // Driver matching via first and last name or steam_id
@@ -115,9 +117,7 @@ class UpdateHotlaps extends Command
 
         // Otherwise just report the error
         if (! $driver) {
-            Log::error('Driver not found', $hotlap['currentDriver']);
-
-            return false;
+            return 'Driver not found' . $hotlap['currentDriver']['firstName'] . ' ' . $hotlap['currentDriver']['lastName'];
         }
 
         if ($driver->steam_id != $hotlap['currentDriver']['playerId']) {
@@ -126,7 +126,7 @@ class UpdateHotlaps extends Command
 
         $laptime = $hotlap['timing']['bestLap'];
 
-        // Disacard bad lap times
+        // Discard bad lap times
         if ($laptime === 0 || $laptime === 2147483647) {
             return true;
         }
@@ -136,7 +136,7 @@ class UpdateHotlaps extends Command
             'track_id'    => $track->id,
             'car_id'      => $car->id,
             'laptime'     => $laptime,
-            'measured_at' => $date->format('Y-m-d'),
+            'measured_at' => $date,
         ]);
 
         return true;
