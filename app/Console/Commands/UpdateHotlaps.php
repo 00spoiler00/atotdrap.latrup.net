@@ -44,53 +44,11 @@ class UpdateHotlaps extends Command
         }
     }
 
-    private function processFile(string $file)
-    {
-        if (preg_match('/(\d{6})_/', basename($file), $matches)) {
-            $date = now()->createFromFormat('ymd', $matches[1]);
-        }
-
-        if (! $date) {
-            return $this->finishAndReport(false, $file, 'ERROR: Unparseable date in filename');
-        }
-
-        $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
-
-        // Find the track by ingame_id
-
-        if (! isset($data['trackName'])) {
-            return $this->finishAndReport(true, $file, 'ERROR: trackName key not found in record, probably and entrylist file');
-        }
-
-        $track = Track::where('ingame_id', $data['trackName'])->first();
-        if (! $track) {
-            return $this->finishAndReport(false, $file, 'ERROR: Track not found ' + $data['trackName']);
-        }
-
-        if (! isset($data['sessionResult']['leaderBoardLines'])) {
-            return $this->finishAndReport(true, $file, 'No leaderBoardLines key found in record');
-        }
-
-        $results = collect($data['sessionResult']['leaderBoardLines']);
-
-        if ($results->isEmpty()) {
-            return $this->finishAndReport(true, $file, 'No leaderBoardLines found in record');
-        }
-
-        $fails = $results
-            ->map(fn ($hotlap) => $this->processHotlap($date, $track, $hotlap))
-            ->filter(fn ($response) => $response !== true);
-
-        return $fails->isEmpty()
-            ? $this->finishAndReport(true, $file, 'File processed successfully')
-            : $this->finishAndReport(false, $file, 'File failed processing: '.$fails->join('||'));
-    }
-
     protected function finishAndReport(bool $deleteFile, string $file, string $message): void
     {
         if ($deleteFile) {
             Log::info('Deleting file. Finished: ', ['message' => $message, 'file' => $file]);
-            
+
             // Reeanble when archiving is implemented
             // unlink($file);
         } else {
@@ -132,13 +90,56 @@ class UpdateHotlaps extends Command
         }
 
         Hotlap::firstOrCreate([
-            'driver_id'   => $driver->id,
-            'track_id'    => $track->id,
-            'car_id'      => $car->id,
-            'laptime'     => $laptime,
+            'driver_id' => $driver->id,
+            'track_id'  => $track->id,
+            'car_id'    => $car->id,
+            'laptime'   => $laptime,
+        ], [
             'measured_at' => $date,
         ]);
 
         return true;
+    }
+
+    private function processFile(string $file)
+    {
+        if (preg_match('/(\d{6})_/', basename($file), $matches)) {
+            $date = now()->createFromFormat('ymd', $matches[1]);
+        }
+
+        if (! $date) {
+            return $this->finishAndReport(false, $file, 'ERROR: Unparseable date in filename');
+        }
+
+        $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
+
+        // Find the track by ingame_id
+
+        if (! isset($data['trackName'])) {
+            return $this->finishAndReport(true, $file, 'ERROR: trackName key not found in record, probably and entrylist file');
+        }
+
+        $track = Track::where('ingame_id', $data['trackName'])->first();
+        if (! $track) {
+            return $this->finishAndReport(false, $file, 'ERROR: Track not found ' + $data['trackName']);
+        }
+
+        if (! isset($data['sessionResult']['leaderBoardLines'])) {
+            return $this->finishAndReport(true, $file, 'No leaderBoardLines key found in record');
+        }
+
+        $results = collect($data['sessionResult']['leaderBoardLines']);
+
+        if ($results->isEmpty()) {
+            return $this->finishAndReport(true, $file, 'No leaderBoardLines found in record');
+        }
+
+        $fails = $results
+            ->map(fn ($hotlap) => $this->processHotlap($date, $track, $hotlap))
+            ->filter(fn ($response) => $response !== true);
+
+        return $fails->isEmpty()
+            ? $this->finishAndReport(true, $file, 'File processed successfully')
+            : $this->finishAndReport(false, $file, 'File failed processing: ' . $fails->join('||'));
     }
 }
