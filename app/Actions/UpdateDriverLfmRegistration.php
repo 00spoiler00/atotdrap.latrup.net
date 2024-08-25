@@ -70,6 +70,9 @@ class UpdateDriverLfmRegistration
                 ]
             );
 
+            // Create a fake car
+            $carId = 1;
+
             // Find the car in the race info
             $participants = collect($raceData['participants']['entries']);
 
@@ -79,9 +82,13 @@ class UpdateDriverLfmRegistration
             // Log if the participant is not found
             if (! $participant) {
                 Log::error('Participant not found in race, skipping', ['driver' => $driver->id]);
+            } else {
+                if (! $car = Car::find($participant['car_model'])) {
+                    Log::error('Unable to find car Id', ['car_id' => $participant['car_model']]);
+                } else {
+                    $carId = $car->id;
+                }
             }
-
-            $car = Car::findOrFail($participant['car_model']);
 
             // UpdateOrCreate the driver
             Enrollment::updateOrCreate(
@@ -90,7 +97,7 @@ class UpdateDriverLfmRegistration
                     'race_id'   => $race->id,
                 ],
                 [
-                    'car_id'      => $car->id,
+                    'car_id'      => $carId,
                     'server_name' => $raceData['server_settings']['server_settings']['settings']['data']['serverName'],
                     'sof'         => $event['sof'],
                     'split'       => $event['split'],
