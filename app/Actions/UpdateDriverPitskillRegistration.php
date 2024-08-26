@@ -22,13 +22,13 @@ class UpdateDriverPitskillRegistration
             // Make sure the track exists
             $track = Track::updateOrCreate(
                 [
-                    'remote_id' => $event['track']['track_id'],
+                    'ingame_id' => $event['track']['ingame_id'],
                 ],
                 [
                     'platform'    => 'pitskill',
+                    'remote_id'   => $event['track']['track_id'],
                     'name'        => $event['track']['track_name_long'],
                     'track_year'  => $event['track']['track_year'],
-                    'ingame_id'   => $event['track']['ingame_id'],
                     'country'     => $event['track']['country'],
                     'corners'     => $event['track']['corners'],
                     'length'      => $event['track']['length'],
