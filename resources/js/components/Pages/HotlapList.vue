@@ -64,8 +64,8 @@ const headers = [
 const sortBy = ref([{ key: 'laptime', order: 'asc' }]);
 
 const modes = [
-    { title: 'Millor x pilot', value: 'best_driver' },
-    { title: 'Millors combos', value: 'best_driver_combo' },
+    { title: 'Millor del pilot', value: 'best_driver' },
+    { title: 'Millors combo del pilot', value: 'best_driver_combo' },
     { title: 'Tots els registres', value: 'all' },
 ];
 const mode = ref('best_driver');

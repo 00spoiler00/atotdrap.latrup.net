@@ -2,6 +2,11 @@
 
 ## V.1
 
+### 20240825
+
+- Avoid requiring a resolved car in enrollments
+- Adjust ELO & SR earners rounding
+
 ### 20240818
 
 - Finally add LFM support
