@@ -1,0 +1,67 @@
+<template>
+    <v-card flat>
+
+        <v-toolbar class="text-center" color="primary" title="Ranking de pilots" height="36" />
+
+        <v-table>
+            <tbody>
+                <tr v-for="item in items" :key="item.driver.id">
+                    <td>
+                        <DriverChip :id="item.driver.id" :name="item.driver.name" :avatar="item.driver.avatar" />
+                    </td>
+                    <td>
+                        {{ item.total }}
+                    </td>
+                    <td v-for="result in item.medals">
+                        <v-tooltip v-if="result.medal != 'none'" :text="result.tooltip" >
+                            <template v-slot:activator="{ props }">
+                                <v-btn v-bind="props" icon variant="text"  density="compact">
+                                    <v-icon  v-if="result.medal == 'bronze'" color="brown">mdi-medal</v-icon>
+                                    <v-icon  v-else-if="result.medal == 'silver'" color="grey">mdi-medal</v-icon>
+                                    <v-icon  v-else-if="result.medal == 'gold'" color="yellow">mdi-medal</v-icon>
+                                </v-btn>
+                            </template>
+                        </v-tooltip>
+                    </td>
+                </tr>
+            </tbody>
+        </v-table>
+    </v-card>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
+
+import { useLoaderStore } from '@/stores/loader';
+const loaderStore = useLoaderStore();
+
+import DriverChip from '../Shared/DriverChip.vue';
+
+const items = ref([]);
+
+const fetchMedals = () => {
+    loaderStore.add();
+    fetch('/api/trackMedals')
+        .then((response) => response.json())
+        .then((data) => items.value = data)
+        .catch((error) => console.error('Error fetching data:', error))
+        .finally(() => {
+            loaderStore.remove()
+            setTimeout(() => fetchMedals(), 10000);
+        });
+};
+
+onMounted(() => fetchMedals());
+
+</script>
+
+<!-- <style>
+  .v-table > .v-table__wrapper > table > tbody > tr > td,
+  .v-table > .v-table__wrapper > table > tbody > tr > th,
+  .v-table > .v-table__wrapper > table > thead > tr > td,
+  .v-table > .v-table__wrapper > table > thead > tr > th,
+  .v-table > .v-table__wrapper > table > tfoot > tr > td,
+  .v-table > .v-table__wrapper > table > tfoot > tr > th {
+    padding: 0 4px;
+  }
+</style> -->

@@ -15,7 +15,7 @@ abstract class BaseModel extends Model
 
     public function getReadableIdAttribute(): string
     {
-        return $this->name;
+        return ucfirst($this->name);
     }
 
     public function getShortReadableIdAttribute(): string

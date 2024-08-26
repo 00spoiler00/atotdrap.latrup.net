@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DriverTrackMedals;
 use App\Http\Resources\HotlapList;
 use App\Http\Resources\Selector;
+use App\Models\Driver;
 use App\Models\Hotlap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,6 +76,13 @@ class HotlapController extends Controller
     public function liveTrack()
     {
         return new Selector(Hotlap::orderBy('created_at', 'desc')->first()->track);
+    }
+
+    public function trackMedals()
+    {
+        $data = Driver::has('hotlaps')->get();
+
+        return DriverTrackMedals::collection($data);
     }
 
     /**

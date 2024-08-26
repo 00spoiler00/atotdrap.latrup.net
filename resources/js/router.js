@@ -8,6 +8,7 @@ import DriverList from '@/components/Pages/DriverList.vue'
 import Statistics from '@/components/Pages/Statistics.vue'
 import Track from '@/components/Pages/Track.vue'
 import HotlapList from '@/components/Pages/HotlapList.vue'
+import TrackMedals from './components/Pages/TrackMedals.vue'
 
 const routes = [
     { path: '/', component: Dashboard },
@@ -18,6 +19,7 @@ const routes = [
     { path: '/track/:id', component: Track, name: 'Track' },
     { path: '/track/:id/hotlaps', component: HotlapList, name: 'TrackHotlaps' },
     { path: '/hotlap', component: HotlapList, name: 'HotlapList' },
+    { path: '/trackMedals', component: TrackMedals, name: 'TrackMedals' },
     { path: '/statistics', component: Statistics, name: 'Statistics' },
 ]
 

@@ -82,7 +82,8 @@ const routes = [
     { title: 'Dashboard', path: '/', icon: 'mdi-view-dashboard' },
     { title: 'Curses', path: '/race', icon: 'mdi-flag-checkered' },
     { title: 'Pilots', path: '/driver', icon: 'mdi-account' },
-    { title: 'Hotlaps', path: '/hotlap', icon: 'mdi-trophy-award' },
+    { title: 'Hotlaps', path: '/hotlap', icon: 'mdi-timer' },
+    { title: 'Medalles', path: '/trackMedals', icon: 'mdi-trophy-award' },
     // { title: 'Circuits', path: '/track', icon: 'mdi-map-marker' },
     // { title: 'Statistics', path: '/statistics', icon: 'mdi-chart-bar' },
 ]
