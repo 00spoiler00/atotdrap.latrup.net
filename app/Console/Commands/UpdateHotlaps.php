@@ -9,6 +9,7 @@ use App\Models\Track;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class UpdateHotlaps extends Command
 {
@@ -26,14 +27,17 @@ class UpdateHotlaps extends Command
      */
     protected $description = 'Updates the hotlaps data from server';
 
-    private static $directory = '/home/marc/accServers/acc-server-00/results';
-
     /**
      * Execute the console command.
      */
     public function handle(): void
     {
-        $files = glob(self::$directory . '/*.json');
+        $directory = config('atotdrap.hotlaps.directory');
+
+        // Get all the files from the hotlaps storage
+        // dd(Storage::disk('hotlaps')->allFiles());
+
+        $files = glob($directory . '/*.json');
 
         Log::info('Updating ' . count($files) . ' hotlap files from the server');
 
@@ -49,8 +53,9 @@ class UpdateHotlaps extends Command
         if ($deleteFile) {
             Log::info('Deleting file. Finished: ', ['message' => $message, 'file' => $file]);
 
-            // Reeanble when archiving is implemented
-            // unlink($file);
+            // Move the file from the 'hotlaps' storage to 'local' storage, in folder 'hotlap_archive'
+            // Storage::disk('local')->move($file, 'hotlap_archive/' . basename($file));
+
         } else {
             Log::info('Finished:', ['message' => $message, 'file' => $file]);
         }
