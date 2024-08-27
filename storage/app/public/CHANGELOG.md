@@ -2,6 +2,10 @@
 
 ## V.1
 
+### 20240827
+
+- Update enrollment links for LFM to include the suffixes
+
 ### 20240825
 
 - Avoid requiring a resolved car in enrollments
