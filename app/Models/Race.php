@@ -31,7 +31,7 @@ class Race extends BaseModel
     {
         return $this->platform == 'pitskill'
             ? "https://pitskill.io/event/{$this->event_id}"
-            : "https://lowfuelmotorsport.com/seasonsv2/{$this->lfm_enrollment_code}";
+            : "https://lowfuelmotorsport.com/seasonsv2/{$this->lfm_enrollment_code}/upcoming";
     }
 
     // Define the date fields

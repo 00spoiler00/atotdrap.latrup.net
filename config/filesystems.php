@@ -36,6 +36,12 @@ return [
             'throw'  => false,
         ],
 
+        'hotlaps' => [
+            'driver' => 'local',
+            'root'   => config('atotdrap.hotlaps.directory'),
+            'throw'  => false,
+        ],
+
         'public' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public'),
