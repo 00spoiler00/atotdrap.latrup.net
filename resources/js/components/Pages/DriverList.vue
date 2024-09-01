@@ -40,6 +40,9 @@
                     </template>
                     <template v-if="xs === false || mode == 'LFM'">
                         <td>
+                            <LfmLicense :license="props.item.lfm_license" :srLicense="props.item.lfm_sr_license" />
+                        </td>
+                        <td>
                             <v-chip color="primary">
                                 <span class="font-bold">
                                     {{ props.item.elo }}
@@ -63,6 +66,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue';
 import PitskillLicense from '@/components/Shared/PitskillLicense.vue';
+import LfmLicense from '../Shared/LfmLicense.vue';
 
 import { useLoaderStore } from '@/stores/loader';
 const loaderStore = useLoaderStore();
@@ -75,23 +79,25 @@ const headers = computed(() => {
     if(xs.value === false){
         return [
             { title: 'Pilot' },
-            { title: 'Llicència', align: 'center' },
+            { title: 'Llicència' },
             { title: 'PS', key: 'pitskill', align: 'center' },
             { title: 'PR', key: 'pitrep', align: 'center' },
+            { title: 'LFMLic', align: 'center' },
             { title: 'ELO', key: 'elo', align: 'center' },
             { title: 'SR', key: 'sr', align: 'center' },
         ]
     }else if(mode.value == 'PS'){
         return [
             { title: 'Pilot' },
-            { title: 'Llicència', align: 'center' },
+            { title: 'Llicència' },
             { title: 'PS', key: 'pitskill', align: 'center' },
             { title: 'PR', key: 'pitrep', align: 'center' },
         ]
-
+        
     }else if(mode.value == 'LFM'){
         return [
             { title: 'Pilot' },
+            { title: 'Llicència' },
             { title: 'ELO', key: 'elo', align: 'center' },
             { title: 'SR', key: 'sr', align: 'center' },
         ]
