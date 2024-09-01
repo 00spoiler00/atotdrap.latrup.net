@@ -1,6 +1,8 @@
 # ChangeLog
 
-## V.1
+### 20240901
+
+- Add LFM License plates
 
 ### 20240827
 
