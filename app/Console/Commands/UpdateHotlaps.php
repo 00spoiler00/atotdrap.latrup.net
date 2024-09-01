@@ -35,9 +35,7 @@ class UpdateHotlaps extends Command
         $directory = config('atotdrap.hotlaps.directory');
 
         // Get all the files from the hotlaps storage
-        // dd(Storage::disk('hotlaps')->allFiles());
-
-        $files = glob($directory . '/*.json');
+        $files = Storage::disk('hotlaps')->allFiles();
 
         Log::info('Updating ' . count($files) . ' hotlap files from the server');
 
@@ -53,9 +51,9 @@ class UpdateHotlaps extends Command
         if ($deleteFile) {
             Log::info('Deleting file. Finished: ', ['message' => $message, 'file' => $file]);
 
-            // Move the file from the 'hotlaps' storage to 'local' storage, in folder 'hotlap_archive'
-            // Storage::disk('local')->move($file, 'hotlap_archive/' . basename($file));
-
+            // Move the file
+            Storage::disk('local')->put('hotlaps_archive/' . $file, Storage::disk('hotlaps')->get($file));
+            Storage::disk('hotlaps')->delete($file);
         } else {
             Log::info('Finished:', ['message' => $message, 'file' => $file]);
         }
@@ -116,7 +114,10 @@ class UpdateHotlaps extends Command
             return $this->finishAndReport(false, $file, 'ERROR: Unparseable date in filename');
         }
 
-        $data = json_decode(mb_convert_encoding(file_get_contents($file), 'UTF-8', 'UTF-16LE'), true);
+        // Get the content for the storage file
+        $data = Storage::disk('hotlaps')->get($file);
+
+        $data = json_decode(mb_convert_encoding($data, 'UTF-8', 'UTF-16LE'), true);
 
         // Find the track by ingame_id
 

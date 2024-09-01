@@ -3,6 +3,8 @@
 ### 20240901
 
 - Add LFM License plates
+- Update enroll colors
+- Add hotlap archiving
 
 ### 20240827
 
