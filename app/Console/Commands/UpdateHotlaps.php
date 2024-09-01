@@ -52,7 +52,7 @@ class UpdateHotlaps extends Command
             Log::info('Deleting file. Finished: ', ['message' => $message, 'file' => $file]);
 
             // Move the file
-            Storage::disk('local')->put('hotlaps_archive/' . $file, Storage::disk('hotlaps')->get($file));
+            Storage::disk('local')->put('hotlap_archive/' . $file, Storage::disk('hotlaps')->get($file));
             Storage::disk('hotlaps')->delete($file);
         } else {
             Log::info('Finished:', ['message' => $message, 'file' => $file]);
