@@ -19,19 +19,13 @@
 
             <div class="mr-4">
                 <a href="https://discord.gg/GFvYkjYbta">
-                    <v-avatar size="36">
+                    <v-avatar size="48" :variant="isLoading ? 'outlined' : 'text'" color="primary">
                         <v-img src="./images/icons/android-chrome-192x192.png" />
                     </v-avatar>
                 </a>
             </div>
             
-            <template v-slot:extension>
-                <v-progress-linear v-if="isLoading" color="secondary" height="3" indeterminate class="position" />
-            </template>
-
         </v-app-bar>
-
-
 
         <v-navigation-drawer :rail="$vuetify.display.mobile" temporary v-model="drawer">
             <v-list density="compact" nav>
@@ -73,8 +67,6 @@ const drawer = ref(false);
 // const router = useRouter();
 // const goBack = () => router.back()
 // const showBackButton = computed(() => route.path !== '/');
-
-
 
 const openChangelog = () => window.open('/changelog', '_blank');
 

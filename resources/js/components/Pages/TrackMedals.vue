@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 import { useLoaderStore } from '@/stores/loader';
 const loaderStore = useLoaderStore();
@@ -49,6 +49,7 @@ import DriverChip from '../Shared/DriverChip.vue';
 
 const items = ref([]);
 
+var refreshThread = null;
 const fetchMedals = () => {
     loaderStore.add();
     fetch('/api/trackMedals')
@@ -57,11 +58,12 @@ const fetchMedals = () => {
         .catch((error) => console.error('Error fetching data:', error))
         .finally(() => {
             loaderStore.remove()
-            setTimeout(() => fetchMedals(), 10000);
+            refreshThread = setTimeout(() => fetchMedals(), 60000);
         });
 };
 
 onMounted(() => fetchMedals());
+onUnmounted(() => clearTimeout(refreshThread));
 
 </script>
 

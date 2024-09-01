@@ -15,22 +15,22 @@
             hide-default-footer
             density="comfortable">
             <template v-slot:item="props">
-                <tr class="text-center">
+                <tr>
                     <td class="text-left">
                         <DriverChip :id="props.item.id" :name="props.item.name" :avatar="props.item.avatar" />
                     </td>
                     <template v-if="xs === false || mode == 'PS'">
-                        <td>
+                        <td class="text-center">
                             <PitskillLicense :pitskill="props.item.pitskill" :pitrep="props.item.pitrep" />
                         </td>
-                        <td>
+                        <td class="text-center">
                             <v-chip color="primary">
                                 <span class="font-bold">
                                     {{ props.item.pitskill }}
                                 </span>
                             </v-chip>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <v-chip color="secondary">
                                 <span class="font-bold">
                                     {{ props.item.pitrep }}
@@ -39,17 +39,17 @@
                         </td>
                     </template>
                     <template v-if="xs === false || mode == 'LFM'">
-                        <td>
+                        <td class="text-center">
                             <LfmLicense :license="props.item.lfm_license" :srLicense="props.item.lfm_sr_license" />
                         </td>
-                        <td>
+                        <td class="text-center">
                             <v-chip color="primary">
                                 <span class="font-bold">
                                     {{ props.item.elo }}
                                 </span>
                             </v-chip>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <v-chip color="secondary">
                                 <span class="font-bold">
                                     {{ props.item.sr }}
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import PitskillLicense from '@/components/Shared/PitskillLicense.vue';
 import LfmLicense from '../Shared/LfmLicense.vue';
 
@@ -82,7 +82,7 @@ const headers = computed(() => {
             { title: 'Llicència' },
             { title: 'PS', key: 'pitskill', align: 'center' },
             { title: 'PR', key: 'pitrep', align: 'center' },
-            { title: 'LFMLic', align: 'center' },
+            { title: 'Llicència' },
             { title: 'ELO', key: 'elo', align: 'center' },
             { title: 'SR', key: 'sr', align: 'center' },
         ]
@@ -114,6 +114,7 @@ watch(() => mode.value, (v) => {
         : [{ key: 'elo', order: 'desc' }]
 })
 
+var refreshThread = null;
 const fetchDrivers = () => {
     loaderStore.add();
     fetch('/api/driver')
@@ -122,11 +123,13 @@ const fetchDrivers = () => {
         .catch((error) => console.error('Error fetching data:', error))
         .finally(() => {
             loaderStore.remove()
-            setTimeout(() => fetchDrivers(), 10000);
+            refreshThread = setTimeout(() => fetchDrivers(), 60000);
         });
 };
 
 onMounted(() => fetchDrivers());
+onUnmounted(() => clearTimeout(refreshThread));
+
 
 </script>
 

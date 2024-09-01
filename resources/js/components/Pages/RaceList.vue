@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 import { useDateTransformer } from '@/composables/useDateTransformer';
 
@@ -46,6 +46,7 @@ const headers = [
 
 const items = ref([]);
 
+var refreshThread = null;
 const fetchData = () => {
     loaderStore.add();
     fetch('/api/race/upcoming')
@@ -54,11 +55,12 @@ const fetchData = () => {
         .catch((error) => console.error('Error fetching data:', error))
         .finally(() => {
             loaderStore.remove()
-            setTimeout(fetchData, 20000);
+            refreshThread = setTimeout(fetchData, 15000);
         });
 };
 
 
 onMounted(() => fetchData());
+onUnmounted(() => clearTimeout(refreshThread));
 
 </script>
