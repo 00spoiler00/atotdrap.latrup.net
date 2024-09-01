@@ -17,13 +17,16 @@ class UpcomingRace extends Resource
         $enrollments = $this->enrollments()->count();
         switch ($enrollments) {
             case 1:
-                $color = 'blue';
+                $color = 'brown';
                 break;
             case 2:
+                $color = 'red';
+                break;
+            case 3:
                 $color = 'orange';
                 break;
             default:
-                $color = 'red';
+                $color = 'yellow';
         }
 
         return [

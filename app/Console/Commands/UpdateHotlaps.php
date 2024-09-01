@@ -43,7 +43,7 @@ class UpdateHotlaps extends Command
 
         foreach ($files as $file) {
             // Reenable when files are getting deleted
-            // Log::info('Processing file', ['file' => $file]);
+            Log::info('Processing file', ['file' => $file]);
             $this->processFile($file);
         }
     }
