@@ -17,7 +17,7 @@ class ConvertLaptime
         // Format each component to ensure proper zero-padding
         $minutesFormatted      = str_pad($minutes, 2, '0', STR_PAD_LEFT);
         $secondsFormatted      = str_pad($seconds, 2, '0', STR_PAD_LEFT);
-        $millisecondsFormatted = str_pad($milliseconds, 3, '0', STR_PAD_RIGHT);
+        $millisecondsFormatted = str_pad($milliseconds, 3, '0', STR_PAD_LEFT);
 
         // Combine the formatted components
         return "{$minutesFormatted}:{$secondsFormatted}.{$millisecondsFormatted}";
