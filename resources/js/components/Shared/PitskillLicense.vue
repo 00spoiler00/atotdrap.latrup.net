@@ -27,7 +27,7 @@ const license = computed(() => {
     if (pitrep >= 5 && pitskill >= 1500) return 'Bronze';
     if (pitrep >= 5 && pitskill >= 1000) return 'Copper';
     if (pitrep >= 5 && pitskill >= 0) return 'Copper';
-    return 'PROVISIONAL';
+    return 'Provisional';
 });
 
 const licenseString = computed(() => display.name.value === 'xs' ? license.value[0] : license.value);
@@ -36,15 +36,15 @@ const licenseString = computed(() => display.name.value === 'xs' ? license.value
 const licenseClass = computed(() => {
     const licenseColors = {
         Elite: 'bg-black-400 text-white border-yellow-400 ',
-        Pro: 'bg-white-400 text-black border-yellow-400',
-        Veteran: 'bg-white-400 text-black border-white',
+        Pro: 'bg-white text-black border-yellow-400',
+        Veteran: 'bg-white text-black border-white',
         Platinum: 'bg-gray-300 text-black border-gray-300 ',
         Silver: 'bg-gray-300 text-black border-gray-300',
         Steel: 'bg-gray-300 text-black border-gray-300',
         Bronze: 'bg-red-800 text-white border-red-800',
         Copper: 'bg-red-800 text-white border-red-800',
         AM: 'bg-red-800 text-white border-red-800',
-        PROVISIONAL: 'bg-red-800 text-white border-yellow-400',
+        Provisional: 'bg-red-800 text-white border-yellow-400',
     };
 
     // If the breakpoint is mobile, return w-10, otherwise return w-24
