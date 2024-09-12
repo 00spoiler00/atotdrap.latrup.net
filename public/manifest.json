@@ -1,6 +1,6 @@
 {
 	"name": "A Tot Drap",
-	"short_name": "PitSkill",
+	"short_name": "A TotDrap",
 	"description": "L'app d'ATotDrap.",
 	"start_url": "/",
 	"display": "standalone",
