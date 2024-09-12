@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const item = ref(null);
 const props = defineProps({

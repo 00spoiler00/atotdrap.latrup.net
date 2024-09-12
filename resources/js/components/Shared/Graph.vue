@@ -53,7 +53,7 @@
 
 <script setup>
 
-import { computed, defineProps, ref } from 'vue';
+import { computed, ref } from 'vue';
 
 // Define the props (v-model for values, type as enum of piskill|PitRep)
 const props = defineProps({

@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, defineProps } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useDateTransformer } from '@/composables/useDateTransformer';
 import { useLaptimeTransformer } from '@/composables/useLaptimeTransformer';
 
