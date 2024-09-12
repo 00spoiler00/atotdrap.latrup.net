@@ -18,7 +18,7 @@ class UpdateDriversAndRegistrations extends Command
      *
      * @var string
      */
-    protected $signature = 'app:update-drivers-and-registrations {--platform=all : The platform to update}';
+    protected $signature = 'app:update-drivers-and-registrations {--platform=all : The platform to update} {--onlyActive : Only update drivers with recent enrollments}';
 
     /**
      * The console command description.
@@ -34,17 +34,26 @@ class UpdateDriversAndRegistrations extends Command
     {
         Log::info('Updating drivers data from the remote api');
 
+        $driversQuery = ClubMember::query();
+
+        if ($this->option('onlyActive')) {
+            $driversQuery->withAnEnrollmentBeforeDate(now()->subWeek());
+        }
+
+        // Clone the query before executing
+        $pitskillQuery = clone $driversQuery;
+        $lfmQuery      = clone $driversQuery;
+
         // If the platform is not 'all' or is not 'pitskill', then skip the pitskill update
         if ($this->option('platform') === 'all' || $this->option('platform') === 'pitskill') {
-            ClubMember::query()
+            $pitskillQuery
                 ->whereNotNull('pitskill_id')
-                ->get()
-                ->each(fn (ClubMember $member) => $this->processViaPitskill($member));
+                ->get()->each(fn (ClubMember $member) => $this->processViaPitskill($member));
         }
 
         // If the platform is not 'all' or is not 'lfm', then skip the pitskill update
         if ($this->option('platform') === 'all' || $this->option('platform') === 'lfm') {
-            ClubMember::query()
+            $lfmQuery
                 ->whereNotNull('lfm_id')
                 ->get()
                 ->each(fn (ClubMember $member) => $this->processViaLfm($member));

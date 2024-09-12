@@ -1,5 +1,10 @@
 # ChangeLog
 
+### 20240912
+
+- Update Pitskill License systems
+- Update driver refreshing algorithm
+
 ### 20240901
 
 - Add LFM License plates

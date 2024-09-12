@@ -16,6 +16,9 @@ $denseBeforeRaceStarts = function () {
 };
 
 Schedule::command(UpdateHotlaps::class)->everyMinute();
-Schedule::command(UpdateDriversAndRegistrations::class)->everyMinute()->when($denseBeforeRaceStarts);
+// The active drivers are updated every minute (with a dense zone filtering)
+Schedule::command(UpdateDriversAndRegistrations::class, ['--onlyActive'])->everyMinute()->when($denseBeforeRaceStarts);
+// The non active drivers are updated every 30 minutes
+Schedule::command(UpdateDriversAndRegistrations::class)->everyThirtyMinutes();
 Schedule::command(NotifyRaceRegistrations::class)->everyMinute()->when($denseBeforeRaceStarts);
 Schedule::command(UpdateStats::class)->everyFiveMinutes();
