@@ -17,7 +17,6 @@ npm-debug.log
 yarn-error.log
 /.fleet
 /.idea
-/.vscode
 .php_cs.cache
 .php-cs-fixer.cache
 .vite/deps/

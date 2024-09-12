@@ -1,0 +1,72 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Deploy PROD to Remote Server",
+        "type": "shell",
+        "command": "ssh marc@test.latrup.net '(cd /var/www/atotdrap.latrup.net/public && git pull origin main && composer install --no-dev --working-dir=/var/www/atotdrap.latrup.net/public && php artisan migrate --ansi --force && npm ci && npm run build)'",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "shared",
+          "clear": false
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Serve Laravel",
+        "type": "shell",
+        "command": "php artisan serve --ansi",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "isBackground": true,
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Run NPM Dev",
+        "type": "shell",
+        "command": "npm run dev",
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "isBackground": true,
+        "presentation": {
+          "echo": true,
+          "reveal": "always",
+          "focus": false,
+          "panel": "dedicated"
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Start Local Development",
+        "dependsOrder": "parallel",
+        "dependsOn": ["Serve Laravel", "Run NPM Dev"],
+        "problemMatcher": [],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always",   // Focuses the terminal when the task starts
+          "panel": "dedicated", // Keeps a dedicated terminal for this task
+          "close": true         // Closes the terminal upon successful execution
+        }
+      }
+    ]
+  }
+  
