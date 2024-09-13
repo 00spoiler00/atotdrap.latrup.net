@@ -2,9 +2,11 @@
     <v-card flat>
 
         <v-toolbar class="text-center" color="primary" title="Ranking de pilots" height="36">
-            <v-btn-toggle v-if="xs" v-model="mode" size="small" variant="text" rounded density="compact" divided mandatory>
-                <v-btn :value="v" v-for="v in ['PS', 'LFM']" :key="v" v-text="v" />
+
+            <v-btn-toggle v-if="xs" v-model="mode" size="small" rounded density="compact" divided mandatory class="mr-2">
+                <v-btn :value="v" v-for="v in ['PS', 'LFM']" :key="v" v-text="v" :variant="mode == v ? 'elevated' : 'plain'" color="primary" />
             </v-btn-toggle>
+
         </v-toolbar>
 
         <v-data-table
@@ -106,9 +108,11 @@ const headers = computed(() => {
 
 const items = ref([]);
 const sortBy = ref([{ key: 'pitskill', order: 'desc' }]);
-const mode = ref('PS');
+const savedMode = localStorage.getItem('driversMode') || 'PS';
+const mode = ref(savedMode)
 
 watch(() => mode.value, (v) => {
+    localStorage.setItem('driversMode', v)
     sortBy.value = v === 'PS'
         ? [{ key: 'pitskill', order: 'desc' }]
         : [{ key: 'elo', order: 'desc' }]
