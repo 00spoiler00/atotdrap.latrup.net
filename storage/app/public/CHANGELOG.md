@@ -6,6 +6,7 @@
 - Update Pitskill License systems
 - Update driver refreshing algorithm
 - Add objective times to hotlap dashboards
+- Unify all medals logic and show proper medal colors into HotLap dashboard
 
 ### 20240901
 
