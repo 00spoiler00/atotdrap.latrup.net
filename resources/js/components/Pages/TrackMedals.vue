@@ -8,7 +8,7 @@
             <v-divider vertical />
             <span class="mx-4 text-yellow">Or < 1.015%</span>
             <v-divider vertical />
-            <span class="mx-4 text-grey">Plata: < 1.025% </span>
+            <span class="mx-4 text-white">Plata: < 1.025% </span>
             <v-divider vertical />
             <span class="mx-4 text-orange">Bronze: < 1.035%</span>
         </div>
