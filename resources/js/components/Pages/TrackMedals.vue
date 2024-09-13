@@ -10,7 +10,7 @@
             <v-divider vertical />
             <span class="mx-4 text-grey">Plata: < 1.025% </span>
             <v-divider vertical />
-            <span class="mx-4 text-brown">Bronze: < 1.035%</span>
+            <span class="mx-4 text-orange">Bronze: < 1.035%</span>
         </div>
 
                 <v-table>
@@ -26,7 +26,7 @@
                                 <v-tooltip v-if="result.medal != 'none'" :text="result.tooltip">
                                     <template v-slot:activator="{ props }">
                                         <v-btn v-bind="props" icon variant="text" density="compact">
-                                            <v-icon v-if="result.medal == 'bronze'" color="brown">mdi-medal</v-icon>
+                                            <v-icon v-if="result.medal == 'bronze'" color="orange">mdi-medal</v-icon>
                                             <v-icon v-else-if="result.medal == 'silver'" color="grey">mdi-medal</v-icon>
                                             <v-icon v-else-if="result.medal == 'gold'" color="yellow">mdi-medal</v-icon>
                                         </v-btn>

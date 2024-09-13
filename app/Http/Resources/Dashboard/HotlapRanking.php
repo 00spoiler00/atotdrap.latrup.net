@@ -18,8 +18,8 @@ class HotlapRanking extends Resource
         $medalColorsMapper = [
             'gold'   => 'yellow',
             'silver' => 'white',
-            'bronze' => 'brown',
-            'none'   => 'gray',
+            'bronze' => 'orange',
+            'none'   => 'blue',
         ];
 
         return [
