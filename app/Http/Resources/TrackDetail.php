@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Actions\ConvertLaptime;
+use App\Actions\HotlapMedals;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource as Resource;
 
@@ -29,11 +29,7 @@ class TrackDetail extends Resource
             'avatar'      => $this->avatar_url,
             'track_guide' => $this->track_guide,
             'hotlaps'     => HotlapList::collection($this->hotlaps()->orderBy('laptime')->limit(10)->get()),
-            'medals'      => [
-                'gold'   => ConvertLaptime::execute($this->time_objective * 1.015),
-                'silver' => ConvertLaptime::execute($this->time_objective * 1.025),
-                'bronze' => ConvertLaptime::execute($this->time_objective * 1.035),
-            ],
+            'medals'      => HotlapMedals::trackMedals($this->resource, true),
         ];
     }
 }

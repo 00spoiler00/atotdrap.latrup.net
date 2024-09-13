@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Actions\ConvertLaptime;
+use App\Actions\HotlapMedals;
 use App\Models\Hotlap;
 use App\Models\Track;
 use Illuminate\Http\Request;
@@ -18,23 +19,16 @@ class DriverTrackMedals extends Resource
     public function toArray(Request $request): array
     {
         $medals = Track::all()->map(function ($track) {
-            $bestTime = Hotlap::query()
+            $bestHotlap = Hotlap::query()
                 ->where('track_id', $track->id)
                 ->where('driver_id', $this->id)
                 ->orderBy('laptime')
                 ->first();
 
-            $medal = match (true) {
-                $bestTime && $bestTime->laptime < $track->time_objective * 1.015 => 'gold',
-                $bestTime && $bestTime->laptime < $track->time_objective * 1.025 => 'silver',
-                $bestTime && $bestTime->laptime < $track->time_objective * 1.035 => 'bronze',
-                default                                                          => 'none',
-            };
-
             return [
                 'track'   => $track->readableId,
-                'medal'   => $medal,
-                'tooltip' => "{$this->readableId} - {$track->readableId} - " . ($bestTime ? ConvertLaptime::execute($bestTime->laptime) : null),
+                'medal'   => $bestHotlap ? HotlapMedals::medalForHotlap($bestHotlap) : null,
+                'tooltip' => "{$this->readableId} - {$track->readableId} - " . ($bestHotlap ? ConvertLaptime::execute($bestHotlap->laptime) : null),
             ];
         })->toArray();
 
