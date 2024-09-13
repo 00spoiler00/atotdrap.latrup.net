@@ -27,7 +27,7 @@
                                     <template v-slot:activator="{ props }">
                                         <v-btn v-bind="props" icon variant="text" density="compact">
                                             <v-icon v-if="result.medal == 'bronze'" color="orange">mdi-medal</v-icon>
-                                            <v-icon v-else-if="result.medal == 'silver'" color="grey">mdi-medal</v-icon>
+                                            <v-icon v-else-if="result.medal == 'silver'" color="white">mdi-medal</v-icon>
                                             <v-icon v-else-if="result.medal == 'gold'" color="yellow">mdi-medal</v-icon>
                                         </v-btn>
                                     </template>
