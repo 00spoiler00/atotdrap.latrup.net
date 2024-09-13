@@ -5,6 +5,7 @@
 - Add persistance of dashboard and drivers list modes to localStorage. Improve visuals on those selectors
 - Update Pitskill License systems
 - Update driver refreshing algorithm
+- Add objective times to hotlap dashboards
 
 ### 20240901
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Dashboard;
 
+use App\Actions\ConvertLaptime;
 use App\Actions\GetMetricEarners;
 use App\Models\Driver;
 use App\Models\Hotlap;
@@ -56,7 +57,7 @@ class Dashboard extends Resource
                 'data'        => UpcomingRace::collection($upcomingRaces),
             ],
             'hotlaps' => [
-                'title'       => 'Hotlaps @ ' . $hotlapTrack->readableId,
+                'title'       => "Hotlaps @ {$hotlapTrack->readableId}: " . ConvertLaptime::execute($hotlapTrack->time_objective * 1.015) . ' - ' . ConvertLaptime::execute($hotlapTrack->time_objective * 1.025) . ' - ' . ConvertLaptime::execute($hotlapTrack->time_objective * 1.035),
                 'targetModel' => 'Driver',
                 'data'        => HotlapRanking::collection($hotlaps),
             ],

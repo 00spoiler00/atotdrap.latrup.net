@@ -1,6 +1,7 @@
 ## 0. Others
 
 - Afegir participants a les carreres
+- Afegir la medalla a les hotlaps dels dashboards (i els temps objectiu)
 - Afegir gràfica d'evolució de hotlaps per pilot/circuit x temps
 - Calculadora de consum basada en circuit i cotxe amb dades preexistents
 - Millorar medals (mobil, etc) i temps objectius.
