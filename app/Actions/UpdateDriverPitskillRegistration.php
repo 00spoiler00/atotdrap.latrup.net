@@ -79,7 +79,7 @@ class UpdateDriverPitskillRegistration
                     ],
                     [
                         'car_id'      => $car->id,
-                        'server_name' => $registration['vehicle_registration']['server']['server_name'],
+                        'server_name' => $registration['vehicle_registration']['server']['server_name'] ?? '',
                         'sof'         => $registration['vehicle_registration']['server']['server_strength_of_field'],
                         'split'       => $registration['vehicle_registration']['server']['server_split_index'],
                     ]

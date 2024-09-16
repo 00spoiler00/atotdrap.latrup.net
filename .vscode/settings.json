@@ -1,0 +1,5 @@
+{
+    "php-cs-fixer.executablePath": "/var/www/atotdrap.latrup.net/public/vendor/friendsofphp/php-cs-fixer/php-cs-fixer",
+    "php-cs-fixer.config": ".php_cs.php",
+    "php-cs-fixer.onsave": true
+}
