@@ -1,14 +1,9 @@
 <template>
-
     <v-card v-if="race">
-
-        <v-toolbar class="text-center" color="primary" title="Detall de la cursa" height="36"/>
-
+        <v-toolbar class="text-center" color="primary" title="Detall de la cursa" height="36" />
         <v-card-text>
-
-            <!-- Header info-->
+            <!-- Header info -->
             <v-row dense>
-
                 <v-col cols="12" sm="9">
                     <v-text-field variant="solo-filled" readonly label="Nom" v-model="race.name" />
                 </v-col>
@@ -17,88 +12,112 @@
                     <v-text-field variant="solo-filled" readonly label="Data" v-model="startsAt" />
                 </v-col>
 
-                <!-- Enroll-->
+                <!-- Enroll -->
                 <v-col cols="12" align="center" justify="center">
                     <v-btn block color="primary" @click="openOnBlank('https://pitskill.io/event/' + race.event_id)" prepend-icon="mdi-account-plus">
                         Apuntar-se
                     </v-btn>
                 </v-col>
 
-                <v-col cols="12">
-                    <v-progress-linear
-                        color="primary"
-                        v-model="race.registers"
-                        :max="50"
-                        :height="24" rounded-bar striped>
-                        {{ race.registers }} registrats
-                    </v-progress-linear>
-                </v-col>
             </v-row>
 
-            <v-row v-for="server in race.servers" :key="server.name">
-                <v-col cols="12">
-                    Servers
-                </v-col>
+            <!-- Entries -->
+            <v-toolbar height="36" class="my-6">
+                <v-toolbar-title>Inscrits</v-toolbar-title>
+            </v-toolbar>
 
-                <v-col cols="12" sm="8">
-                    <v-text-field variant="solo-filled" readonly label="Server" v-model="server.name" />
-                </v-col>
+            <v-progress-linear
+                color="primary"
+                v-model="race.registers"
+                :max="50"
+                :height="24" rounded-bar striped>
+                {{ race.registers }} registrats
+            </v-progress-linear>
 
-                <v-col cols="12" sm="4">
-                    <v-text-field variant="solo-filled" readonly label="Split" v-model="server.split" />
-                </v-col>
+            <v-data-table :headers="entriesHeaders" :items="entries" dense item-key="userId" :loading="entriesLoading">
+                <template v-slot:item.userId='{ item }'>
+                    <v-btn @click="openOnBlank(`https://pitskill.io/driver-license/${item.userId}`)" icon="mdi-magnify" />
+                </template>
+                <template v-slot:item.driver='{ item }'>
+                    {{ item.name }} {{ item.surname }}
+                </template>
+                <template v-slot:item.license='{ item }'>
+                    <PitskillLicense :pitskill="item.pitskill" :pitrep="item.pitrep" />
+                </template>
+            </v-data-table>
 
-                <v-col cols="12">
-                    <v-progress-linear
-                        color="primary"
-                        v-model="server.sof"
-                        :max="4000"
-                        :height="24" rounded-bar striped>
-                        {{ server.sof }} SoF
-                    </v-progress-linear>
-                </v-col>
-
-                <v-col cols="12">
-                    Inscripcions
-                </v-col>
-
-                <v-col cols="12">
-                    <v-row>
-                        <v-col cols="12" sm="3" v-for="enroll in server.enrolls" :key="enroll.driver_id">
-                            <DriverChip :id="enroll.driver_id" :name="enroll.driver_name" :avatar="enroll.driver_avatar" size="x-large" />
-                        </v-col>
-                    </v-row>
-                </v-col>
-
-            </v-row>
+            <!-- Track Component -->
+            <Track :id="race.track_id" />
         </v-card-text>
-
-        <Track :id="race.track_id" />
-
     </v-card>
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-// import { useDateTransformer } from '../../composables/useDateTransformer';
-import moment from 'moment';
-import Track from '@/components/Pages/Track.vue';
-import DriverChip from '../Shared/DriverChip.vue';
+import moment from 'moment'
+import Track from '@/components/Pages/Track.vue'
+import PitskillLicense from '@/components/Shared/PitskillLicense.vue'
+import axios from 'axios'
 
 const route = useRoute()
-const race = ref(null);
+const race = ref(null)
+const entries = ref([])
+const error = ref(null)
+const entriesLoading = ref(false)
 
-// TODO: Move to useDateTransformer 
-const startsAt = computed(() => moment(race?.value?.starts_at).format('DD/MM HH:mm'));
+const startsAt = computed(() => moment(race.value?.starts_at).format('DD/MM HH:mm'))
+
+const entriesHeaders = [
+    { title: '', key: 'userId' },
+    { title: 'Pilot', key: 'driver' },
+    { title: 'Llicència', key: 'license' },
+    { title: 'PitSkill', key: 'pitskill' },
+    { title: 'PitRep', key: 'pitrep' }
+]
+
+const getDriverList = (userId) => axios.get(`https://api.pitskill.io/api/pitskill/getdriverinfo?id=${userId}`)
+const getEventInfo = (eventId) => axios.get(`https://api.pitskill.io/api/events/${eventId}`)
+
+const fetchEventAndDrivers = async (eventId) => {
+    try {
+        entriesLoading.value = true
+        const eventResponse = await getEventInfo(eventId)
+        const driverIds = eventResponse
+            .data
+            .payload
+            .event_vehicle_registration
+            .flatMap(vehicle => vehicle.event_registrations.map(registration => registration.user_id))
+
+        const promises = driverIds.map(async (userId) => {
+            try {
+                const response = await getDriverList(userId)
+                const name = response.data.payload.sigma_user_data.profile_data.first_name || 'N/A'
+                const surname = response.data.payload.sigma_user_data.profile_data.last_name || 'N/A'
+                const pitskill = response.data.payload.tpc_driver_data.currentPitSkill || 'N/A'
+                const pitrep = response.data.payload.tpc_driver_data.currentPitRep || 'N/A'
+                return { userId, name, surname, pitskill, pitrep }
+            } catch (error) {
+                return { userId, name: 'Error', surname: 'Error', pitskill: 'Error', pitrep: 'Error' }
+            }
+        })
+
+        entries.value = await Promise.all(promises)
+    } catch (err) {
+        error.value = 'Failed to fetch event or driver data'
+    } finally {
+        entriesLoading.value = false
+    }
+}
 
 onMounted(() => {
     fetch(`/api/race/${route.params.id}`)
         .then(response => response.json())
-        .then(data => race.value = data);
+        .then(data => {
+            race.value = data
+            fetchEventAndDrivers(race.value.event_id)
+        })
 })
 
 const openOnBlank = (url) => window.open(url, '_blank')
-
-
 </script>
