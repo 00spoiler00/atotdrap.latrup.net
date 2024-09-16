@@ -1,5 +1,9 @@
 # ChangeLog
 
+### 20240916
+
+- Implemented Iban's frontend entry resolver and table for races
+
 ### 20240912
 
 - Add persistance of dashboard and drivers list modes to localStorage. Improve visuals on those selectors
