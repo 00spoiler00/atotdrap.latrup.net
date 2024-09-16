@@ -21,30 +21,32 @@
 
             </v-row>
 
-            <!-- Entries -->
-            <v-toolbar height="36" class="my-6">
-                <v-toolbar-title>Inscrits</v-toolbar-title>
-            </v-toolbar>
+            <v-template v-if="race.platform == 'pitskill'">
+                <!-- Entries -->
+                <v-toolbar height="36" class="my-6">
+                    <v-toolbar-title>Inscrits</v-toolbar-title>
+                </v-toolbar>
 
-            <v-progress-linear
-                color="primary"
-                v-model="race.registers"
-                :max="50"
-                :height="24" rounded-bar striped>
-                {{ race.registers }} registrats
-            </v-progress-linear>
+                <v-progress-linear
+                    color="primary"
+                    v-model="race.registers"
+                    :max="50"
+                    :height="24" rounded-bar striped>
+                    {{ race.registers }} registrats
+                </v-progress-linear>
 
-            <v-data-table :headers="entriesHeaders" :items="entries" dense item-key="userId" :loading="entriesLoading">
-                <template v-slot:item.userId='{ item }'>
-                    <v-btn @click="openOnBlank(`https://pitskill.io/driver-license/${item.userId}`)" icon="mdi-magnify" />
-                </template>
-                <template v-slot:item.driver='{ item }'>
-                    {{ item.name }} {{ item.surname }}
-                </template>
-                <template v-slot:item.license='{ item }'>
-                    <PitskillLicense :pitskill="item.pitskill" :pitrep="item.pitrep" />
-                </template>
-            </v-data-table>
+                <v-data-table :headers="entriesHeaders" :items="entries" dense item-key="userId" :loading="entriesLoading" :sort-by="sortBy">
+                    <template v-slot:item.userId='{ item }'>
+                        <v-btn @click="openOnBlank(`https://pitskill.io/driver-license/${item.userId}`)" icon="mdi-magnify" />
+                    </template>
+                    <template v-slot:item.driver='{ item }'>
+                        {{ item.name }} {{ item.surname }}
+                    </template>
+                    <template v-slot:item.license='{ item }'>
+                        <PitskillLicense :pitskill="item.pitskill" :pitrep="item.pitrep" />
+                    </template>
+                </v-data-table>
+            </v-template>
 
             <!-- Track Component -->
             <Track :id="race.track_id" />
@@ -63,7 +65,7 @@ import axios from 'axios'
 const route = useRoute()
 const race = ref(null)
 const entries = ref([])
-const error = ref(null)
+const sortBy = ref([{ key: 'pitskill', order: 'desc' }]);
 const entriesLoading = ref(false)
 
 const startsAt = computed(() => moment(race.value?.starts_at).format('DD/MM HH:mm'))
@@ -104,7 +106,7 @@ const fetchEventAndDrivers = async (eventId) => {
 
         entries.value = await Promise.all(promises)
     } catch (err) {
-        error.value = 'Failed to fetch event or driver data'
+        console.error(err)
     } finally {
         entriesLoading.value = false
     }
