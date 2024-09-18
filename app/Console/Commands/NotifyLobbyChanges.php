@@ -44,8 +44,9 @@ class NotifyLobbyChanges extends Command
             Storage::put('status', $status);
 
             // Build the message
-            $statusString = $status ? 'funcionant' : 'caigut';
-            $message      = "Canvi d'estat del lobby d'**ACC**, ara està **{$statusString}!**";
+            $message = $status
+                ? '*Servidors de Kunos en funcionament.* 🟢'
+                : '*Servidors de Kunos caiguts.* 🔴';
 
             // Get the Discord webhook URL from config
             $webhookUrl = config('atotdrap.discord.webhook_url');
