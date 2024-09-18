@@ -1,5 +1,10 @@
 # ChangeLog
 
+### 20240918
+
+- Bring back race split info and drivers. It was blown when new list was added
+- Add new ACC lobby detector and discord notifier
+
 ### 20240916
 
 - Implemented Iban's frontend entry resolver and table for races

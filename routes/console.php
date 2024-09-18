@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\NotifyLobbyChanges;
 use App\Console\Commands\NotifyRaceRegistrations;
 use App\Console\Commands\UpdateDriversAndRegistrations;
 use App\Console\Commands\UpdateHotlaps;
@@ -21,4 +22,5 @@ Schedule::command(UpdateDriversAndRegistrations::class, ['--onlyActive'])->every
 // The non active drivers are updated every 30 minutes
 Schedule::command(UpdateDriversAndRegistrations::class)->everyThirtyMinutes();
 Schedule::command(NotifyRaceRegistrations::class)->everyMinute()->when($denseBeforeRaceStarts);
+Schedule::command(NotifyLobbyChanges::class)->everyMinute();
 Schedule::command(UpdateStats::class)->everyFiveMinutes();

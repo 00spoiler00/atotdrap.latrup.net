@@ -1,6 +1,7 @@
 <template>
     <v-card v-if="race">
         <v-toolbar class="text-center" color="primary" title="Detall de la cursa" height="36" />
+
         <v-card-text>
             <!-- Header info -->
             <v-row dense>
@@ -18,14 +19,53 @@
                         Apuntar-se
                     </v-btn>
                 </v-col>
+            </v-row>
+
+            <v-row>
+
+                <v-col cols="12">
+                    <v-toolbar class="text-center"  title="Servers / Splits" height="36" />
+                </v-col>
+            </v-row>
+                
+            <v-row v-for="server in race.servers" :key="server.name">
+
+                <v-col cols="12" sm="8">
+                    <v-text-field variant="solo-filled" readonly label="Server" v-model="server.name" />
+                </v-col>
+
+                <v-col cols="12" sm="4">
+                    <v-text-field variant="solo-filled" readonly label="Split" v-model="server.split" />
+                </v-col>
+
+                <v-col cols="12">
+                    <v-progress-linear
+                        color="primary"
+                        v-model="server.sof"
+                        :max="4000"
+                        :height="24" rounded-bar striped>
+                        {{ server.sof }} SoF
+                    </v-progress-linear>
+                </v-col>
+
+                <v-col cols="12">
+                    Membres d'ATotDrap a l'split
+                </v-col>
+
+                <v-col cols="12">
+                    <v-row>
+                        <v-col cols="12" sm="3" v-for="enroll in server.enrolls" :key="enroll.driver_id">
+                            <DriverChip :id="enroll.driver_id" :name="enroll.driver_name" :avatar="enroll.driver_avatar" size="x-large" />
+                        </v-col>
+                    </v-row>
+                </v-col>
+
 
             </v-row>
 
             <v-template v-if="race.platform == 'pitskill'">
                 <!-- Entries -->
-                <v-toolbar height="36" class="my-6">
-                    <v-toolbar-title>Inscrits</v-toolbar-title>
-                </v-toolbar>
+                <v-toolbar class="text-center my-6"  title="Inscrits a la sèrie" height="36" />
 
                 <v-progress-linear
                     color="primary"
@@ -52,6 +92,7 @@
             <Track :id="race.track_id" />
         </v-card-text>
     </v-card>
+
 </template>
 
 <script setup>
@@ -61,6 +102,7 @@ import moment from 'moment'
 import Track from '@/components/Pages/Track.vue'
 import PitskillLicense from '@/components/Shared/PitskillLicense.vue'
 import axios from 'axios'
+import DriverChip from '../Shared/DriverChip.vue'
 
 const route = useRoute()
 const race = ref(null)

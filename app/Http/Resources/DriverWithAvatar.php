@@ -17,8 +17,6 @@ class DriverWithAvatar extends Resource
         return [
             'id'         => $this->id,
             'name'       => $this->shortReadableId,
-            'pitskill'   => $this->pitskill,
-            'pitrep'     => $this->pitrep,
             'avatar_url' => $this->avatar_url,
         ];
     }
