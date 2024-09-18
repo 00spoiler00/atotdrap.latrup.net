@@ -4,7 +4,7 @@
       {
         "label": "Deploy PROD to Remote Server",
         "type": "shell",
-        "command": "ssh marc@test.latrup.net '(cd /var/www/atotdrap.latrup.net/public && git pull origin main && composer install --no-dev --working-dir=/var/www/atotdrap.latrup.net/public && php artisan migrate --ansi --force && pnpm install --frozen-lockfile && pnpm run build)'",
+        "command": "git push && ssh marc@test.latrup.net '(cd /var/www/atotdrap.latrup.net/public && git pull origin main && composer install --no-dev --working-dir=/var/www/atotdrap.latrup.net/public && php artisan migrate --ansi --force && pnpm install --frozen-lockfile && pnpm run build)'",
         "group": {
           "kind": "build",
           "isDefault": true
