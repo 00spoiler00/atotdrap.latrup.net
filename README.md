@@ -1,3 +1,35 @@
+# Model de dades actual
+
+```mermaid
+
+flowchart TD
+    %% Define all entities as rounded boxes
+    classDef entityStyle stroke:#333,stroke-width:2px,rounded;
+
+    ClubMember(ClubMember):::entityStyle
+    Driver(Driver):::entityStyle
+    Enrollment(Enrollment):::entityStyle
+    Metric(Metric):::entityStyle
+    Hotlap(Hotlap):::entityStyle
+    Car(Car):::entityStyle
+    Race(Race):::entityStyle
+    Track(Track):::entityStyle
+    Broadcast(Broadcast):::entityStyle
+
+    %% Relationships
+    ClubMember o--o Driver
+    Driver o--x Enrollment
+    Driver o--x Metric
+    Driver o--x Hotlap
+    Car o--x Enrollment
+    Race o--x Enrollment 
+    Car o--x Hotlap
+    Track o--x Hotlap
+    Track o--x Race
+    Race o--x Broadcast
+
+
+```
 
 # Guia d'Instal·lació i Configuració del Projecte
 
