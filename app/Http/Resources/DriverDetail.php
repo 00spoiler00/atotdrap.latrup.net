@@ -60,8 +60,8 @@ class DriverDetail extends Resource
             'raceroom' => [
                 'id'               => $this->clubMember->raceroom_id,
                 'ranking'          => Driver::where('raceroom_rating', '>', $this->raceroom_rating)->count() + 1,
-                'elo'              => $this->raceroom_rating,
-                'sr'               => $this->raceroom_reputation,
+                'rating'           => $this->raceroom_rating,
+                'reputation'       => $this->raceroom_reputation,
                 'rating_graph'     => $this->metrics()->where('type', 'raceroom_rating')->orderBy('measured_at')->get(['measured_at', 'value']),
                 'reputation_graph' => $this->metrics()->where('type', 'raceroom_reputation')->orderBy('measured_at')->get(['measured_at', 'value']),
             ],

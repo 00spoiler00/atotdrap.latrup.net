@@ -111,7 +111,7 @@
                     <v-text-field variant="solo-filled" readonly label="Ranking" v-model="driver.raceroom.ranking" />
                 </v-col>
                 <v-col cols="12" sm="3">
-                    <v-text-field variant="solo-filled" readonly label="ELO" v-model="driver.raceroom.ranking" />
+                    <v-text-field variant="solo-filled" readonly label="ELO" v-model="driver.raceroom.rating" />
                 </v-col>
                 <v-col cols="12" sm="3">
                     <v-text-field variant="solo-filled" readonly label="SR" v-model="driver.raceroom.reputation" />
