@@ -41,7 +41,7 @@ class DriverDetail extends Resource
             'nickname'   => $this->nickname,
             'pitskill'   => [
                 'id'             => $this->clubMember->pitskill_id,
-                'ranking'        => Driver::where('pitskill', '>', $this->pitskill)->count() + 1,
+                'ranking'        => Driver::where('pitskill', '>', ($this->pitskill ?? 0))->count() + 1,
                 'enrollments'    => $this->enrollments()->whereHas('race', fn ($q) => $q->where('platform', 'pitskill'))->count(),
                 'pitskill'       => $this->pitskill,
                 'pitrep'         => $this->pitrep,
@@ -50,7 +50,7 @@ class DriverDetail extends Resource
             ],
             'lfm' => [
                 'id'          => $this->clubMember->lfm_id,
-                'ranking'     => Driver::where('elo', '>', $this->elo)->count() + 1,
+                'ranking'     => Driver::where('elo', '>', ($this->elo ?? 0))->count() + 1,
                 'enrollments' => $this->enrollments()->whereHas('race', fn ($q) => $q->where('platform', 'lfm'))->count(),
                 'elo'         => $this->elo,
                 'sr'          => $this->sr,
@@ -59,7 +59,7 @@ class DriverDetail extends Resource
             ],
             'raceroom' => [
                 'id'               => $this->clubMember->raceroom_id,
-                'ranking'          => Driver::where('raceroom_rating', '>', $this->raceroom_rating)->count() + 1,
+                'ranking'          => Driver::where('raceroom_rating', '>', ($this->raceroom_rating ?? 0))->count() + 1,
                 'rating'           => $this->raceroom_rating,
                 'reputation'       => $this->raceroom_reputation,
                 'rating_graph'     => $this->metrics()->where('type', 'raceroom_rating')->orderBy('measured_at')->get(['measured_at', 'value']),
