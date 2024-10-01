@@ -43,6 +43,7 @@ class UpdateDriversAndRegistrations extends Command
         // Clone the query before executing
         $pitskillQuery = clone $driversQuery;
         $lfmQuery      = clone $driversQuery;
+        $raceRoomQuery = clone $driversQuery;
 
         // If the platform is not 'all' or is not 'pitskill', then skip the pitskill update
         if ($this->option('platform') === 'all' || $this->option('platform') === 'pitskill') {
@@ -57,6 +58,14 @@ class UpdateDriversAndRegistrations extends Command
                 ->whereNotNull('lfm_id')
                 ->get()
                 ->each(fn (ClubMember $member) => $this->processViaLfm($member));
+        }
+
+        // If the platform is not 'all' or is not 'lfm', then skip the pitskill update
+        if ($this->option('platform') === 'all' || $this->option('platform') === 'raceroom') {
+            $lfmQuery
+                ->whereNotNull('raceroom_id')
+                ->get()
+                ->each(fn (ClubMember $member) => $this->processViaRaceRoom($member));
         }
     }
 
@@ -122,6 +131,22 @@ class UpdateDriversAndRegistrations extends Command
         if (count($data['race'])) {
             UpdateDriverLfmRegistration::execute($driver, $data['race']);
         }
+    }
+
+    protected function processViaRaceRoom(ClubMember $clubMember): void
+    {
+        $data = Http::get("https://game.raceroom.com/multiplayer-rating/user/{$clubMember->raceroom_id}.json")->json();
+
+        $driver = Driver::updateOrCreate(
+            ['club_member_id' => $clubMember->id],
+            [
+                'raceroom_rating'     => $data['Rating'],
+                'raceroom_reputation' => $data['Reputation'],
+            ]
+        );
+
+        $this->updateMetric($driver, 'raceroom_rating', $data['Rating']);
+        $this->updateMetric($driver, 'raceroom_reputation', $data['Reputation']);
     }
 
     /**

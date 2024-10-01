@@ -1,5 +1,9 @@
 # ChangeLog
 
+### 20241001
+
+- Add RaceRoom tracking and statistics
+
 ### 20240918
 
 - Bring back race split info and drivers. It was blown when new list was added
@@ -54,7 +58,7 @@
 
 ### 20240731
 
-- Unify hotlap and fetch. 
+- Unify hotlap and fetch.
 - Add logging
 
 ### 20240730
@@ -88,7 +92,6 @@
 - Add proper scrolls to dialogs
 - Fix some styling elevations
 
-
 ## V 0.2 Improvement Phase 1
 
 - Add hovers for all available fields.
@@ -104,7 +107,6 @@
 - Fix license and remove unused columns
 - Remove most backend html and value transformation favoring fe interpretation
 
-
 ## V 0.1 Vuetified
 
 - Afegides taules dinàmiques per ordenar columnes.
@@ -119,4 +121,3 @@
 - Disposem d'un subdomini directe per accedir al contingut https://pitskill.latrup.net
 - Es pot accedir al perfil del pilot de PitSkill des de la llista de pilots
 - L'informe d'inscripcions indica el temps que queda fins a la cursa
-

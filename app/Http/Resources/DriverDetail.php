@@ -57,6 +57,14 @@ class DriverDetail extends Resource
                 'elo_graph'   => $this->metrics()->where('type', 'elo')->orderBy('measured_at')->get(['measured_at', 'value']),
                 'sr_graph'    => $this->metrics()->where('type', 'sr')->orderBy('measured_at')->get(['measured_at', 'value']),
             ],
+            'raceroom' => [
+                'id'               => $this->clubMember->raceroom_id,
+                'ranking'          => Driver::where('raceroom_rating', '>', $this->raceroom_rating)->count() + 1,
+                'elo'              => $this->raceroom_rating,
+                'sr'               => $this->raceroom_reputation,
+                'rating_graph'     => $this->metrics()->where('type', 'raceroom_rating')->orderBy('measured_at')->get(['measured_at', 'value']),
+                'reputation_graph' => $this->metrics()->where('type', 'raceroom_reputation')->orderBy('measured_at')->get(['measured_at', 'value']),
+            ],
             'hotlaps_count' => $this->hotlaps()->count(),
             'hotlaps'       => HotlapList::collection(Hotlap::whereIn('id', $bestHotlapIds)->get()),
         ];

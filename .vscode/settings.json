@@ -1,5 +1,26 @@
 {
     "php-cs-fixer.executablePath": "/var/www/atotdrap.latrup.net/public/vendor/friendsofphp/php-cs-fixer/php-cs-fixer",
     "php-cs-fixer.config": ".php_cs.php",
-    "php-cs-fixer.onsave": true
+    "php-cs-fixer.onsave": true,
+    "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#c23e4e",
+    "activityBar.activeBorder": "#b23553",
+    "activityBar.background": "#c23e4e",
+    "activityBar.foreground": "#f7e7e7",
+    "activityBar.inactiveForeground": "#f7e7e799",
+    "activityBarBadge.background": "#b23553",
+    "activityBarBadge.foreground": "#f7e7e7",
+    "statusBar.background": "#9c3147",
+    "statusBar.foreground": "#f7e7e7",
+    "statusBarItem.hoverBackground": "#c23e4e",
+    "titleBar.activeBackground": "#9c3147",
+    "titleBar.activeForeground": "#f7e7e7",
+    "titleBar.inactiveBackground": "#9c314799",
+    "titleBar.inactiveForeground": "#f7e7e799",
+    "sash.hoverBorder": "#c23e4e",
+    "statusBarItem.remoteBackground": "#9c3147",
+    "statusBarItem.remoteForeground": "#f7e7e7",
+    "commandCenter.border": "#f7e7e799"
+}
+
 }

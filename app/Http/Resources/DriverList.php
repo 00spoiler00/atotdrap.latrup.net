@@ -16,15 +16,17 @@ class DriverList extends Resource
     public function toArray(Request $request): array
     {
         return [
-            'id'             => $this->id,
-            'name'           => $this->shortReadableId,
-            'avatar'         => $this->avatar_url,
-            'pitskill'       => $this->pitskill,
-            'pitrep'         => $this->pitrep,
-            'elo'            => $this->elo,
-            'sr'             => $this->sr,
-            'lfm_license'    => $this->lfm_license,
-            'lfm_sr_license' => $this->lfm_sr_license,
+            'id'                  => $this->id,
+            'name'                => $this->shortReadableId,
+            'avatar'              => $this->avatar_url,
+            'pitskill'            => $this->pitskill,
+            'pitrep'              => $this->pitrep,
+            'elo'                 => $this->elo,
+            'sr'                  => $this->sr,
+            'lfm_license'         => $this->lfm_license,
+            'lfm_sr_license'      => $this->lfm_sr_license,
+            'raceroom_rating'     => $this->raceroom_rating,
+            'raceroom_reputation' => $this->raceroom_reputation,
         ];
     }
 }

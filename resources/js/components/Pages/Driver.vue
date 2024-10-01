@@ -8,39 +8,39 @@
 
             <v-row>
                 <v-col cols="12" sm="6">
-                    
+
                     <v-row dense>
-                        
+
                         <v-col cols="12">
                             <v-text-field variant="solo-filled" readonly label="Nom" v-model="driver.first_name" />
                         </v-col>
-                        
+
                         <v-col cols="12">
                             <v-text-field variant="solo-filled" readonly label="Cognom" v-model="driver.last_name" />
                         </v-col>
-                        
+
                         <v-col cols="12">
                             <v-text-field variant="solo-filled" readonly label="Nick" v-model="driver.nickname" />
                         </v-col>
-                        
+
                     </v-row>
                 </v-col>
-                
-                
-                <v-col cols="12" sm="6" align="center" >
+
+
+                <v-col cols="12" sm="6" align="center">
                     <v-avatar size="256">
                         <v-img
-                        color="surface-variant"
-                        :src="driver.avatar"
-                        cover />
+                            color="surface-variant"
+                            :src="driver.avatar"
+                            cover />
                     </v-avatar>
                 </v-col>
             </v-row>
         </v-card-text>
-            
-            <v-toolbar height="36">
-                <v-toolbar-title>PitSkill IO</v-toolbar-title>
-            </v-toolbar>
+
+        <v-toolbar height="36">
+            <v-toolbar-title>PitSkill IO</v-toolbar-title>
+        </v-toolbar>
 
         <v-card-text>
             <v-row dense>
@@ -94,6 +94,33 @@
                 </v-col>
                 <v-col cols="12" sm="6">
                     <Graph :value="driver.lfm.sr_graph" type="SR" />
+                </v-col>
+            </v-row>
+        </v-card-text>
+
+        <v-toolbar height="36" v-if="driver.raceroom.id">
+            <v-toolbar-title>RaceRoom</v-toolbar-title>
+        </v-toolbar>
+
+        <v-card-text v-if="driver.raceroom.id">
+            <v-row dense>
+                <v-col cols="12" sm="2">
+                    <v-text-field variant="solo-filled" readonly label="Id" v-model="driver.raceroom.id" />
+                </v-col>
+                <v-col cols="12" sm="2">
+                    <v-text-field variant="solo-filled" readonly label="Ranking" v-model="driver.raceroom.ranking" />
+                </v-col>
+                <v-col cols="12" sm="3">
+                    <v-text-field variant="solo-filled" readonly label="ELO" v-model="driver.raceroom.ranking" />
+                </v-col>
+                <v-col cols="12" sm="3">
+                    <v-text-field variant="solo-filled" readonly label="SR" v-model="driver.raceroom.reputation" />
+                </v-col>
+                <v-col cols="12" sm="6">
+                    <Graph :value="driver.raceroom.rating_graph" type="RRating" />
+                </v-col>
+                <v-col cols="12" sm="6">
+                    <Graph :value="driver.raceroom.reputation_graph" type="RReputaion" />
                 </v-col>
             </v-row>
         </v-card-text>
