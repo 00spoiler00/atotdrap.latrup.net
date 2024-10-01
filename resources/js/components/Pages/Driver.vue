@@ -120,7 +120,7 @@
                     <Graph :value="driver.raceroom.rating_graph" type="RRating" />
                 </v-col>
                 <v-col cols="12" sm="6">
-                    <Graph :value="driver.raceroom.reputation_graph" type="RReputaion" />
+                    <Graph :value="driver.raceroom.reputation_graph" type="RReputation" />
                 </v-col>
             </v-row>
         </v-card-text>
