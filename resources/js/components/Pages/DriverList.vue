@@ -4,7 +4,7 @@
         <v-toolbar class="text-center" color="primary" title="Ranking de pilots" height="36">
 
             <v-btn-toggle v-if="xs" v-model="mode" size="small" rounded density="compact" divided mandatory class="mr-2">
-                <v-btn :value="v" v-for="v in ['PS', 'LFM']" :key="v" v-text="v" :variant="mode == v ? 'elevated' : 'plain'" color="primary" />
+                <v-btn :value="v" v-for="v in ['PS', 'LFM', 'RR']" :key="v" v-text="v" :variant="mode == v ? 'elevated' : 'plain'" color="primary" />
             </v-btn-toggle>
 
         </v-toolbar>
