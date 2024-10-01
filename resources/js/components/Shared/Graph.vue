@@ -64,13 +64,13 @@ const props = defineProps({
     type: {
         type: String,
         required: true,
-        validator: (value) => ['PitSkill', 'PitRep', 'ELO', 'SR'].includes(value),
+        validator: (value) => ['PitSkill', 'PitRep', 'ELO', 'SR', 'RRating', 'RReputation'].includes(value),
     },
 });
 
 // Define the computed property to get the correct color
 const color = computed(() => {
-    return ['PitSkill', 'ELO'].includes(props.type) ? 'primary' : 'secondary';
+    return ['PitSkill', 'ELO', 'RRating'].includes(props.type) ? 'primary' : 'secondary';
 });
 
 // Define the range to be shown var
@@ -78,14 +78,14 @@ const range = ref('month');
 
 // Create a computed that filters the values based on the range
 const inRangeValues = computed(() => {
-    
+
     // No data
-    if(props.value.length === 0) {
+    if (props.value.length === 0) {
         return [0, 0];
     }
 
     // Single data
-    if(props.value.length === 1) {
+    if (props.value.length === 1) {
         return [
             props.value[0].value,
             props.value[0].value,
@@ -109,18 +109,18 @@ const inRangeValues = computed(() => {
             }
         });
 
-    if(inRange.length === 0) {
+    if (inRange.length === 0) {
         // return last value of props.value
         return [
             props.value[props.value.length - 1].value,
             props.value[props.value.length - 1].value,
         ]
-    } else if(inRange.length === 1) {
+    } else if (inRange.length === 1) {
         return [
             inRange[0].value,
             inRange[0].value,
         ]
-    } else{
+    } else {
         return inRange.map((item) => item.value)
     }
 
