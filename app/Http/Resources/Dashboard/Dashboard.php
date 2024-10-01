@@ -34,6 +34,11 @@ class Dashboard extends Resource
         $eloEarners = GetMetricEarners::execute('elo', $limit);
         $srEarners  = GetMetricEarners::execute('sr', $limit);
 
+        $rratingLeaders     = Driver::where('raceroom_rating', '>', 0)->orderBy('raceroom_rating', 'desc')->limit($limit)->get();
+        $rreputaionLeaders  = Driver::where('raceroom_reputation', '>', 0)->orderBy('raceroom_reputation', 'desc')->limit($limit)->get();
+        $rratingEarners     = GetMetricEarners::execute('raceroom_rating', $limit);
+        $rreputationEarners = GetMetricEarners::execute('raceroom_reputation', $limit);
+
         // Get the track of the last recorded hotlap
         $hotlapTrack = Hotlap::orderBy('created_at', 'desc')->first()->track;
         $subQuery    = Hotlap::select('driver_id', DB::raw('MIN(laptime) as best_laptime'))
@@ -114,6 +119,33 @@ class Dashboard extends Resource
                     ],
                 ],
             ],
+            'raceroom' => [
+                'rating' => [
+                    'earners' => [
+                        'title'       => 'Rating earners (7d)',
+                        'targetModel' => 'Driver',
+                        'data'        => RRatingEarner::collection($rratingEarners),
+                    ],
+                    'ranking' => [
+                        'title'       => 'Reputation ranking',
+                        'targetModel' => 'Driver',
+                        'data'        => RRatingRanking::collection($rratingLeaders),
+                    ],
+                ],
+                'reputation' => [
+                    'earners' => [
+                        'title'       => 'Rating earners (7d)',
+                        'targetModel' => 'Driver',
+                        'data'        => RRatingEarner::collection($rreputationEarners),
+                    ],
+                    'ranking' => [
+                        'title'       => 'Reputation ranking',
+                        'targetModel' => 'Driver',
+                        'data'        => RReputationRanking::collection($rreputaionLeaders),
+                    ],
+                ],
+            ],
+
         ];
     }
 }

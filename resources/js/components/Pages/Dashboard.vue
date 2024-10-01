@@ -24,20 +24,20 @@
 
         <v-row class="ma-0 sm:ma-2">
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.pitskill.pitskill.ranking" />
             </v-col>
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.pitskill.pitrep.ranking" />
             </v-col>
 
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.pitskill.pitskill.earners" />
             </v-col>
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.pitskill.pitrep.earners" />
             </v-col>
 
@@ -49,21 +49,47 @@
 
         <v-row class="ma-0 sm:ma-2">
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.lfm.elo.ranking" />
             </v-col>
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.lfm.sr.ranking" />
             </v-col>
 
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.lfm.elo.earners" />
             </v-col>
 
-            <v-col cols="12" sm="6"  lg="3">
+            <v-col cols="12" sm="6" lg="3">
                 <DashboardCard :data="dashboard.lfm.sr.earners" />
+            </v-col>
+
+        </v-row>
+
+
+        <v-toolbar height="48">
+            <v-toolbar-title text="RaceRoom" />
+        </v-toolbar>
+
+        <v-row class="ma-0 sm:ma-2">
+
+            <v-col cols="12" sm="6" lg="3">
+                <DashboardCard :data="dashboard.raceroom.rating.ranking" />
+            </v-col>
+
+            <v-col cols="12" sm="6" lg="3">
+                <DashboardCard :data="dashboard.raceroom.reputation.ranking" />
+            </v-col>
+
+
+            <v-col cols="12" sm="6" lg="3">
+                <DashboardCard :data="dashboard.raceroom.rating.earners" />
+            </v-col>
+
+            <v-col cols="12" sm="6" lg="3">
+                <DashboardCard :data="dashboard.raceroom.reputation.earners" />
             </v-col>
 
         </v-row>

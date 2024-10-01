@@ -16,7 +16,7 @@ class GetMetricEarners
      */
     public static function execute(string $type, $limit = 3): \Illuminate\Database\Eloquent\Collection
     {
-        abort_if(! in_array($type, ['pitskill', 'pitrep', 'elo', 'sr']), 404);
+        abort_if(! in_array($type, ['pitskill', 'pitrep', 'elo', 'sr', 'raceroom_rating', 'raceroom_reputation']), 404);
 
         return Driver::query()
             ->whereHas('metrics', fn ($q) => $q->where('type', $type)->where('measured_at', '>', now()->subWeek()))
