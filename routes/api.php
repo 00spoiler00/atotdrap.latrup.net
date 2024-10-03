@@ -5,9 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->get('/user', fn (Request $request) => $request->user());
 
-// Demo data route
-Route::post('/demo', 'App\Http\Controllers\DemoController');
-
 Route::get('/frontVersion', fn () => response()->json(['version' => '1.0.0']));
 Route::get('/dashboard', 'App\Http\Controllers\GenericController@dashboard');
 Route::get('/selector/{model}', 'App\Http\Controllers\GenericController@selector');
