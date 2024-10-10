@@ -1,4 +1,6 @@
 *
+!acc_server
+!acc_server/**
 !public/
 !public/**
 !.gitignore

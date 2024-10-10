@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Obtener el nombre del directorio actual
+SESSION_NAME=$(basename "$PWD")
+
+# Comando a ejecutar dentro de la sesión
+COMMAND="wine accServer.exe"
+
+# Crear una nueva sesión de screen con el nombre especificado y ejecutar el comando
+screen -dmS "$SESSION_NAME" bash -c "$COMMAND"

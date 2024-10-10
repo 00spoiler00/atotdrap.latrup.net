@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Get the name of the current directory
+SESSION_NAME=$(basename "$PWD")
+
+# Message with the key combination to detach the screen session
+echo "To detach the screen session, press 'Ctrl-a' and then 'd'."
+
+# Pause for 3 seconds before attaching
+sleep 3
+
+# Detach the screen session if it is attached
+screen -d "$SESSION_NAME"
+
+# Attach to the screen session with the specified name
+screen -r "$SESSION_NAME"
